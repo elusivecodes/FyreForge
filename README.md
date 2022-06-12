@@ -128,7 +128,7 @@ $forge->alterTable($table, $options);
 
 **Build**
 
-Build a table forge.
+Build a [*TableForge*](#table-forges).
 
 - `$table` is a string representing the table name.
 - `$options` is an array containing the table options.
