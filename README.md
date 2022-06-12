@@ -176,7 +176,7 @@ Create a new schema.
 - `$options` is an array containing the schema options.
     - `charset` is a string representing the schema character set, and will default to the connection character set.
     - `collation` is a string representing the schema collation, and will default to the connection collation.
-    - `ifNotExists` is a boolean indicating whether to use an *IF NOT EXISTS* clause, and will default to *false*.
+    - `ifNotExists` is a boolean indicating whether to use an `IF NOT EXISTS` clause, and will default to *false*.
 
 ```php
 $forge->createSchema($schema, $options);
@@ -192,7 +192,7 @@ Create a new table.
     - `charset` is a string representing the table character set, and will default to the connection character set.
     - `collation` is a string representing the table collation, and will default to the connection collation.
     - `comment` is a string representing the table comment, and will default to "".
-    - `ifNotExists` is a boolean indicating whether to use an *IF NOT EXISTS* clause, and will default to *false*.
+    - `ifNotExists` is a boolean indicating whether to use an `IF NOT EXISTS` clause, and will default to *false*.
 
 ```php
 $forge->createTable($table, $options);
@@ -205,7 +205,7 @@ Drop a column from a table.
 - `$table` is a string representing the table name.
 - `$column` is a string representing the column name.
 - `$options` is an array containing the column options.
-    - `ifExists` is a boolean indicating whether to use an *IF EXISTS* clause, and will default to *false*.
+    - `ifExists` is a boolean indicating whether to use an `IF EXISTS` clause, and will default to *false*.
 
 ```php
 $forge->dropColumn($table, $column, $options);
@@ -239,7 +239,7 @@ Drop a schema.
 
 - `$schema` is a string representing the schema name.
 - `$options` is an array containing the schema options.
-    - `ifExists` is a boolean indicating whether to use an *IF EXISTS* clause, and will default to *false*.
+    - `ifExists` is a boolean indicating whether to use an `IF EXISTS` clause, and will default to *false*.
 
 ```php
 $forge->dropSchema($schema, $options);
@@ -251,7 +251,7 @@ Drop a table.
 
 - `$table` is a string representing the table name.
 - `$options` is an array containing the table options.
-    - `ifExists` is a boolean indicating whether to use an *IF EXISTS* clause, and will default to *false*.
+    - `ifExists` is a boolean indicating whether to use an `IF EXISTS` clause, and will default to *false*.
 
 ```php
 $forge->dropTable($table, $options);
