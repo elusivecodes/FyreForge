@@ -222,7 +222,7 @@ trait ExecuteTest
             ]
         ], [
             'indexes' => [
-                'id' => []
+                'id'
             ]
         ]);
 

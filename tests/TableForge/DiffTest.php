@@ -283,7 +283,7 @@ trait DiffTest
             ]
         ], [
             'indexes' => [
-                'value' => []
+                'value'
             ]
         ]);
 
@@ -456,7 +456,7 @@ trait DiffTest
             ]
         ], [
             'indexes' => [
-                'value' => []
+                'value'
             ]
         ]);
 

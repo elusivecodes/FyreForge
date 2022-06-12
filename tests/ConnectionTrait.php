@@ -7,6 +7,7 @@ use
     Fyre\DB\Connection,
     Fyre\DB\ConnectionManager,
     Fyre\DB\Handlers\MySQL\MySQLConnection,
+    Fyre\Forge\ForgeInterface,
     Fyre\Forge\ForgeRegistry,
     Fyre\Schema\Schema,
     Fyre\Schema\SchemaRegistry;
@@ -19,7 +20,9 @@ trait ConnectionTrait
 
     protected Connection $db;
 
-    protected Schema $forge;
+    protected Schema $schema;
+
+    protected ForgeInterface $forge;
 
     protected function setUp(): void
     {

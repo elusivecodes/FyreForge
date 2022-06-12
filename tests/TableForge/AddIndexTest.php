@@ -54,7 +54,7 @@ trait AddIndexTest
             ]
         ], [
             'indexes' => [
-                'id' => []
+                'id'
             ]
         ]);
 

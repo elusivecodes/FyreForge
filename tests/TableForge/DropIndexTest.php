@@ -34,7 +34,7 @@ trait DropIndexTest
             ]
         ], [
             'indexes' => [
-                'id' => []
+                'id'
             ]
         ]);
 

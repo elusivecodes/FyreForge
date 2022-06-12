@@ -14,6 +14,7 @@ use function
     array_keys,
     array_map,
     implode,
+    is_numeric,
     strtolower,
     strtoupper;
 
@@ -174,6 +175,11 @@ class MySQLForge extends MySQLSchema implements ForgeInterface
         );
 
         foreach ($options['indexes'] AS $index => $indexOptions) {
+            if (is_numeric($index)) {
+                $index = $indexOptions;
+                $indexOptions = [];
+            }
+
             $definitions[] = $this->prepareIndexSql($index, $indexOptions);
         }
 
