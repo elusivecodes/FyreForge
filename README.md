@@ -30,9 +30,9 @@ use Fyre\Forge\ForgeRegistry;
 
 **Get Forge**
 
-Get the *Forge* for a *Connection*.
+Get the [*Forge*](#forges) for a [*Connection*](https://github.com/elusivecodes/FyreDB#connections).
 
-- `$connection` is a [*Connection*](https://github.com/elusivecodes/FyreDB).
+- `$connection` is a [*Connection*](https://github.com/elusivecodes/FyreDB#connections).
 
 ```php
 $forge = ForgeRegistry::getForge($connection);
@@ -40,10 +40,10 @@ $forge = ForgeRegistry::getForge($connection);
 
 **Set Handler**
 
-Set a *Forge* handler for a *Connection* class.
+Set a [*Forge*](#forges) handler for a [*Connection*](https://github.com/elusivecodes/FyreDB#connections) class.
 
-- `$connectionClass` is a string representing the *Connection* class name.
-- `$schemaClass` is a string representing the *Schema* class name.
+- `$connectionClass` is a string representing the [*Connection*](https://github.com/elusivecodes/FyreDB#connections) class name.
+- `$schemaClass` is a string representing the [*Schema*](https://github.com/elusivecodes/FyreSchema#schemas) class name.
 
 ```php
 ForgeRegistry::setHandler($connectionClass, $schemaClass);

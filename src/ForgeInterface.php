@@ -3,10 +3,13 @@ declare(strict_types=1);
 
 namespace Fyre\Forge;
 
+use
+    Fyre\Schema\SchemaInterface;
+
 /**
  * ForgeInterface
  */
-interface ForgeInterface
+interface ForgeInterface extends SchemaInterface
 {
 
     /**

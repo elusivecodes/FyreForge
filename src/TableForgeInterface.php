@@ -3,19 +3,23 @@ declare(strict_types=1);
 
 namespace Fyre\Forge;
 
+use
+    Fyre\Schema\SchemaInterface,
+    Fyre\Schema\TableSchemaInterface;
+
 /**
  * TableForgeInterface
  */
-interface TableForgeInterface
+interface TableForgeInterface extends TableSchemaInterface
 {
 
     /**
      * New TableForge constructor.
-     * @param ForgeInterface $forge The Forge.
+     * @param SchemaInterface $schema The schema.
      * @param string $tableName The table name.
      * @param array $options The table options.
      */
-    public function __construct(ForgeInterface $forge, string $tableName, array $options = []);
+    public function __construct(SchemaInterface $schema, string $tableName, array $options = []);
 
     /**
      * Add a column to the table.

@@ -4,11 +4,11 @@ declare(strict_types=1);
 namespace Fyre\Forge\Traits;
 
 use
-    Fyre\DB\ConnectionManager,
+    Fyre\DB\Connection,
     Fyre\Forge\Exceptions\ForgeException,
     Fyre\Forge\ForgeInterface,
-    Fyre\Schema\SchemaRegistry,
-    Fyre\Schema\TableSchema;
+    Fyre\Forge\ForgeRegistry,
+    Fyre\Schema\SchemaInterface;
 
 use const
     ARRAY_FILTER_USE_KEY;
@@ -50,16 +50,15 @@ trait TableForgeTrait
 
     /**
      * New TableForge constructor.
-     * @param ForgeInterface $forge The Forge.
+     * @param SchemaInterface $schema The schema.
      * @param string $tableName The table name.
      * @param array $options The table options.
      */
-    public function __construct(ForgeInterface $forge, string $tableName, array $options = [])
+    public function __construct(SchemaInterface $schema, string $tableName, array $options = [])
     {
-        $this->forge = $forge;
+        $connection = $schema->getConnection();
 
-        $connection =$this->forge->getConnection();
-        $schema = SchemaRegistry::getSchema($connection);
+        $this->forge = ForgeRegistry::getForge($connection);
 
         $clean = $options['clean'] ?? false;
 
