@@ -322,13 +322,17 @@ trait TableForgeTrait
 
         $connection->commit();
 
-        $this->schema->clear();
+        if ($this->schema->hasTable($this->tableName)) {
+            $this->schema->describe($this->tableName)->clear();
+        }
 
-        if ($this->schema->hasTable($this->originalTableName)) {
-            $this->schema->clear();
+        if ($this->tableName !== $this->originalTableName && $this->schema->hasTable($this->originalTableName)) {
+            $this->schema->describe($this->originalTableName)->clear();
         }
 
         $this->clear();
+
+        $this->schema->clear();
 
         $this->originalTableName = $this->tableName;
 
