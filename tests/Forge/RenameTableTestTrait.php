@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Tests\Forge;
 
-trait RenameTableTest
+trait RenameTableTestTrait
 {
 
     public function testRenameTable(): void

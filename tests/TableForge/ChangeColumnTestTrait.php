@@ -3,13 +3,12 @@ declare(strict_types=1);
 
 namespace Tests\TableForge;
 
-use
-    Fyre\Forge\Exceptions\ForgeException;
+use Fyre\Forge\Exceptions\ForgeException;
 
-trait DropColumnTest
+trait ChangeColumnTestTrait
 {
 
-    public function testDropColumnSqlNewTable(): void
+    public function testChangeColumnSqlNewTable(): void
     {
         $this->assertSame(
             [
@@ -18,45 +17,45 @@ trait DropColumnTest
             $this->forge
                 ->build('test')
                 ->addColumn('id', [
+                    'type' => 'varchar'
+                ])
+                ->changeColumn('id', [
                     'type' => 'int'
                 ])
-                ->addColumn('value', [
-                    'type' => 'int'
-                ])
-                ->dropColumn('value')
                 ->sql()
         );
     }
 
-    public function testDropColumnSqlExistingTable(): void
+    public function testChangeColumnSqlExistingTable(): void
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int'
-            ],
-            'value' => [
-                'type' => 'int'
+                'type' => 'varchar'
             ]
         ]);
 
         $this->assertSame(
             [
-                'ALTER TABLE test DROP COLUMN value'
+                'ALTER TABLE test CHANGE COLUMN id id INT(11) NOT NULL'
             ],
             $this->forge
                 ->build('test')
-                ->dropColumn('value')
+                ->changeColumn('id', [
+                    'type' => 'int'
+                ])
                 ->sql()
         );
     }
 
-    public function testDropColumnSqlInvalidColumn(): void
+    public function testChangeColumnSqlInvalidColumn(): void
     {
         $this->expectException(ForgeException::class);
 
         $this->forge
             ->build('test')
-            ->dropColumn('invalid');
+            ->changeColumn('invalid', [
+                'type' => 'int'
+            ]);
     }
 
 }

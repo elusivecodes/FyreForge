@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Tests\TableForge;
 
-trait TableTest
+trait TableTestTrait
 {
 
     public function testOptionsNewTable(): void

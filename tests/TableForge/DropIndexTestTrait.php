@@ -3,13 +3,12 @@ declare(strict_types=1);
 
 namespace Tests\TableForge;
 
-use
-    Fyre\Forge\Exceptions\ForgeException;
+use Fyre\Forge\Exceptions\ForgeException;
 
-trait ChangeColumnTest
+trait DropIndexTestTrait
 {
 
-    public function testChangeColumnSqlNewTable(): void
+    public function testDropIndexSqlNewTable(): void
     {
         $this->assertSame(
             [
@@ -18,45 +17,44 @@ trait ChangeColumnTest
             $this->forge
                 ->build('test')
                 ->addColumn('id', [
-                    'type' => 'varchar'
-                ])
-                ->changeColumn('id', [
                     'type' => 'int'
                 ])
+                ->addIndex('id')
+                ->dropIndex('id')
                 ->sql()
         );
     }
 
-    public function testChangeColumnSqlExistingTable(): void
+    public function testDropIndexSqlExistingTable(): void
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'varchar'
+                'type' => 'int'
+            ]
+        ], [
+            'indexes' => [
+                'id'
             ]
         ]);
 
         $this->assertSame(
             [
-                'ALTER TABLE test CHANGE COLUMN id id INT(11) NOT NULL'
+                'DROP INDEX id ON test'
             ],
             $this->forge
                 ->build('test')
-                ->changeColumn('id', [
-                    'type' => 'int'
-                ])
+                ->dropIndex('id')
                 ->sql()
         );
     }
 
-    public function testChangeColumnSqlInvalidColumn(): void
+    public function testDropIndexSqlInvalidIndex(): void
     {
         $this->expectException(ForgeException::class);
 
         $this->forge
             ->build('test')
-            ->changeColumn('invalid', [
-                'type' => 'int'
-            ]);
+            ->dropIndex('invalid');
     }
 
 }

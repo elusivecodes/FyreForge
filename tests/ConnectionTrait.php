@@ -3,41 +3,41 @@ declare(strict_types=1);
 
 namespace Tests;
 
-use
-    Fyre\DB\Connection,
-    Fyre\DB\ConnectionManager,
-    Fyre\DB\Handlers\MySQL\MySQLConnection,
-    Fyre\Forge\ForgeInterface,
-    Fyre\Forge\ForgeRegistry,
-    Fyre\Schema\SchemaInterface,
-    Fyre\Schema\SchemaRegistry;
+use Fyre\DB\Connection;
+use Fyre\DB\ConnectionManager;
+use Fyre\DB\Handlers\MySQL\MySQLConnection;
+use Fyre\Forge\Forge;
+use Fyre\Forge\ForgeRegistry;
+use Fyre\Schema\Schema;
+use Fyre\Schema\SchemaRegistry;
 
-use function
-    getenv;
+use function getenv;
 
 trait ConnectionTrait
 {
 
     protected Connection $db;
 
-    protected SchemaInterface $schema;
+    protected Schema $schema;
 
-    protected ForgeInterface $forge;
+    protected Forge $forge;
 
     protected function setUp(): void
     {
         ConnectionManager::clear();
-        ConnectionManager::setConfig('default', [
-            'className' => MySQLConnection::class,
-            'host' => getenv('DB_HOST'),
-            'username' => getenv('DB_USERNAME'),
-            'password' => getenv('DB_PASSWORD'),
-            'database' => getenv('DB_NAME'),
-            'port' => getenv('DB_PORT'),
-            'collation' => 'utf8mb4_unicode_ci',
-            'charset' => 'utf8mb4',
-            'compress' => true,
-            'persist' => true
+        ConnectionManager::setConfig([
+            'default' => [
+                'className' => MySQLConnection::class,
+                'host' => getenv('DB_HOST'),
+                'username' => getenv('DB_USERNAME'),
+                'password' => getenv('DB_PASSWORD'),
+                'database' => getenv('DB_NAME'),
+                'port' => getenv('DB_PORT'),
+                'collation' => 'utf8mb4_unicode_ci',
+                'charset' => 'utf8mb4',
+                'compress' => true,
+                'persist' => true
+            ]
         ]);
 
         $this->db = ConnectionManager::use();

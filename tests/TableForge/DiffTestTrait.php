@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Tests\TableForge;
 
-trait DiffTest
+trait DiffTestTrait
 {
 
     public function testTableDiffSql(): void
@@ -43,9 +43,8 @@ trait DiffTest
         $this->assertSame(
             [],
             $this->forge
-                ->build('test', [
-                    'clean' => true
-                ])
+                ->build('test')
+                ->clear()
                 ->addColumn('id', [
                     'type' => 'int',
                     'extra' => 'AUTO_INCREMENT'
@@ -88,9 +87,8 @@ trait DiffTest
                 'ALTER TABLE test ADD COLUMN value1 VARCHAR(80) CHARACTER SET \'utf8mb4\' COLLATE \'utf8mb4_unicode_ci\' NOT NULL AFTER id'
             ],
             $this->forge
-                ->build('test', [
-                    'clean' => true
-                ])
+                ->build('test')
+                ->clear()
                 ->addColumn('id', [
                     'type' => 'int'
                 ])
@@ -134,9 +132,8 @@ trait DiffTest
                 'ALTER TABLE test ADD FOREIGN KEY value_id (value_id) REFERENCES test_values (id)'
             ],
             $this->forge
-                ->build('test', [
-                    'clean' => true
-                ])
+                ->build('test')
+                ->clear()
                 ->addColumn('id', [
                     'type' => 'int'
                 ])
@@ -168,9 +165,8 @@ trait DiffTest
                 'ALTER TABLE test ADD INDEX value (value) USING BTREE'
             ],
             $this->forge
-                ->build('test', [
-                    'clean' => true
-                ])
+                ->build('test')
+                ->clear()
                 ->addColumn('id', [
                     'type' => 'int'
                 ])
@@ -197,9 +193,9 @@ trait DiffTest
             ],
             $this->forge
                 ->build('test', [
-                    'clean' => true,
                     'engine' => 'MyISAM'
                 ])
+                ->clear()
                 ->addColumn('id', [
                     'type' => 'int'
                 ])
@@ -223,9 +219,8 @@ trait DiffTest
                 'ALTER TABLE test CHANGE COLUMN value value VARCHAR(255) CHARACTER SET \'utf8mb4\' COLLATE \'utf8mb4_unicode_ci\' NOT NULL'
             ],
             $this->forge
-                ->build('test', [
-                    'clean' => true
-                ])
+                ->build('test')
+                ->clear()
                 ->addColumn('id', [
                     'type' => 'int'
                 ])
@@ -256,9 +251,8 @@ trait DiffTest
                 'ALTER TABLE test CHANGE COLUMN value2 value2 VARCHAR(80) CHARACTER SET \'utf8mb4\' COLLATE \'utf8mb4_unicode_ci\' NOT NULL AFTER id'
             ],
             $this->forge
-                ->build('test', [
-                    'clean' => true
-                ])
+                ->build('test')
+                ->clear()
                 ->addColumn('id', [
                     'type' => 'int'
                 ])
@@ -293,9 +287,8 @@ trait DiffTest
                 'ALTER TABLE test ADD UNIQUE KEY value (value) USING BTREE'
             ],
             $this->forge
-                ->build('test', [
-                    'clean' => true
-                ])
+                ->build('test')
+                ->clear()
                 ->addColumn('id', [
                     'type' => 'int'
                 ])
@@ -347,9 +340,8 @@ trait DiffTest
                 'ALTER TABLE test ADD FOREIGN KEY value_id (value_id) REFERENCES test_values (id) ON UPDATE CASCADE ON DELETE CASCADE'
             ],
             $this->forge
-                ->build('test', [
-                    'clean' => true
-                ])
+                ->build('test')
+                ->clear()
                 ->addColumn('id', [
                     'type' => 'int'
                 ])
@@ -383,9 +375,8 @@ trait DiffTest
                 'ALTER TABLE test DROP COLUMN value'
             ],
             $this->forge
-                ->build('test', [
-                    'clean' => true
-                ])
+                ->build('test')
+                ->clear()
                 ->addColumn('id', [
                     'type' => 'int'
                 ])
@@ -431,9 +422,8 @@ trait DiffTest
                 'ALTER TABLE test DROP FOREIGN KEY value_id'
             ],
             $this->forge
-                ->build('test', [
-                    'clean' => true
-                ])
+                ->build('test')
+                ->clear()
                 ->addColumn('id', [
                     'type' => 'int'
                 ])
@@ -465,9 +455,8 @@ trait DiffTest
                 'DROP INDEX value ON test'
             ],
             $this->forge
-                ->build('test', [
-                    'clean' => true
-                ])
+                ->build('test')
+                ->clear()
                 ->addColumn('id', [
                     'type' => 'int'
                 ])
@@ -492,9 +481,8 @@ trait DiffTest
                 'ALTER TABLE test ADD PRIMARY KEY (id)'
             ],
             $this->forge
-                ->build('test', [
-                    'clean' => true
-                ])
+                ->build('test')
+                ->clear()
                 ->addColumn('id', [
                     'type' => 'int'
                 ])

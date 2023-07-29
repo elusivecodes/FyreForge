@@ -1,98 +1,81 @@
 <?php
 declare(strict_types=1);
 
-namespace Fyre\Forge\Traits;
+namespace Fyre\Forge;
 
-use
-    Fyre\DB\Connection,
-    Fyre\Forge\Exceptions\ForgeException,
-    Fyre\Forge\ForgeInterface,
-    Fyre\Forge\ForgeRegistry,
-    Fyre\Schema\SchemaInterface;
+use Fyre\DB\Connection;
+use Fyre\Forge\Exceptions\ForgeException;
+use Fyre\Forge\ForgeRegistry;
+use Fyre\Schema\Schema;
+use Fyre\Schema\SchemaRegistry;
+use Fyre\Schema\TableSchema;
 
-use const
-    ARRAY_FILTER_USE_KEY;
+use const ARRAY_FILTER_USE_KEY;
 
-use function
-    array_diff,
-    array_diff_assoc,
-    array_filter,
-    array_key_exists,
-    array_keys,
-    array_merge,
-    array_replace,
-    array_search,
-    array_slice,
-    array_splice,
-    in_array,
-    is_array;
+use function array_diff;
+use function array_diff_assoc;
+use function array_filter;
+use function array_key_exists;
+use function array_keys;
+use function array_merge;
+use function array_replace;
+use function array_search;
+use function array_slice;
+use function array_splice;
+use function is_array;
 
 /**
  * TableForge
  */
-trait TableForgeTrait
+abstract class TableForge
 {
 
-    protected ForgeInterface $forge;
+    protected Forge $forge;
+    protected Schema $schema;
+    protected TableSchema|null $tableSchema = null;
 
-    protected string $originalTableName;
-
-    protected array $originalColumns = [];
-    protected array $originalIndexes = [];
-    protected array $originalForeignKeys = [];
-    protected array $originalTableOptions = [];
-
-    protected array $renameColumns = [];
-
+    protected string $tableName;
     protected array $tableOptions;
-    protected bool $tableExists;
-    protected bool $dropped = false;
+    protected array $columns = [];
+    protected array $indexes = [];
+    protected array $foreignKeys = [];
+
+    protected string|null $newTableName = null;
+    protected array $renameColumns = [];
+    protected bool $dropTable = false;
 
     /**
      * New TableForge constructor.
-     * @param SchemaInterface $schema The schema.
+     * @param Forge $forge The forge.
      * @param string $tableName The table name.
      * @param array $options The table options.
      */
-    public function __construct(SchemaInterface $schema, string $tableName, array $options = [])
+    public function __construct(Forge $forge, string $tableName, array $options = [])
     {
-        $connection = $schema->getConnection();
+        $this->forge = $forge;
 
-        $this->forge = ForgeRegistry::getForge($connection);
+        $connection = $this->forge->getConnection();
+        $this->schema = SchemaRegistry::getSchema($connection);
 
-        $clean = $options['clean'] ?? false;
+        $this->tableName = $tableName;
 
-        unset($options['clean']);
-
-        parent::__construct($schema, $tableName);
-
-        $this->originalTableName = $tableName;
-
-        $this->tableExists = $this->schema->hasTable($this->originalTableName);
-
-        if ($this->tableExists) {
-            $this->originalTableOptions = $this->schema->table($this->tableName);
-            $this->tableOptions = array_merge($this->originalTableOptions, $options);
-
-            $this->originalColumns = $this->columns();
-            $this->originalIndexes = $this->indexes();
-            $this->originalForeignKeys = $this->foreignKeys();
-        } else {
+        if (!$this->schema->hasTable($this->tableName)) {
             $this->tableOptions = $this->forge->parseTableOptions($options);
+            return;
         }
 
-        if (!$this->tableExists || $clean) {
-            $this->columns = [];
-            $this->indexes = [];
-            $this->foreignKeys = [];
-        }
+        $this->tableSchema = $this->schema->describe($this->tableName);
+        $this->tableOptions = array_replace($this->schema->table($this->tableName), $options);
+        $this->columns = $this->tableSchema->columns();
+        $this->indexes = $this->tableSchema->indexes();
+        $this->foreignKeys = $this->tableSchema->foreignKeys();
     }
 
     /**
      * Add a column to the table.
      * @param string $column The column name.
      * @param array $options The column options.
-     * @return TableForgeInterface The TableForge.
+     * @return TableForge The TableForge.
      * @throws ForgeException if the column already exists.
      */
     public function addColumn(string $column, array $options = []): static
@@ -132,7 +115,7 @@ trait TableForgeTrait
      * Add a foreign key to the table.
      * @param string $foreignKey The foreign key name.
      * @param array $options The foreign key options.
-     * @return TableForgeInterface The TableForge.
+     * @return TableForge The TableForge.
      * @throws ForgeException if the foreign key already exists.
      */
     public function addForeignKey(string $foreignKey, array $options = []): static
@@ -141,7 +124,7 @@ trait TableForgeTrait
             throw ForgeException::forExistingForeignKey($foreignKey);
         }
 
-        $this->foreignKeys[$foreignKey] = $this->forge->parseForeignKeyOptions($options);
+        $this->foreignKeys[$foreignKey] = $this->forge->parseForeignKeyOptions($options, $foreignKey);
 
         return $this;
     }
@@ -150,7 +133,7 @@ trait TableForgeTrait
      * Add an index to the table.
      * @param string $index The index name.
      * @param array $options The index options.
-     * @return TableForgeInterface The TableForge.
+     * @return TableForge The TableForge.
      * @throws ForgeException if the index already exists.
      */
     public function addIndex(string $index, array $options = []): static
@@ -164,7 +147,7 @@ trait TableForgeTrait
             throw ForgeException::forExistingIndex($index);
         }
 
-        $this->indexes[$index] = $this->forge->parseIndexOptions($options);
+        $this->indexes[$index] = $this->forge->parseIndexOptions($options, $index);
 
         return $this;
     }
@@ -173,7 +156,7 @@ trait TableForgeTrait
      * Change a table column.
      * @param string $column The column name.
      * @param array $options The column options.
-     * @return TableForgeInterface The TableForge.
+     * @return TableForge The TableForge.
      * @throws ForgeException if the column does not exist.
      */
     public function changeColumn(string $column, array $options): static
@@ -221,29 +204,58 @@ trait TableForgeTrait
     }
 
     /**
-     * Clear data from the cache.
-     * @return TableForgeInterface The TableForge.
+     * Clear the column and index data.
+     * @return TableForge The TableForge.
      */
     public function clear(): static
     {
-        parent::clear();
-
+        $this->columns = [];
+        $this->indexes = [];
+        $this->foreignKeys = [];
         $this->renameColumns = [];
 
         return $this;
     }
 
     /**
+     * Get the data for a table column.
+     * @param string $name The column name.
+     * @return array|null The column data.
+     */
+    public function column(string $name): array|null
+    {
+        return $this->columns[$name] ?? null;
+    }
+
+    /**
+     * Get the names of all table columns.
+     * @return array The names of all table columns.
+     */
+    public function columnNames(): array
+    {
+        return array_keys($this->columns);
+    }
+
+    /**
+     * Get the data for all table columns.
+     * @return array The table columns data.
+     */
+    public function columns(): array
+    {
+        return $this->columns;
+    }
+
+    /**
      * Drop the table.
-     * @return TableForgeInterface The TableForge.
+     * @return TableForge The TableForge.
      */
     public function drop(): static
     {
-        if (!$this->tableExists) {
-            throw ForgeException::forMissingTable($this->originalTableName);
+        if (!$this->tableSchema) {
+            throw ForgeException::forMissingTable($this->tableName);
         }
 
-        $this->dropped = true;
+        $this->dropTable = true;
 
         return $this;
     }
@@ -252,7 +264,7 @@ trait TableForgeTrait
      * Drop a column from the table.
      * @param string $column The column name.
      * @param array $options The options for dropping the table.
-     * @return TableForgeInterface The TableForge.
+     * @return TableForge The TableForge.
      * @throws ForgeException if the column does not exist.
      */
     public function dropColumn(string $column, array $options = []): static
@@ -269,7 +281,7 @@ trait TableForgeTrait
     /**
      * Drop a foreign key from the table.
      * @param string $foreignKey The foreign key name.
-     * @return TableForgeInterface The TableForge.
+     * @return TableForge The TableForge.
      * @throws ForgeException if the foreign key does not exist.
      */
     public function dropForeignKey(string $foreignKey): static
@@ -287,7 +299,7 @@ trait TableForgeTrait
     /**
      * Drop an index from the table.
      * @param string $index The index name.
-     * @return TableForgeInterface The TableForge.
+     * @return TableForge The TableForge.
      * @throws ForgeException if the index does not exist.
      */
     public function dropIndex(string $index): static
@@ -307,13 +319,13 @@ trait TableForgeTrait
 
     /**
      * Generate and execute the SQL queries.
-     * @return TableForgeInterface The TableForge.
+     * @return TableForge The TableForge.
      */
     public function execute(): static
     {
         $queries = $this->sql();
 
-        $connection = $this->schema->getConnection();
+        $connection = $this->forge->getConnection();
         $connection->begin();
 
         foreach ($queries AS $sql) {
@@ -322,46 +334,133 @@ trait TableForgeTrait
 
         $connection->commit();
 
-        if ($this->schema->hasTable($this->tableName)) {
-            $this->schema->describe($this->tableName)->clear();
-        }
-
-        if ($this->tableName !== $this->originalTableName && $this->schema->hasTable($this->originalTableName)) {
-            $this->schema->describe($this->originalTableName)->clear();
-        }
-
         $this->clear();
 
-        $this->schema->clear();
+        if ($this->tableSchema) {
+            $this->tableSchema->clear();
+        }
 
-        $this->originalTableName = $this->tableName;
+        if (!$this->tableSchema || $this->newTableName || $this->dropTable) {
+            $this->schema->clear();
+        }
 
-        $this->tableExists = !$this->dropped;
-        $this->dropped = false;
+        if ($this->newTableName) {
+            $this->tableName = $this->newTableName;
+            $this->newTableName = null;
+        }
 
-        if ($this->tableExists) {
-            $this->originalTableOptions = $this->schema->table($this->tableName);
-            $this->originalColumns = $this->columns();
-            $this->originalIndexes = $this->indexes();
-            $this->originalForeignKeys = $this->foreignKeys();
+        if ($this->dropTable) {
+            $this->tableSchema = null;
+            $this->dropTable = false;
         } else {
-            $this->originalTableOptions = [];
-            $this->originalColumns = [];
-            $this->originalIndexes = [];
-            $this->originalForeignKeys = [];
+            $this->tableSchema = $this->schema->describe($this->tableName);
+            $this->tableOptions = $this->schema->table($this->tableName);
+            $this->columns = $this->tableSchema->columns();
+            $this->indexes = $this->tableSchema->indexes();
+            $this->foreignKeys = $this->tableSchema->foreignKeys();
         }
 
         return $this;
     }
 
     /**
+     * Get the data for a table foreign key.
+     * @param string $name The foreign key name.
+     * @return array|null The foreign key data.
+     */
+    public function foreignKey(string $name): array|null
+    {
+        return $this->foreignKeys[$name] ?? null;
+    }
+
+    /**
+     * Get the data for all table foreign keys.
+     * @return array The table foreign keys data.
+     */
+    public function foreignKeys()
+    {
+        return $this->foreignKeys;
+    }
+
+    /**
+     * Get the Forge.
+     * @return Forge The Forge.
+     */
+    public function getForge(): Forge
+    {
+        return $this->forge;
+    }
+
+    /**
+     * Get the table name.
+     * @return string The table name.
+     */
+    public function getTableName(): string
+    {
+        return $this->newTableName ?? $this->tableName;
+    }
+
+    /**
+     * Determine if the table has a column.
+     * @param string $name The column name.
+     * @return bool TRUE if the table has the column, otherwise FALSE.
+     */
+    public function hasColumn(string $name): bool
+    {
+        return array_key_exists($name, $this->columns);
+    }
+
+    /**
+     * Determine if the table has a foreign key.
+     * @param string $name The foreign key name.
+     * @return bool TRUE if the table has the foreign key, otherwise FALSE.
+     */
+    public function hasForeignKey(string $name): bool
+    {
+        return array_key_exists($name, $this->foreignKeys);
+    }
+
+    /**
+     * Determine if the table has an index.
+     * @param string $name The index name.
+     * @return bool TRUE if the table has the index, otherwise FALSE.
+     */
+    public function hasIndex(string $name): bool
+    {
+        return array_key_exists($name, $this->indexes);
+    }
+
+    /**
+     * Get the data for a table index.
+     * @param string $name The index name.
+     * @return array|null The index data.
+     */
+    public function index(string $name): array|null
+    {
+        return $this->indexes[$name] ?? null;
+    }
+
+    /**
+     * Get the data for all table indexes.
+     * @return array The table indexes data.
+     */
+    public function indexes(): array
+    {
+        return $this->indexes;
+    }
+
+    /**
      * Rename the table.
      * @param string $table The new table name.
-     * @return TableForgeInterface The TableForge.
+     * @return TableForge The TableForge.
      */
     public function rename(string $table): static
     {
-        $this->tableName = $table;
+        if ($this->tableSchema) {
+            $this->newTableName = $table;
+        } else {
+            $this->tableName = $table;
+        }
 
         return $this;
     }
@@ -369,7 +468,7 @@ trait TableForgeTrait
     /**
      * Set the primary key.
      * @param string|array $columns The columns.
-     * @return TableForgeInterface The TableForge.
+     * @return TableForge The TableForge.
      */
     public function setPrimaryKey(string|array $columns): static
     {
@@ -388,7 +487,7 @@ trait TableForgeTrait
     {
         $queries = [];
 
-        if (!$this->tableExists) {
+        if (!$this->tableSchema) {
             $nonForeignKeys = array_filter(
                 $this->indexes,
                 fn(string $index): bool => !$this->hasForeignKey($index),
@@ -410,16 +509,21 @@ trait TableForgeTrait
             return $queries;
         }
 
-        foreach ($this->originalForeignKeys AS $foreignKey => $options) {
+        $originalColumns = $this->tableSchema->columns();
+        $originalIndexes = $this->tableSchema->indexes();
+        $originalForeignKeys = $this->tableSchema->foreignKeys();
+        $originalTableOptions = $this->schema->table($this->tableName);
+
+        foreach ($originalForeignKeys AS $foreignKey => $options) {
             if (array_key_exists($foreignKey, $this->foreignKeys) && static::compare($this->foreignKeys[$foreignKey], $options)) {
                 continue;
             }
 
-            $queries[] = $this->forge->dropForeignKeySql($this->originalTableName, $foreignKey);
+            $queries[] = $this->forge->dropForeignKeySql($this->tableName, $foreignKey);
         }
 
-        foreach ($this->originalIndexes AS $index => $options) {
-            if (array_key_exists($index, $this->originalForeignKeys)) {
+        foreach ($originalIndexes AS $index => $options) {
+            if (array_key_exists($index, $originalForeignKeys)) {
                 continue;
             }
 
@@ -427,61 +531,62 @@ trait TableForgeTrait
                 continue;
             }
 
-            $queries[] = $this->forge->dropIndexSql($this->originalTableName, $index);
+            $queries[] = $this->forge->dropIndexSql($this->tableName, $index);
         }
 
-        if ($this->dropped) {
-            $queries[] = $this->forge->dropTableSql($this->originalTableName);
+        if ($this->dropTable) {
+            $queries[] = $this->forge->dropTableSql($this->tableName);
 
             return $queries;
         }
 
-        foreach ($this->originalColumns AS $column => $options) {
+        foreach ($originalColumns AS $column => $options) {
             $newColumn = $this->renameColumns[$column] ?? $column;
 
             if (array_key_exists($newColumn, $this->columns)) {
                 continue;
             }
 
-            $queries[] = $this->forge->dropColumnSql($this->originalTableName, $column);
+            $queries[] = $this->forge->dropColumnSql($this->tableName, $column);
         }
 
-        if ($this->tableName !== $this->originalTableName) {
-            $queries[] = $this->forge->renameTableSql($this->originalTableName, $this->tableName);
+        if ($this->newTableName && $this->newTableName !== $this->tableName) {
+            $queries[] = $this->forge->renameTableSql($this->tableName, $this->newTableName);
         }
 
-        $tableOptions = array_diff_assoc($this->tableOptions, $this->originalTableOptions);
+        $tableName = $this->newtableName ?? $this->tableName;
+        $tableOptions = array_diff_assoc($this->tableOptions, $originalTableOptions);
 
         if ($tableOptions !== []) {
-            $queries[] = $this->forge->alterTableSql($this->tableName, $tableOptions);
+            $queries[] = $this->forge->alterTableSql($tableName, $tableOptions);
         }
 
         $columnIndex = 0;
         $prevColumn = null;
-        $originalColumns = array_keys($this->originalColumns);
+        $originalColumnNames = array_keys($originalColumns);
         $newColumns = [];
 
         foreach ($this->columns AS $column => $options) {
             $originalColumn = array_search($column, $this->renameColumns) ?: $column;
-            $oldIndex = array_search($column, $originalColumns);
+            $oldIndex = array_search($column, $originalColumnNames);
 
             if ($oldIndex === false || $columnIndex !== $oldIndex) {
                 if ($prevColumn) {
                     $options['after'] = $prevColumn;
-                    $originalColumns = array_diff($originalColumns, [$column]);
-                    $prevIndex = array_search($prevColumn, $originalColumns);
-                    array_splice($originalColumns, $prevIndex + 1, 0, $column);
+                    $originalColumnNames = array_diff($originalColumnNames, [$column]);
+                    $prevIndex = array_search($prevColumn, $originalColumnNames);
+                    array_splice($originalColumnNames, $prevIndex + 1, 0, $column);
                 } else {
                     $options['first'] = true;
-                    array_unshift($originalColumns, $column);
+                    array_unshift($originalColumnNames, $column);
                 }
             }
 
-            if (!array_key_exists($originalColumn, $this->originalColumns)) {
-                $queries[] = $this->forge->addColumnSql($this->tableName, $column, $options);
-            } else if ($columnIndex !== $oldIndex || !static::compare($options, $this->originalColumns[$originalColumn])) {
+            if (!array_key_exists($originalColumn, $originalColumns)) {
+                $queries[] = $this->forge->addColumnSql($tableName, $column, $options);
+            } else if ($columnIndex !== $oldIndex || !static::compare($options, $originalColumns[$originalColumn])) {
                 $options['name'] = $column;
-                $queries[] = $this->forge->changeColumnSql($this->tableName, $originalColumn, $options);
+                $queries[] = $this->forge->changeColumnSql($tableName, $originalColumn, $options);
             }
 
             $newColumns[] = $column;
@@ -494,20 +599,20 @@ trait TableForgeTrait
                 continue;
             }
 
-            if (array_key_exists($index, $this->originalIndexes) && static::compare($options, $this->originalIndexes[$index])) {
+            if (array_key_exists($index, $originalIndexes) && static::compare($options, $originalIndexes[$index])) {
                 continue;
             }
 
-            $queries[] = $this->forge->addIndexSql($this->tableName, $index, $options);
+            $queries[] = $this->forge->addIndexSql($tableName, $index, $options);
         }
 
         foreach ($this->foreignKeys AS $foreignKey => $options) {
-            if (array_key_exists($foreignKey, $this->originalForeignKeys) && static::compare($options, $this->originalForeignKeys[$foreignKey])) {
+            if (array_key_exists($foreignKey, $originalForeignKeys) && static::compare($options, $originalForeignKeys[$foreignKey])) {
                 continue;
             }
 
 
-            $queries[] = $this->forge->addForeignKeySql($this->tableName, $foreignKey, $options);
+            $queries[] = $this->forge->addForeignKeySql($tableName, $foreignKey, $options);
         }
 
         return $queries;

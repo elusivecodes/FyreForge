@@ -3,17 +3,15 @@ declare(strict_types=1);
 
 namespace Fyre\Forge;
 
-use
-    Fyre\DB\Connection,
-    Fyre\DB\Handlers\MySQL\MySQLConnection,
-    Fyre\Forge\Handlers\MySQL\MySQLForge,
-    Fyre\Schema\Schema,
-    WeakMap;
+use Fyre\DB\Connection;
+use Fyre\DB\Handlers\MySQL\MySQLConnection;
+use Fyre\Forge\Handlers\MySQL\MySQLForge;
+use Fyre\Schema\Schema;
+use WeakMap;
 
-use function
-    array_key_exists,
-    get_class,
-    ltrim;
+use function array_key_exists;
+use function get_class;
+use function ltrim;
 
 /**
  * ForgeRegistry
@@ -30,9 +28,9 @@ abstract class ForgeRegistry
     /**
      * Get the Forge for a Connection.
      * @param Connection $connection The Connection.
-     * @return ForgeInterface The Forge.
+     * @return Forge The Forge.
      */
-    public static function getForge(Connection $connection): ForgeInterface
+    public static function getForge(Connection $connection): Forge
     {
         static::$forges ??= new WeakMap;
 
@@ -54,9 +52,9 @@ abstract class ForgeRegistry
     /**
      * Load a Forge for a Connection.
      * @param Connection $connection The Connection.
-     * @return ForgeInterface The Forge.
+     * @return Forge The Forge.
      */
-    protected static function loadForge(Connection $connection): ForgeInterface
+    protected static function loadForge(Connection $connection): Forge
     {
         $connectionClass = get_class($connection);
 

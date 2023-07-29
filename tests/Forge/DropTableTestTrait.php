@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Tests\Forge;
 
-trait DropTableTest
+trait DropTableTestTrait
 {
 
     public function testDropTable(): void

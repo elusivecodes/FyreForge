@@ -3,10 +3,9 @@ declare(strict_types=1);
 
 namespace Tests\TableForge;
 
-use
-    Fyre\Forge\Exceptions\ForgeException;
+use Fyre\Forge\Exceptions\ForgeException;
 
-trait AddIndexTest
+trait AddIndexTestTrait
 {
 
     public function testAddIndexSqlNewTable(): void

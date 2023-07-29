@@ -3,29 +3,23 @@ declare(strict_types=1);
 
 namespace Fyre\Forge\Handlers\MySQL;
 
-use
-    Fyre\Forge\ForgeInterface,
-    Fyre\Forge\Traits\ForgeTrait,
-    Fyre\Schema\Handlers\MySQL\MySQLSchema,
-    Fyre\Schema\TableSchema;
+use Fyre\Forge\Forge;
+use Fyre\Schema\Handlers\MySQL\MySQLSchema;
+use Fyre\Schema\TableSchema;
 
-use function
-    array_key_exists,
-    array_keys,
-    array_map,
-    implode,
-    is_numeric,
-    strtolower,
-    strtoupper;
+use function array_keys;
+use function array_map;
+use function implode;
+use function is_numeric;
+use function preg_replace_callback;
+use function strtolower;
+use function strtoupper;
 
 /**
  * MySQLForge
  */
-class MySQLForge extends MySQLSchema implements ForgeInterface
+class MySQLForge extends Forge
 {
-
-    use
-        ForgeTrait;
 
     /**
      * Generate SQL for adding a column to a table.
@@ -350,6 +344,7 @@ class MySQLForge extends MySQLSchema implements ForgeInterface
                 break;
         }
 
+        $defaultLength = $options['length'] === null;
         switch ($options['type']) {
             case 'bit':
                 $options['length'] = 1;
@@ -422,6 +417,10 @@ class MySQLForge extends MySQLSchema implements ForgeInterface
             case 'decimal':
             case 'float':
             case 'double':
+                if (!$options['unsigned'] && $options['length'] !== null && $defaultLength) {
+                    $options['length']++;
+                }
+
                 break;
             default:
                 $options['unsigned'] = false;
@@ -434,12 +433,13 @@ class MySQLForge extends MySQLSchema implements ForgeInterface
     /**
      * Parse foreign key options.
      * @param array $options The foreign key options.
+     * @param string|null $foreignKey The foreign key name.
      * @return array The parsed options.
      */
-    public function parseForeignKeyOptions(array $options = []): array
+    public function parseForeignKeyOptions(array $options = [], string|null $foreignKey = null): array
     {
         $options['columns'] ??= [];
-        $options['referencedtable'] ??= '';
+        $options['referencedTable'] ??= '';
         $options['referencedColumns'] ??= [];
         $options['update'] ??= '';
         $options['delete'] ??= '';
@@ -447,15 +447,20 @@ class MySQLForge extends MySQLSchema implements ForgeInterface
         $options['columns'] = (array) $options['columns'];
         $options['referencedColumns'] = (array) $options['referencedColumns'];
 
+        if ($foreignKey && $options['columns'] === []) {
+            $options['columns'] = [$foreignKey];
+        }
+
         return $options;
     }
 
     /**
      * Parse index options.
      * @param array $options The index options.
+     * @param string|null $index The index name.
      * @return array The parsed options.
      */
-    public function parseIndexOptions(array $options = []): array
+    public function parseIndexOptions(array $options = [], string|null $index = null): array
     {
         $options['type'] ??= 'BTREE';
         $options['columns'] ??= [];
@@ -463,6 +468,10 @@ class MySQLForge extends MySQLSchema implements ForgeInterface
 
         $options['type'] = strtoupper($options['type']);
         $options['columns'] = (array) $options['columns'];
+
+        if ($index && $options['columns'] === []) {
+            $options['columns'] = [$index];
+        }
 
         return $options;
     }
@@ -516,22 +525,6 @@ class MySQLForge extends MySQLSchema implements ForgeInterface
         $sql .= strtoupper($options['type']);
 
         if ($options['length'] !== null) {
-
-            switch ($options['type']) {
-                case 'tinyint':
-                case 'smallint':
-                case 'mediumint':
-                case 'int':
-                case 'bigint':
-                case 'decimal':
-                case 'float':
-                case 'double':
-                    if (!$options['unsigned']) {
-                        $options['length']++;
-                    }
-                    break;
-            }
-
             $sql .= '(';
             $sql .= (int) $options['length'];
 
@@ -608,11 +601,7 @@ class MySQLForge extends MySQLSchema implements ForgeInterface
      */
     protected function prepareForeignKeySql(string $foreignKey, array $options)
     {
-        $options = $this->parseForeignKeyOptions($options);
-
-        if ($options['columns'] === []) {
-            $options['columns'] = [$foreignKey];
-        }
+        $options = $this->parseForeignKeyOptions($options, $foreignKey);
 
         $sql = '';
         $sql .= ' (';
@@ -645,11 +634,7 @@ class MySQLForge extends MySQLSchema implements ForgeInterface
      */
     protected function prepareIndexSql(string $index, array $options): string
     {
-        $options = $this->parseIndexOptions($options);
-
-        if ($options['columns'] === []) {
-            $options['columns'] = [$index];
-        }
+        $options = $this->parseIndexOptions($options, $index);
 
         $sql = '';
         if ($index === 'PRIMARY') {

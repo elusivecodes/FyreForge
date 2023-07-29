@@ -1,6 +1,6 @@
 # FyreForge
 
-**FyreForge** is a free, database forge library for *PHP*.
+**FyreForge** is a free, open-source database forge library for *PHP*.
 
 
 ## Table Of Contents
@@ -51,8 +51,6 @@ ForgeRegistry::setHandler($connectionClass, $schemaClass);
 
 
 ## Forges
-
-This class extends the [*Schema*](https://github.com/elusivecodes/FyreSchema#schemas) class.
 
 **Add Column**
 
@@ -257,6 +255,14 @@ Drop a table.
 $forge->dropTable($table, $options);
 ```
 
+**Get Connection**
+
+Get the [*Connection*](https://github.com/elusivecodes/FyreDB#connections).
+
+```php
+$connection = $forge->getConnection();
+```
+
 **Rename Table**
 
 Rename a table.
@@ -270,8 +276,6 @@ $forge->renameTable($table, $newTable);
 
 
 ## Table Forges
-
-This class extends the [*TableSchema*](https://github.com/elusivecodes/FyreSchema#table-schemas) class.
 
 **Add Column**
 
@@ -352,6 +356,40 @@ Change a table column.
 $tableForge->changeColumn($column, $options);
 ```
 
+**Clear**
+
+Clear the column and index data.
+
+```php
+$tableForge->clear();
+```
+
+**Column**
+
+Get the data for a table column.
+
+- `$name` is a string representing the column name.
+
+```php
+$column = $tableForge->column($name);
+```
+
+**Column Names**
+
+Get the names of all table columns.
+
+```php
+$columnNames = $tableForge->columnNames();
+```
+
+**Columns**
+
+Get the data for all table columns.
+
+```php
+$columns = $tableForge->columns();
+```
+
 **Drop**
 
 Drop the table.
@@ -396,6 +434,88 @@ Generate and execute the SQL queries.
 
 ```php
 $tableForge->execute();
+```
+
+**Foreign Key**
+
+Get the data for a table foreign key.
+
+- `$name` is a string representing the foreign key name.
+
+```php
+$foreignKey = $tableForge->foreignKey($name);
+```
+
+**Foreign Keys**
+
+Get the data for all table foreign keys.
+
+```php
+$foreignKeys = $tableForge->foreignKeys();
+```
+
+**Get Forge**
+
+Get the [*Forge*](#forges).
+
+```php
+$forge = $tableForge->getForge();
+```
+
+**Get Table Name**
+
+Get the table name.
+
+```php
+$tableName = $tableForge->getTableName();
+```
+
+**Has Column**
+
+Determine if the table has a column.
+
+- `$name` is a string representing the column name.
+
+```php
+$hasColumn = $tableForge->hasColumn($name);
+```
+
+**Has Foreign Key**
+
+Determine if the table has a foreign key.
+
+- `$name` is a string representing the foreign key name.
+
+```php
+$hasForeignKey = $tableForge->hasForeignKey($name);
+```
+
+**Has Index**
+
+Determine if the table has an index.
+
+- `$name` is a string representing the index name.
+
+```php
+$hasIndex = $tableForge->hasIndex($name);
+```
+
+**Index**
+
+Get the data for a table index.
+
+- `$name` is a string representing the index name.
+
+```php
+$index = $tableForge->index($name);
+```
+
+**Indexes**
+
+Get the data for all table indexes.
+
+```php
+$indexes = $tableForge->indexes();
 ```
 
 **Rename**

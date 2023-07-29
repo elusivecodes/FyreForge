@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Tests\Forge;
 
-trait DropForeignKeyTest
+trait DropForeignKeyTestTrait
 {
 
     public function testDropForeignKey(): void

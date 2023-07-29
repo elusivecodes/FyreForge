@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Tests\Forge;
 
-trait AddColumnTest
+trait AddColumnTestTrait
 {
 
     public function testAddColumn(): void
@@ -219,7 +219,7 @@ trait AddColumnTest
     public function testAddColumnSqlLength(): void
     {
         $this->assertSame(
-            'ALTER TABLE test ADD COLUMN value INT(10) NOT NULL',
+            'ALTER TABLE test ADD COLUMN value INT(9) NOT NULL',
             $this->forge->addColumnSql('test', 'value', [
                 'type' => 'int',
                 'length' => 9

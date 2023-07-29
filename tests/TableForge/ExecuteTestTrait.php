@@ -3,10 +3,7 @@ declare(strict_types=1);
 
 namespace Tests\TableForge;
 
-use
-    Fyre\Forge\Exceptions\ForgeException;
-
-trait ExecuteTest
+trait ExecuteTestTrait
 {
 
     public function testExecuteAddColumn(): void

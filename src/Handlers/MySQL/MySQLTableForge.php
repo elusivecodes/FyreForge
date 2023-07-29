@@ -3,18 +3,13 @@ declare(strict_types=1);
 
 namespace Fyre\Forge\Handlers\MySQL;
 
-use
-    Fyre\Forge\TableForgeInterface,
-    Fyre\Forge\Traits\TableForgeTrait,
-    Fyre\Schema\Handlers\MySQL\MySQLTableSchema;
+use Fyre\Forge\TableForge;
+use Fyre\Schema\Handlers\MySQL\MySQLTableSchema;
 
 /**
  * MySQLTableTable
  */
-class MySQLTableForge extends MySQLTableSchema implements TableForgeInterface
+class MySQLTableForge extends TableForge
 {
-
-    use
-        TableForgeTrait;
 
 }

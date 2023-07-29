@@ -3,8 +3,7 @@ declare(strict_types=1);
 
 namespace Fyre\Forge\Exceptions;
 
-use
-    RunTimeException;
+use RunTimeException;
 
 /**
  * ForgeException

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Tests\Forge;
 
-trait DropSchemaTest
+trait DropSchemaTestTrait
 {
 
     public function testDropSchema(): void

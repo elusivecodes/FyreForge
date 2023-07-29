@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Tests\TableForge;
 
-trait RenameTest
+trait RenameTestTrait
 {
 
     public function testRenameSqlNewTable(): void
