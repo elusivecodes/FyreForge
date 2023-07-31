@@ -6,7 +6,6 @@ namespace Fyre\Forge;
 use Fyre\DB\Connection;
 use Fyre\DB\Handlers\MySQL\MySQLConnection;
 use Fyre\Forge\Handlers\MySQL\MySQLForge;
-use Fyre\Schema\Schema;
 use WeakMap;
 
 use function array_key_exists;

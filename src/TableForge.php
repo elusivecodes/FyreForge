@@ -3,9 +3,7 @@ declare(strict_types=1);
 
 namespace Fyre\Forge;
 
-use Fyre\DB\Connection;
 use Fyre\Forge\Exceptions\ForgeException;
-use Fyre\Forge\ForgeRegistry;
 use Fyre\Schema\Schema;
 use Fyre\Schema\SchemaRegistry;
 use Fyre\Schema\TableSchema;

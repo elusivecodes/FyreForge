@@ -4,8 +4,6 @@ declare(strict_types=1);
 namespace Fyre\Forge\Handlers\MySQL;
 
 use Fyre\Forge\Forge;
-use Fyre\Schema\Handlers\MySQL\MySQLSchema;
-use Fyre\Schema\TableSchema;
 
 use function array_keys;
 use function array_map;

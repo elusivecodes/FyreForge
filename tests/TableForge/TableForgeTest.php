@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Tests\TableForge;
 
-use Fyre\Forge\ForgeRegistry;
 use PHPUnit\Framework\TestCase;
 use Tests\ConnectionTrait;
 
