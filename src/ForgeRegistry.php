@@ -52,6 +52,7 @@ abstract class ForgeRegistry
      * Load a Forge for a Connection.
      * @param Connection $connection The Connection.
      * @return Forge The Forge.
+     * @throws ForgeException if the handler is missing.
      */
     protected static function loadForge(Connection $connection): Forge
     {
