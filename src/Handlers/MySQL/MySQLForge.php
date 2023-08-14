@@ -597,7 +597,7 @@ class MySQLForge extends Forge
      * @param array $options The foreign key options.
      * @return string The foreign key SQL.
      */
-    protected function prepareForeignKeySql(string $foreignKey, array $options)
+    protected function prepareForeignKeySql(string $foreignKey, array $options): string
     {
         $options = $this->parseForeignKeyOptions($options, $foreignKey);
 
