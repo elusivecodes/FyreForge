@@ -14,9 +14,8 @@ trait DropSchemaTestTrait
 
         $this->assertCount(
             0,
-            $this->db->builder()
-                ->select('*')
-                ->table('INFORMATION_SCHEMA.SCHEMATA')
+            $this->db->select()
+                ->from('INFORMATION_SCHEMA.SCHEMATA')
                 ->where([
                     'SCHEMA_NAME' => 'other'
                 ])

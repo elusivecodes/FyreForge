@@ -20,7 +20,7 @@
         }
     },
     "require": {
-        "fyre/schema": "^2.0"
+        "fyre/schema": "^3.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^10"

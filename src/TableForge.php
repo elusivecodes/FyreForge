@@ -324,13 +324,10 @@ abstract class TableForge
         $queries = $this->sql();
 
         $connection = $this->forge->getConnection();
-        $connection->begin();
 
         foreach ($queries AS $sql) {
             $connection->query($sql);
         }
-
-        $connection->commit();
 
         $this->clear();
 
