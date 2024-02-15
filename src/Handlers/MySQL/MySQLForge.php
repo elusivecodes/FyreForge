@@ -315,7 +315,7 @@ class MySQLForge extends Forge
         $options['extra'] = strtolower($options['extra'] ?? '');
         $options['comment'] ??= '';
 
-        if ($options['default']) {
+        if ($options['default'] !== null) {
             $options['default'] = preg_replace_callback(
                 '/(["\']).*?[^\\\\]\1|([A-Z]+)/',
                 fn(array $match): string => $match[1] || $match[2] === 'NULL' ?
