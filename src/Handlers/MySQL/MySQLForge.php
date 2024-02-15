@@ -563,7 +563,7 @@ class MySQLForge extends Forge
             $sql .= ' NOT NULL';
         }
 
-        if ($options['default']) {
+        if ($options['default'] !== null) {
             $sql .= ' DEFAULT ';
             $sql .= preg_replace_callback(
                 '/(["\']).*?[^\\\\]\1|([a-z]+)/',
@@ -578,7 +578,7 @@ class MySQLForge extends Forge
             $sql .= ' '.strtoupper($options['extra']);
         }
 
-        if ($options['comment']) {
+        if ($options['comment'] !== '') {
             $sql .= ' COMMENT '.$this->connection->quote($options['comment']);
         }
 
@@ -688,7 +688,7 @@ class MySQLForge extends Forge
             $sql .= ' COLLATE = '.$this->connection->quote($options['collation']);
         }
 
-        if ($options['comment']) {
+        if ($options['comment'] !== '') {
             $sql .= ' COMMENT '.$this->connection->quote($options['comment']);
         }
 
