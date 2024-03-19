@@ -535,10 +535,12 @@ abstract class TableForge
             return $queries;
         }
 
+        $originalColumnNames = [];
         foreach ($originalColumns AS $column => $options) {
             $newColumn = $this->renameColumns[$column] ?? $column;
 
             if (array_key_exists($newColumn, $this->columns)) {
+                $originalColumnNames[] = $newColumn;
                 continue;
             }
 
@@ -558,7 +560,6 @@ abstract class TableForge
 
         $columnIndex = 0;
         $prevColumn = null;
-        $originalColumnNames = array_keys($originalColumns);
         $newColumns = [];
 
         foreach ($this->columns AS $column => $options) {
@@ -579,7 +580,7 @@ abstract class TableForge
 
             if (!array_key_exists($originalColumn, $originalColumns)) {
                 $queries[] = $this->forge->addColumnSql($tableName, $column, $options);
-            } else if ($columnIndex !== $oldIndex || !static::compare($options, $originalColumns[$originalColumn])) {
+            } else if ($column !== $originalColumn || $columnIndex !== $oldIndex || !static::compare($options, $originalColumns[$originalColumn])) {
                 $options['name'] = $column;
                 $queries[] = $this->forge->changeColumnSql($tableName, $originalColumn, $options);
             }

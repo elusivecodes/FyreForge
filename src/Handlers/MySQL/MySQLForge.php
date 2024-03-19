@@ -329,6 +329,7 @@ class MySQLForge extends Forge
             case 'char':
             case 'varchar':
             case 'tinytext':
+            case 'text':
             case 'mediumtext':
             case 'longtext':
             case 'enum':
