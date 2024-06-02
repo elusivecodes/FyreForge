@@ -551,7 +551,7 @@ abstract class TableForge
             $queries[] = $this->forge->renameTableSql($this->tableName, $this->newTableName);
         }
 
-        $tableName = $this->newtableName ?? $this->tableName;
+        $tableName = $this->newTableName ?? $this->tableName;
         $tableOptions = array_diff_assoc($this->tableOptions, $originalTableOptions);
 
         if ($tableOptions !== []) {
@@ -611,7 +611,7 @@ abstract class TableForge
             $queries[] = $this->forge->addForeignKeySql($tableName, $foreignKey, $options);
         }
 
-        return $queries;
+        return $this->forge->mergeQueries($queries);
     }
 
     /**

@@ -7,11 +7,15 @@ use Fyre\Forge\Forge;
 
 use function array_keys;
 use function array_map;
+use function array_values;
 use function implode;
 use function is_numeric;
+use function preg_match;
 use function preg_replace_callback;
 use function strtolower;
 use function strtoupper;
+use function str_starts_with;
+use function substr;
 
 /**
  * MySQLForge
@@ -294,6 +298,33 @@ class MySQLForge extends Forge
         $sql .= $table;
 
         return $sql;
+    }
+
+    /**
+     * Merge queries.
+     * @param array $queries The queries.
+     * @return array The queries.
+     */
+    public function mergeQueries(array $queries): array
+    {
+        for ($i = count($queries) - 1; $i > 0; $i--) {
+            $query = $queries[$i];
+
+            if (!preg_match('/^(ALTER TABLE [^\s]+) (.*)$/', $query, $match)) {
+                continue;
+            }
+
+            $prevQuery = $queries[$i - 1];
+
+            if (!str_starts_with($prevQuery, $match[1])) {
+                continue;
+            }
+
+            $queries[$i - 1] = $prevQuery.', '.$match[2];
+            unset($queries[$i]);
+        }
+
+        return array_values($queries);
     }
 
     /**

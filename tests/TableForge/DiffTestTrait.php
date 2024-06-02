@@ -336,8 +336,7 @@ trait DiffTestTrait
 
         $this->assertSame(
             [
-                'ALTER TABLE test DROP FOREIGN KEY value_id',
-                'ALTER TABLE test ADD FOREIGN KEY value_id (value_id) REFERENCES test_values (id) ON UPDATE CASCADE ON DELETE CASCADE'
+                'ALTER TABLE test DROP FOREIGN KEY value_id, ADD FOREIGN KEY value_id (value_id) REFERENCES test_values (id) ON UPDATE CASCADE ON DELETE CASCADE'
             ],
             $this->forge
                 ->build('test')

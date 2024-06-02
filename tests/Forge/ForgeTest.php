@@ -22,6 +22,7 @@ final class ForgeTest extends TestCase
     use DropIndexTestTrait;
     use DropSchemaTestTrait;
     use DropTableTestTrait;
+    use MergeQueryTestTrait;
     use RenameTableTestTrait;
 
 }

@@ -308,6 +308,16 @@ abstract class Forge
     }
 
     /**
+     * Merge queries.
+     * @param array $queries The queries.
+     * @return array The queries.
+     */
+    public function mergeQueries(array $queries): array
+    {
+        return $queries;
+    }
+
+    /**
      * Parse column options.
      * @param array $options The column options.
      * @return array The parsed options.

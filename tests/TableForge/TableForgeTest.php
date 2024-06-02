@@ -20,6 +20,7 @@ final class TableForgeTest extends TestCase
     use DropForeignKeyTestTrait;
     use DropIndexTestTrait;
     use ExecuteTestTrait;
+    use MergeQueryTestTrait;
     use RenameTestTrait;
     use TableTestTrait;
 
