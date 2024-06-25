@@ -7,18 +7,17 @@ use Fyre\Forge\Exceptions\ForgeException;
 
 trait DropTestTrait
 {
-
     public function testDropSqlExistingTable(): void
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int'
-            ]
+                'type' => 'int',
+            ],
         ]);
 
         $this->assertSame(
             [
-                'DROP TABLE test'
+                'DROP TABLE test',
             ],
             $this->forge
                 ->build('test')
@@ -34,9 +33,8 @@ trait DropTestTrait
         $this->forge
             ->build('test')
             ->addColumn('id', [
-                'type' => 'int'
+                'type' => 'int',
             ])
             ->drop();
     }
-
 }

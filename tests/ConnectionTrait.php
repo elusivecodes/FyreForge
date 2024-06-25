@@ -15,12 +15,11 @@ use function getenv;
 
 trait ConnectionTrait
 {
-
     protected Connection $db;
 
-    protected Schema $schema;
-
     protected Forge $forge;
+
+    protected Schema $schema;
 
     protected function setUp(): void
     {
@@ -36,8 +35,8 @@ trait ConnectionTrait
                 'collation' => 'utf8mb4_unicode_ci',
                 'charset' => 'utf8mb4',
                 'compress' => true,
-                'persist' => true
-            ]
+                'persist' => true,
+            ],
         ]);
 
         $this->db = ConnectionManager::use();
@@ -49,5 +48,4 @@ trait ConnectionTrait
         $this->db->query('DROP TABLE IF EXISTS other');
         $this->db->query('DROP SCHEMA IF EXISTS other');
     }
-
 }

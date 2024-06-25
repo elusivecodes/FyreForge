@@ -8,7 +8,4 @@ use Fyre\Forge\TableForge;
 /**
  * MySQLTableTable
  */
-class MySQLTableForge extends TableForge
-{
-
-}
+class MySQLTableForge extends TableForge {}

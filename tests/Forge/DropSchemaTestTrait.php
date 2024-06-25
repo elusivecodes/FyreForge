@@ -5,7 +5,6 @@ namespace Tests\Forge;
 
 trait DropSchemaTestTrait
 {
-
     public function testDropSchema(): void
     {
         $this->forge->createSchema('other');
@@ -17,7 +16,7 @@ trait DropSchemaTestTrait
             $this->db->select()
                 ->from('INFORMATION_SCHEMA.SCHEMATA')
                 ->where([
-                    'SCHEMA_NAME' => 'other'
+                    'SCHEMA_NAME' => 'other',
                 ])
                 ->execute()
                 ->all()
@@ -39,5 +38,4 @@ trait DropSchemaTestTrait
             $this->forge->dropSchemaSql('test', ['ifExists' => true])
         );
     }
-
 }

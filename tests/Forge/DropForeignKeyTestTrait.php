@@ -5,35 +5,34 @@ namespace Tests\Forge;
 
 trait DropForeignKeyTestTrait
 {
-
     public function testDropForeignKey(): void
     {
         $this->forge->createTable('test_values', [
             'id' => [
-                'type' => 'int'
-            ]
+                'type' => 'int',
+            ],
         ], [
             'indexes' => [
                 'PRIMARY' => [
                     'columns' => [
-                        'id'
-                    ]
-                ]
-            ]
+                        'id',
+                    ],
+                ],
+            ],
         ]);
 
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int'
+                'type' => 'int',
             ],
             'value_id' => [
-                'type' => 'int'
-            ]
+                'type' => 'int',
+            ],
         ]);
 
         $this->forge->addForeignKey('test', 'value_id', [
             'referencedTable' => 'test_values',
-            'referencedColumns' => 'id'
+            'referencedColumns' => 'id',
         ]);
 
         $this->forge->dropForeignKey('test', 'value_id');
@@ -51,5 +50,4 @@ trait DropForeignKeyTestTrait
             $this->forge->dropForeignKeySql('test', 'value')
         );
     }
-
 }

@@ -5,19 +5,18 @@ namespace Tests\TableForge;
 
 trait ExecuteTestTrait
 {
-
     public function testExecuteAddColumn(): void
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int'
-            ]
+                'type' => 'int',
+            ],
         ]);
 
         $this->forge
             ->build('test')
             ->addColumn('value', [
-                'type' => 'int'
+                'type' => 'int',
             ])
             ->execute();
 
@@ -31,32 +30,32 @@ trait ExecuteTestTrait
     {
         $this->forge->createTable('test_values', [
             'id' => [
-                'type' => 'int'
-            ]
+                'type' => 'int',
+            ],
         ], [
             'indexes' => [
                 'PRIMARY' => [
                     'columns' => [
-                        'id'
-                    ]
-                ]
-            ]
+                        'id',
+                    ],
+                ],
+            ],
         ]);
 
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int'
+                'type' => 'int',
             ],
             'value_id' => [
-                'type' => 'int'
-            ]
+                'type' => 'int',
+            ],
         ]);
 
         $this->forge
             ->build('test')
             ->addForeignKey('value_id', [
                 'referencedTable' => 'test_values',
-                'referencedColumns' => 'id'
+                'referencedColumns' => 'id',
             ])
             ->execute();
 
@@ -70,8 +69,8 @@ trait ExecuteTestTrait
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int'
-            ]
+                'type' => 'int',
+            ],
         ]);
 
         $this->forge
@@ -89,17 +88,17 @@ trait ExecuteTestTrait
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int'
+                'type' => 'int',
             ],
             'value' => [
-                'type' => 'int'
-            ]
+                'type' => 'int',
+            ],
         ]);
 
         $this->forge
             ->build('test')
             ->changeColumn('value', [
-                'name' => 'other'
+                'name' => 'other',
             ])
             ->execute();
 
@@ -119,7 +118,7 @@ trait ExecuteTestTrait
         $this->forge
             ->build('test')
             ->addColumn('id', [
-                'type' => 'int'
+                'type' => 'int',
             ])
             ->execute();
 
@@ -132,8 +131,8 @@ trait ExecuteTestTrait
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int'
-            ]
+                'type' => 'int',
+            ],
         ]);
 
         $this->forge
@@ -150,11 +149,11 @@ trait ExecuteTestTrait
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int'
+                'type' => 'int',
             ],
             'value' => [
-                'type' => 'int'
-            ]
+                'type' => 'int',
+            ],
         ]);
 
         $this->forge
@@ -172,32 +171,32 @@ trait ExecuteTestTrait
     {
         $this->forge->createTable('test_values', [
             'id' => [
-                'type' => 'int'
-            ]
+                'type' => 'int',
+            ],
         ], [
             'indexes' => [
                 'PRIMARY' => [
                     'columns' => [
-                        'id'
-                    ]
-                ]
-            ]
+                        'id',
+                    ],
+                ],
+            ],
         ]);
 
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int'
+                'type' => 'int',
             ],
             'value_id' => [
-                'type' => 'int'
-            ]
+                'type' => 'int',
+            ],
         ], [
             'foreignKeys' => [
                 'value_id' => [
                     'referencedTable' => 'test_values',
-                    'referencedColumns' => 'id'
-                ]
-            ]
+                    'referencedColumns' => 'id',
+                ],
+            ],
         ]);
 
         $this->forge
@@ -215,12 +214,12 @@ trait ExecuteTestTrait
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int'
-            ]
+                'type' => 'int',
+            ],
         ], [
             'indexes' => [
-                'id'
-            ]
+                'id',
+            ],
         ]);
 
         $this->forge
@@ -238,8 +237,8 @@ trait ExecuteTestTrait
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int'
-            ]
+                'type' => 'int',
+            ],
         ]);
 
         $this->forge
@@ -255,5 +254,4 @@ trait ExecuteTestTrait
             $this->schema->hasTable('other')
         );
     }
-
 }

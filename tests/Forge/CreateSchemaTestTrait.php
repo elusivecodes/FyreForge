@@ -5,7 +5,6 @@ namespace Tests\Forge;
 
 trait CreateSchemaTestTrait
 {
-
     public function testCreateSchema(): void
     {
         $this->forge->createSchema('other');
@@ -15,7 +14,7 @@ trait CreateSchemaTestTrait
             $this->db->select()
                 ->from('INFORMATION_SCHEMA.SCHEMATA')
                 ->where([
-                    'SCHEMA_NAME' => 'other'
+                    'SCHEMA_NAME' => 'other',
                 ])
                 ->execute()
                 ->all()
@@ -30,25 +29,24 @@ trait CreateSchemaTestTrait
         );
     }
 
-    public function testCreateSchemaSqlIfNotExists(): void
-    {
-        $this->assertSame(
-            'CREATE SCHEMA IF NOT EXISTS test CHARACTER SET = \'utf8mb4\' COLLATE = \'utf8mb4_unicode_ci\'',
-            $this->forge->createSchemaSql('test', [
-                'ifNotExists' => true
-            ])
-        );
-    }
-
     public function testCreateSchemaSqlCharsetCollation(): void
     {
         $this->assertSame(
             'CREATE SCHEMA test CHARACTER SET = \'utf8\' COLLATE = \'utf8_unicode_ci\'',
             $this->forge->createSchemaSql('test', [
                 'charset' => 'utf8',
-                'collation' => 'utf8_unicode_ci'
+                'collation' => 'utf8_unicode_ci',
             ])
         );
     }
 
+    public function testCreateSchemaSqlIfNotExists(): void
+    {
+        $this->assertSame(
+            'CREATE SCHEMA IF NOT EXISTS test CHARACTER SET = \'utf8mb4\' COLLATE = \'utf8mb4_unicode_ci\'',
+            $this->forge->createSchemaSql('test', [
+                'ifNotExists' => true,
+            ])
+        );
+    }
 }

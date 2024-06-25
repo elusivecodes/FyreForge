@@ -5,13 +5,12 @@ namespace Tests\Forge;
 
 trait RenameTableTestTrait
 {
-
     public function testRenameTable(): void
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int'
-            ]
+                'type' => 'int',
+            ],
         ]);
 
         $this->forge->renameTable('test', 'other');
@@ -32,5 +31,4 @@ trait RenameTableTestTrait
             $this->forge->renameTableSql('test', 'other')
         );
     }
-
 }

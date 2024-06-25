@@ -8,8 +8,6 @@ use Fyre\Schema\Schema;
 use Fyre\Schema\SchemaRegistry;
 use Fyre\Schema\TableSchema;
 
-use const ARRAY_FILTER_USE_KEY;
-
 use function array_diff;
 use function array_diff_assoc;
 use function array_filter;
@@ -22,28 +20,38 @@ use function array_slice;
 use function array_splice;
 use function is_array;
 
+use const ARRAY_FILTER_USE_KEY;
+
 /**
  * TableForge
  */
 abstract class TableForge
 {
-
-    protected Forge $forge;
-    protected Schema $schema;
-    protected TableSchema|null $tableSchema = null;
-
-    protected string $tableName;
-    protected array $tableOptions;
     protected array $columns = [];
-    protected array $indexes = [];
+
+    protected bool $dropTable = false;
+
     protected array $foreignKeys = [];
 
+    protected Forge $forge;
+
+    protected array $indexes = [];
+
     protected string|null $newTableName = null;
+
     protected array $renameColumns = [];
-    protected bool $dropTable = false;
+
+    protected Schema $schema;
+
+    protected string $tableName;
+
+    protected array $tableOptions;
+
+    protected TableSchema|null $tableSchema = null;
 
     /**
      * New TableForge constructor.
+     *
      * @param Forge $forge The forge.
      * @param string $tableName The table name.
      * @param array $options The table options.
@@ -59,6 +67,7 @@ abstract class TableForge
 
         if (!$this->schema->hasTable($this->tableName)) {
             $this->tableOptions = $this->forge->parseTableOptions($options);
+
             return;
         }
 
@@ -71,9 +80,11 @@ abstract class TableForge
 
     /**
      * Add a column to the table.
+     *
      * @param string $column The column name.
      * @param array $options The column options.
      * @return TableForge The TableForge.
+     *
      * @throws ForgeException if the column already exists.
      */
     public function addColumn(string $column, array $options = []): static
@@ -111,9 +122,11 @@ abstract class TableForge
 
     /**
      * Add a foreign key to the table.
+     *
      * @param string $foreignKey The foreign key name.
      * @param array $options The foreign key options.
      * @return TableForge The TableForge.
+     *
      * @throws ForgeException if the foreign key already exists.
      */
     public function addForeignKey(string $foreignKey, array $options = []): static
@@ -129,9 +142,11 @@ abstract class TableForge
 
     /**
      * Add an index to the table.
+     *
      * @param string $index The index name.
      * @param array $options The index options.
      * @return TableForge The TableForge.
+     *
      * @throws ForgeException if the index already exists.
      */
     public function addIndex(string $index, array $options = []): static
@@ -152,9 +167,11 @@ abstract class TableForge
 
     /**
      * Change a table column.
+     *
      * @param string $column The column name.
      * @param array $options The column options.
      * @return TableForge The TableForge.
+     *
      * @throws ForgeException if the column does not exist.
      */
     public function changeColumn(string $column, array $options): static
@@ -197,12 +214,13 @@ abstract class TableForge
         if ($newColumn !== $column) {
             unset($this->columns[$column]);
         }
-    
+
         return $this;
     }
 
     /**
      * Clear the column and index data.
+     *
      * @return TableForge The TableForge.
      */
     public function clear(): static
@@ -217,6 +235,7 @@ abstract class TableForge
 
     /**
      * Get the data for a table column.
+     *
      * @param string $name The column name.
      * @return array|null The column data.
      */
@@ -227,6 +246,7 @@ abstract class TableForge
 
     /**
      * Get the names of all table columns.
+     *
      * @return array The names of all table columns.
      */
     public function columnNames(): array
@@ -236,6 +256,7 @@ abstract class TableForge
 
     /**
      * Get the data for all table columns.
+     *
      * @return array The table columns data.
      */
     public function columns(): array
@@ -245,6 +266,7 @@ abstract class TableForge
 
     /**
      * Drop the table.
+     *
      * @return TableForge The TableForge.
      */
     public function drop(): static
@@ -260,9 +282,11 @@ abstract class TableForge
 
     /**
      * Drop a column from the table.
+     *
      * @param string $column The column name.
      * @param array $options The options for dropping the table.
      * @return TableForge The TableForge.
+     *
      * @throws ForgeException if the column does not exist.
      */
     public function dropColumn(string $column, array $options = []): static
@@ -278,8 +302,10 @@ abstract class TableForge
 
     /**
      * Drop a foreign key from the table.
+     *
      * @param string $foreignKey The foreign key name.
      * @return TableForge The TableForge.
+     *
      * @throws ForgeException if the foreign key does not exist.
      */
     public function dropForeignKey(string $foreignKey): static
@@ -296,8 +322,10 @@ abstract class TableForge
 
     /**
      * Drop an index from the table.
+     *
      * @param string $index The index name.
      * @return TableForge The TableForge.
+     *
      * @throws ForgeException if the index does not exist.
      */
     public function dropIndex(string $index): static
@@ -317,6 +345,7 @@ abstract class TableForge
 
     /**
      * Generate and execute the SQL queries.
+     *
      * @return TableForge The TableForge.
      */
     public function execute(): static
@@ -325,7 +354,7 @@ abstract class TableForge
 
         $connection = $this->forge->getConnection();
 
-        foreach ($queries AS $sql) {
+        foreach ($queries as $sql) {
             $connection->query($sql);
         }
 
@@ -360,6 +389,7 @@ abstract class TableForge
 
     /**
      * Get the data for a table foreign key.
+     *
      * @param string $name The foreign key name.
      * @return array|null The foreign key data.
      */
@@ -370,6 +400,7 @@ abstract class TableForge
 
     /**
      * Get the data for all table foreign keys.
+     *
      * @return array The table foreign keys data.
      */
     public function foreignKeys(): array
@@ -379,6 +410,7 @@ abstract class TableForge
 
     /**
      * Get the Forge.
+     *
      * @return Forge The Forge.
      */
     public function getForge(): Forge
@@ -388,6 +420,7 @@ abstract class TableForge
 
     /**
      * Get the table name.
+     *
      * @return string The table name.
      */
     public function getTableName(): string
@@ -397,6 +430,7 @@ abstract class TableForge
 
     /**
      * Determine if the table has a column.
+     *
      * @param string $name The column name.
      * @return bool TRUE if the table has the column, otherwise FALSE.
      */
@@ -407,6 +441,7 @@ abstract class TableForge
 
     /**
      * Determine if the table has a foreign key.
+     *
      * @param string $name The foreign key name.
      * @return bool TRUE if the table has the foreign key, otherwise FALSE.
      */
@@ -417,6 +452,7 @@ abstract class TableForge
 
     /**
      * Determine if the table has an index.
+     *
      * @param string $name The index name.
      * @return bool TRUE if the table has the index, otherwise FALSE.
      */
@@ -427,6 +463,7 @@ abstract class TableForge
 
     /**
      * Get the data for a table index.
+     *
      * @param string $name The index name.
      * @return array|null The index data.
      */
@@ -437,6 +474,7 @@ abstract class TableForge
 
     /**
      * Get the data for all table indexes.
+     *
      * @return array The table indexes data.
      */
     public function indexes(): array
@@ -446,6 +484,7 @@ abstract class TableForge
 
     /**
      * Rename the table.
+     *
      * @param string $table The new table name.
      * @return TableForge The TableForge.
      */
@@ -462,13 +501,14 @@ abstract class TableForge
 
     /**
      * Set the primary key.
+     *
      * @param string|array $columns The columns.
      * @return TableForge The TableForge.
      */
-    public function setPrimaryKey(string|array $columns): static
+    public function setPrimaryKey(array|string $columns): static
     {
         $this->addIndex('PRIMARY', [
-            'columns' => $columns
+            'columns' => $columns,
         ]);
 
         return $this;
@@ -476,6 +516,7 @@ abstract class TableForge
 
     /**
      * Generate the SQL queries.
+     *
      * @return array The SQL queries.
      */
     public function sql(): array
@@ -496,7 +537,7 @@ abstract class TableForge
                     $this->tableOptions,
                     [
                         'indexes' => $nonForeignKeys,
-                        'foreignKeys' => $this->foreignKeys
+                        'foreignKeys' => $this->foreignKeys,
                     ]
                 )
             );
@@ -509,7 +550,7 @@ abstract class TableForge
         $originalForeignKeys = $this->tableSchema->foreignKeys();
         $originalTableOptions = $this->schema->table($this->tableName);
 
-        foreach ($originalForeignKeys AS $foreignKey => $options) {
+        foreach ($originalForeignKeys as $foreignKey => $options) {
             if (array_key_exists($foreignKey, $this->foreignKeys) && static::compare($this->foreignKeys[$foreignKey], $options)) {
                 continue;
             }
@@ -517,7 +558,7 @@ abstract class TableForge
             $queries[] = $this->forge->dropForeignKeySql($this->tableName, $foreignKey);
         }
 
-        foreach ($originalIndexes AS $index => $options) {
+        foreach ($originalIndexes as $index => $options) {
             if (array_key_exists($index, $originalForeignKeys)) {
                 continue;
             }
@@ -536,11 +577,12 @@ abstract class TableForge
         }
 
         $originalColumnNames = [];
-        foreach ($originalColumns AS $column => $options) {
+        foreach ($originalColumns as $column => $options) {
             $newColumn = $this->renameColumns[$column] ?? $column;
 
             if (array_key_exists($newColumn, $this->columns)) {
                 $originalColumnNames[] = $newColumn;
+
                 continue;
             }
 
@@ -562,7 +604,7 @@ abstract class TableForge
         $prevColumn = null;
         $newColumns = [];
 
-        foreach ($this->columns AS $column => $options) {
+        foreach ($this->columns as $column => $options) {
             $originalColumn = array_search($column, $this->renameColumns) ?: $column;
             $oldIndex = array_search($column, $originalColumnNames);
 
@@ -590,7 +632,7 @@ abstract class TableForge
             $columnIndex++;
         }
 
-        foreach ($this->indexes AS $index => $options) {
+        foreach ($this->indexes as $index => $options) {
             if (array_key_exists($index, $this->foreignKeys)) {
                 continue;
             }
@@ -602,11 +644,10 @@ abstract class TableForge
             $queries[] = $this->forge->addIndexSql($tableName, $index, $options);
         }
 
-        foreach ($this->foreignKeys AS $foreignKey => $options) {
+        foreach ($this->foreignKeys as $foreignKey => $options) {
             if (array_key_exists($foreignKey, $originalForeignKeys) && static::compare($options, $originalForeignKeys[$foreignKey])) {
                 continue;
             }
-
 
             $queries[] = $this->forge->addForeignKeySql($tableName, $foreignKey, $options);
         }
@@ -616,13 +657,14 @@ abstract class TableForge
 
     /**
      * Compare the difference in array options.
+     *
      * @param array $a The array.
      * @param array $b The array to compare against.
      * @return bool TRUE if the arrays are equal, otherwise FALSE.
      */
     protected static function compare(array $a, array $b): bool
     {
-        foreach ($a AS $key => $value) {
+        foreach ($a as $key => $value) {
             if (!array_key_exists($key, $b)) {
                 continue;
             }
@@ -640,5 +682,4 @@ abstract class TableForge
 
         return true;
     }
-
 }

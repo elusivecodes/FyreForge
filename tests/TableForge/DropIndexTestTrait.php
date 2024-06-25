@@ -7,39 +7,21 @@ use Fyre\Forge\Exceptions\ForgeException;
 
 trait DropIndexTestTrait
 {
-
-    public function testDropIndexSqlNewTable(): void
-    {
-        $this->assertSame(
-            [
-                'CREATE TABLE test (id INT(11) NOT NULL) ENGINE = InnoDB DEFAULT CHARSET = \'utf8mb4\' COLLATE = \'utf8mb4_unicode_ci\''
-            ],
-            $this->forge
-                ->build('test')
-                ->addColumn('id', [
-                    'type' => 'int'
-                ])
-                ->addIndex('id')
-                ->dropIndex('id')
-                ->sql()
-        );
-    }
-
     public function testDropIndexSqlExistingTable(): void
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int'
-            ]
+                'type' => 'int',
+            ],
         ], [
             'indexes' => [
-                'id'
-            ]
+                'id',
+            ],
         ]);
 
         $this->assertSame(
             [
-                'DROP INDEX id ON test'
+                'DROP INDEX id ON test',
             ],
             $this->forge
                 ->build('test')
@@ -57,4 +39,20 @@ trait DropIndexTestTrait
             ->dropIndex('invalid');
     }
 
+    public function testDropIndexSqlNewTable(): void
+    {
+        $this->assertSame(
+            [
+                'CREATE TABLE test (id INT(11) NOT NULL) ENGINE = InnoDB DEFAULT CHARSET = \'utf8mb4\' COLLATE = \'utf8mb4_unicode_ci\'',
+            ],
+            $this->forge
+                ->build('test')
+                ->addColumn('id', [
+                    'type' => 'int',
+                ])
+                ->addIndex('id')
+                ->dropIndex('id')
+                ->sql()
+        );
+    }
 }

@@ -8,42 +8,31 @@ use Tests\ConnectionTrait;
 
 final class TableForgeTest extends TestCase
 {
-
     use AddColumnTestTrait;
     use AddForeignKeyTestTrait;
     use AddIndexTestTrait;
     use ChangeColumnTestTrait;
     use ConnectionTrait;
     use DiffTestTrait;
-    use DropTestTrait;
     use DropColumnTestTrait;
     use DropForeignKeyTestTrait;
     use DropIndexTestTrait;
+    use DropTestTrait;
     use ExecuteTestTrait;
     use MergeQueryTestTrait;
     use RenameTestTrait;
     use TableTestTrait;
-
-    public function testGetTableName(): void
-    {
-        $tableForge = $this->forge->build('test');
-
-        $this->assertSame(
-            'test',
-            $tableForge->getTableName()
-        );
-    }
 
     public function testColumn(): void
     {
         $tableForge = $this->forge->build('test');
 
         $tableForge->addColumn('id', [
-            'type' => 'int'
+            'type' => 'int',
         ]);
 
         $tableForge->addColumn('value', [
-            'type' => 'varchar'
+            'type' => 'varchar',
         ]);
 
         $this->assertSame(
@@ -58,7 +47,7 @@ final class TableForgeTest extends TestCase
                 'default' => null,
                 'extra' => '',
                 'comment' => '',
-                'values' => null
+                'values' => null,
             ],
             $tableForge->column('id')
         );
@@ -69,17 +58,17 @@ final class TableForgeTest extends TestCase
         $tableForge = $this->forge->build('test');
 
         $tableForge->addColumn('id', [
-            'type' => 'int'
+            'type' => 'int',
         ]);
 
         $tableForge->addColumn('value', [
-            'type' => 'varchar'
+            'type' => 'varchar',
         ]);
 
         $this->assertSame(
             [
                 'id',
-                'value'
+                'value',
             ],
             $tableForge->columnNames()
         );
@@ -90,11 +79,11 @@ final class TableForgeTest extends TestCase
         $tableForge = $this->forge->build('test');
 
         $tableForge->addColumn('id', [
-            'type' => 'int'
+            'type' => 'int',
         ]);
 
         $tableForge->addColumn('value', [
-            'type' => 'varchar'
+            'type' => 'varchar',
         ]);
 
         $this->assertSame(
@@ -110,7 +99,7 @@ final class TableForgeTest extends TestCase
                     'default' => null,
                     'extra' => '',
                     'comment' => '',
-                    'values' => null
+                    'values' => null,
                 ],
                 'value' => [
                     'type' => 'varchar',
@@ -123,8 +112,8 @@ final class TableForgeTest extends TestCase
                     'default' => null,
                     'extra' => '',
                     'comment' => '',
-                    'values' => null
-                ]
+                    'values' => null,
+                ],
             ],
             $tableForge->columns()
         );
@@ -135,29 +124,29 @@ final class TableForgeTest extends TestCase
         $tableForge = $this->forge->build('test');
 
         $tableForge->addColumn('id', [
-            'type' => 'int'
+            'type' => 'int',
         ]);
 
         $tableForge->addColumn('value_id', [
-            'type' => 'int'
+            'type' => 'int',
         ]);
 
         $tableForge->addForeignKey('value_id', [
             'referencedTable' => 'test_values',
-            'referencedColumns' => 'id'
+            'referencedColumns' => 'id',
         ]);
 
         $this->assertSame(
             [
                 'referencedTable' => 'test_values',
                 'referencedColumns' => [
-                    'id'
+                    'id',
                 ],
                 'columns' => [
-                    'value_id'
+                    'value_id',
                 ],
                 'update' => '',
-                'delete' => ''
+                'delete' => '',
             ],
             $tableForge->foreignKey('value_id')
         );
@@ -168,16 +157,16 @@ final class TableForgeTest extends TestCase
         $tableForge = $this->forge->build('test');
 
         $tableForge->addColumn('id', [
-            'type' => 'int'
+            'type' => 'int',
         ]);
 
         $tableForge->addColumn('value_id', [
-            'type' => 'int'
+            'type' => 'int',
         ]);
 
         $tableForge->addForeignKey('value_id', [
             'referencedTable' => 'test_values',
-            'referencedColumns' => 'id'
+            'referencedColumns' => 'id',
         ]);
 
         $this->assertSame(
@@ -185,62 +174,26 @@ final class TableForgeTest extends TestCase
                 'value_id' => [
                     'referencedTable' => 'test_values',
                     'referencedColumns' => [
-                        'id'
+                        'id',
                     ],
                     'columns' => [
-                        'value_id'
+                        'value_id',
                     ],
                     'update' => '',
-                    'delete' => ''
-                ]
+                    'delete' => '',
+                ],
             ],
             $tableForge->foreignKeys()
         );
     }
 
-    public function testIndex(): void
+    public function testGetTableName(): void
     {
         $tableForge = $this->forge->build('test');
 
-        $tableForge->addColumn('id', [
-            'type' => 'int'
-        ]);
-
-        $tableForge->addIndex('id');
-
         $this->assertSame(
-            [
-                'type' => 'BTREE',
-                'columns' => [
-                    'id'
-                ],
-                'unique' => false
-            ],
-            $tableForge->index('id')
-        );
-    }
-
-    public function testIndexes(): void
-    {
-        $tableForge = $this->forge->build('test');
-
-        $tableForge->addColumn('id', [
-            'type' => 'int'
-        ]);
-
-        $tableForge->addIndex('id');
-
-        $this->assertSame(
-            [
-                'id' => [
-                    'type' => 'BTREE',
-                    'columns' => [
-                        'id'
-                    ],
-                    'unique' => false
-                ]
-            ],
-            $tableForge->indexes()
+            'test',
+            $tableForge->getTableName()
         );
     }
 
@@ -249,7 +202,7 @@ final class TableForgeTest extends TestCase
         $tableForge = $this->forge->build('test');
 
         $tableForge->addColumn('id', [
-            'type' => 'int'
+            'type' => 'int',
         ]);
 
         $this->assertTrue(
@@ -262,7 +215,7 @@ final class TableForgeTest extends TestCase
         $tableForge = $this->forge->build('test');
 
         $tableForge->addColumn('id', [
-            'type' => 'int'
+            'type' => 'int',
         ]);
 
         $this->assertFalse(
@@ -275,16 +228,16 @@ final class TableForgeTest extends TestCase
         $tableForge = $this->forge->build('test');
 
         $tableForge->addColumn('id', [
-            'type' => 'int'
+            'type' => 'int',
         ]);
 
         $tableForge->addColumn('value_id', [
-            'type' => 'int'
+            'type' => 'int',
         ]);
 
         $tableForge->addForeignKey('value_id', [
             'referencedTable' => 'test_values',
-            'referencedColumns' => 'id'
+            'referencedColumns' => 'id',
         ]);
 
         $this->assertTrue(
@@ -297,11 +250,11 @@ final class TableForgeTest extends TestCase
         $tableForge = $this->forge->build('test');
 
         $tableForge->addColumn('id', [
-            'type' => 'int'
+            'type' => 'int',
         ]);
 
         $tableForge->addColumn('value_id', [
-            'type' => 'int'
+            'type' => 'int',
         ]);
 
         $this->assertFalse(
@@ -314,7 +267,7 @@ final class TableForgeTest extends TestCase
         $tableForge = $this->forge->build('test');
 
         $tableForge->addColumn('id', [
-            'type' => 'int'
+            'type' => 'int',
         ]);
 
         $tableForge->addIndex('id');
@@ -329,7 +282,7 @@ final class TableForgeTest extends TestCase
         $tableForge = $this->forge->build('test');
 
         $tableForge->addColumn('id', [
-            'type' => 'int'
+            'type' => 'int',
         ]);
 
         $this->assertFalse(
@@ -337,4 +290,49 @@ final class TableForgeTest extends TestCase
         );
     }
 
+    public function testIndex(): void
+    {
+        $tableForge = $this->forge->build('test');
+
+        $tableForge->addColumn('id', [
+            'type' => 'int',
+        ]);
+
+        $tableForge->addIndex('id');
+
+        $this->assertSame(
+            [
+                'type' => 'BTREE',
+                'columns' => [
+                    'id',
+                ],
+                'unique' => false,
+            ],
+            $tableForge->index('id')
+        );
+    }
+
+    public function testIndexes(): void
+    {
+        $tableForge = $this->forge->build('test');
+
+        $tableForge->addColumn('id', [
+            'type' => 'int',
+        ]);
+
+        $tableForge->addIndex('id');
+
+        $this->assertSame(
+            [
+                'id' => [
+                    'type' => 'BTREE',
+                    'columns' => [
+                        'id',
+                    ],
+                    'unique' => false,
+                ],
+            ],
+            $tableForge->indexes()
+        );
+    }
 }

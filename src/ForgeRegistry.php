@@ -17,27 +17,28 @@ use function ltrim;
  */
 abstract class ForgeRegistry
 {
+    protected static WeakMap $forges;
 
     protected static array $handlers = [
-        MySQLConnection::class => MySQLForge::class
+        MySQLConnection::class => MySQLForge::class,
     ];
-
-    protected static WeakMap $forges;
 
     /**
      * Get the Forge for a Connection.
+     *
      * @param Connection $connection The Connection.
      * @return Forge The Forge.
      */
     public static function getForge(Connection $connection): Forge
     {
-        static::$forges ??= new WeakMap;
+        static::$forges ??= new WeakMap();
 
         return static::$forges[$connection] ??= static::loadForge($connection);
     }
 
     /**
      * Set a Forge handler for a Connection class.
+     *
      * @param string $connectionClass The Connection class.
      * @param string $forgeClass The Forge class.
      */
@@ -50,8 +51,10 @@ abstract class ForgeRegistry
 
     /**
      * Load a Forge for a Connection.
+     *
      * @param Connection $connection The Connection.
      * @return Forge The Forge.
+     *
      * @throws ForgeException if the handler is missing.
      */
     protected static function loadForge(Connection $connection): Forge
@@ -66,5 +69,4 @@ abstract class ForgeRegistry
 
         return new $forgeClass($connection);
     }
-
 }

@@ -5,37 +5,36 @@ namespace Tests\Forge;
 
 trait AddForeignKeyTestTrait
 {
-
     public function testAddForeignKey(): void
     {
         $this->forge->createTable('test_values', [
             'id' => [
-                'type' => 'int'
-            ]
+                'type' => 'int',
+            ],
         ], [
             'indexes' => [
                 'PRIMARY' => [
                     'columns' => [
-                        'id'
-                    ]
-                ]
-            ]
+                        'id',
+                    ],
+                ],
+            ],
         ]);
 
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int'
+                'type' => 'int',
             ],
             'value_id' => [
-                'type' => 'int'
-            ]
+                'type' => 'int',
+            ],
         ]);
 
         $this->forge->addForeignKey('test', 'value_id', [
             'referencedTable' => 'test_values',
             'referencedColumns' => 'id',
             'update' => 'cascade',
-            'delete' => 'cascade'
+            'delete' => 'cascade',
         ]);
 
         $this->assertTrue(
@@ -50,7 +49,7 @@ trait AddForeignKeyTestTrait
             'ALTER TABLE test ADD FOREIGN KEY value (value) REFERENCES other (id)',
             $this->forge->addForeignKeySql('test', 'value', [
                 'referencedTable' => 'other',
-                'referencedColumns' => 'id'
+                'referencedColumns' => 'id',
             ])
         );
     }
@@ -62,7 +61,7 @@ trait AddForeignKeyTestTrait
             $this->forge->addForeignKeySql('test', 'test_value_other_id', [
                 'columns' => 'value',
                 'referencedTable' => 'other',
-                'referencedColumns' => 'id'
+                'referencedColumns' => 'id',
             ])
         );
     }
@@ -74,7 +73,7 @@ trait AddForeignKeyTestTrait
             $this->forge->addForeignKeySql('test', 'test_other', [
                 'columns' => ['value', 'test'],
                 'referencedTable' => 'other',
-                'referencedColumns' => ['id', 'test']
+                'referencedColumns' => ['id', 'test'],
             ])
         );
     }
@@ -87,9 +86,8 @@ trait AddForeignKeyTestTrait
                 'referencedTable' => 'other',
                 'referencedColumns' => 'id',
                 'update' => 'cascade',
-                'delete' => 'cascade'
+                'delete' => 'cascade',
             ])
         );
     }
-
 }

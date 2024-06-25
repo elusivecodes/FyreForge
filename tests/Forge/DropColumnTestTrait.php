@@ -5,16 +5,15 @@ namespace Tests\Forge;
 
 trait DropColumnTestTrait
 {
-
     public function testDropColumn(): void
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int'
+                'type' => 'int',
             ],
             'value' => [
-                'type' => 'int'
-            ]
+                'type' => 'int',
+            ],
         ]);
 
         $this->forge->dropColumn('test', 'value');
@@ -40,5 +39,4 @@ trait DropColumnTestTrait
             $this->forge->dropColumnSql('test', 'value', ['ifExists' => true])
         );
     }
-
 }

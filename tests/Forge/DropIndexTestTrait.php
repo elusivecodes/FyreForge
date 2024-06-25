@@ -5,13 +5,12 @@ namespace Tests\Forge;
 
 trait DropIndexTestTrait
 {
-
     public function testDropIndex(): void
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int'
-            ]
+                'type' => 'int',
+            ],
         ]);
 
         $this->forge->addIndex('test', 'id');
@@ -31,5 +30,4 @@ trait DropIndexTestTrait
             $this->forge->dropIndexSql('test', 'value')
         );
     }
-
 }

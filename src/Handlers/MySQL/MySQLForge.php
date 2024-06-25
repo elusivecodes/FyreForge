@@ -12,19 +12,18 @@ use function implode;
 use function is_numeric;
 use function preg_match;
 use function preg_replace_callback;
+use function str_starts_with;
 use function strtolower;
 use function strtoupper;
-use function str_starts_with;
-use function substr;
 
 /**
  * MySQLForge
  */
 class MySQLForge extends Forge
 {
-
     /**
      * Generate SQL for adding a column to a table.
+     *
      * @param string $table The table name.
      * @param string $column The column name.
      * @param array $options The column options.
@@ -42,6 +41,7 @@ class MySQLForge extends Forge
 
     /**
      * Generate SQL for adding a foreign key to a table.
+     *
      * @param string $table The table name.
      * @param string $foreignKey The foreign key name.
      * @param array $options The foreign key options.
@@ -60,6 +60,7 @@ class MySQLForge extends Forge
 
     /**
      * Generate SQL for adding an index to a table.
+     *
      * @param string $table The table name.
      * @param string $index The index name.
      * @param array $options The index options.
@@ -77,6 +78,7 @@ class MySQLForge extends Forge
 
     /**
      * Generate SQL for altering a table.
+     *
      * @param string $table The table name.
      * @param array $options The table options.
      * @return string The SQL query.
@@ -92,6 +94,7 @@ class MySQLForge extends Forge
 
     /**
      * Build a table schema.
+     *
      * @param string $tableName The table name.
      * @param array $options The table options.
      * @return MySQLTableForge The MySQLTableForge.
@@ -103,6 +106,7 @@ class MySQLForge extends Forge
 
     /**
      * Generate SQL for changing a table column.
+     *
      * @param string $table The table name.
      * @param string $column The column name.
      * @param array $options The column options.
@@ -122,6 +126,7 @@ class MySQLForge extends Forge
 
     /**
      * Generate SQL for creating a new schema.
+     *
      * @param string $schema The schema name.
      * @param array $options The schema options.
      * @return string The SQL query.
@@ -153,6 +158,7 @@ class MySQLForge extends Forge
 
     /**
      * Generate SQL for creating a new table.
+     *
      * @param string $table The table name.
      * @param array $columns The table columns.
      * @param array $options The table options.
@@ -170,7 +176,7 @@ class MySQLForge extends Forge
             $columns
         );
 
-        foreach ($options['indexes'] AS $index => $indexOptions) {
+        foreach ($options['indexes'] as $index => $indexOptions) {
             if (is_numeric($index)) {
                 $index = $indexOptions;
                 $indexOptions = [];
@@ -179,7 +185,7 @@ class MySQLForge extends Forge
             $definitions[] = $this->prepareIndexSql($index, $indexOptions);
         }
 
-        foreach ($options['foreignKeys'] AS $foreignKey => $foreignKeyOptions) {
+        foreach ($options['foreignKeys'] as $foreignKey => $foreignKeyOptions) {
             $definitions[] = 'CONSTRAINT '.$foreignKey.' FOREIGN KEY'.$this->prepareForeignKeySql($foreignKey, $foreignKeyOptions);
         }
 
@@ -204,6 +210,7 @@ class MySQLForge extends Forge
 
     /**
      * Generate SQL for dropping a column from a table.
+     *
      * @param string $table The table name.
      * @param string $column The column name.
      * @param array $options The options for dropping the table.
@@ -228,6 +235,7 @@ class MySQLForge extends Forge
 
     /**
      * Generate SQL for dropping a foreign key from a table.
+     *
      * @param string $table The table name.
      * @param string $foreignKey The foreign key name.
      * @return string The SQL query.
@@ -244,6 +252,7 @@ class MySQLForge extends Forge
 
     /**
      * Generate SQL for dropping an index from a table.
+     *
      * @param string $table The table name.
      * @param string $index The index name.
      * @return string The SQL query.
@@ -260,6 +269,7 @@ class MySQLForge extends Forge
 
     /**
      * Generate SQL for dropping a schema.
+     *
      * @param string $schema The schema name.
      * @param array $options The options for dropping the schema.
      * @return string The SQL query.
@@ -281,6 +291,7 @@ class MySQLForge extends Forge
 
     /**
      * Generate SQL for dropping a table.
+     *
      * @param string $table The table name.
      * @param array $options The options for dropping the table.
      * @return string The SQL query.
@@ -302,6 +313,7 @@ class MySQLForge extends Forge
 
     /**
      * Merge queries.
+     *
      * @param array $queries The queries.
      * @return array The queries.
      */
@@ -329,6 +341,7 @@ class MySQLForge extends Forge
 
     /**
      * Parse column options.
+     *
      * @param array $options The column options.
      * @return array The parsed options.
      */
@@ -462,6 +475,7 @@ class MySQLForge extends Forge
 
     /**
      * Parse foreign key options.
+     *
      * @param array $options The foreign key options.
      * @param string|null $foreignKey The foreign key name.
      * @return array The parsed options.
@@ -486,6 +500,7 @@ class MySQLForge extends Forge
 
     /**
      * Parse index options.
+     *
      * @param array $options The index options.
      * @param string|null $index The index name.
      * @return array The parsed options.
@@ -508,6 +523,7 @@ class MySQLForge extends Forge
 
     /**
      * Parse table options.
+     *
      * @param array $options The table options.
      * @return array The parsed options.
      */
@@ -523,6 +539,7 @@ class MySQLForge extends Forge
 
     /**
      * Generate SQL for renaming a table.
+     *
      * @param string $table The old table name.
      * @param string $newTable The new table name.
      * @return string The SQL query.
@@ -539,6 +556,7 @@ class MySQLForge extends Forge
 
     /**
      * Prepare a column SQL.
+     *
      * @param string $column The column name.
      * @param array $options The Cclumn options.
      * @return string The column SQL.
@@ -625,6 +643,7 @@ class MySQLForge extends Forge
 
     /**
      * Prepare a foreign key SQL.
+     *
      * @param string $foreignKey The foreign key name.
      * @param array $options The foreign key options.
      * @return string The foreign key SQL.
@@ -658,6 +677,7 @@ class MySQLForge extends Forge
 
     /**
      * Prepare an index SQL.
+     *
      * @param string $index The index name.
      * @param array $options The index options.
      * @return string The index SQL.
@@ -696,6 +716,7 @@ class MySQLForge extends Forge
 
     /**
      * Prepate table SQL.
+     *
      * @param array $options The table options.
      * @return string The table SQL.
      */
@@ -726,5 +747,4 @@ class MySQLForge extends Forge
 
         return $sql;
     }
-
 }

@@ -5,34 +5,33 @@ namespace Tests\TableForge;
 
 trait MergeQueryTestTrait
 {
-
     public function testMergeQueries(): void
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'varchar'
+                'type' => 'varchar',
             ],
             'test' => [
-                'type' => 'varchar'
-            ]
+                'type' => 'varchar',
+            ],
         ], [
             'indexes' => [
-                'test'
-            ]
+                'test',
+            ],
         ]);
 
         $this->assertSame(
             [
                 'DROP INDEX test ON test',
-                'ALTER TABLE test DROP COLUMN test, CHANGE COLUMN id id INT(11) NOT NULL, ADD COLUMN value INT(11) NOT NULL AFTER id, ADD INDEX id (id) USING BTREE'
+                'ALTER TABLE test DROP COLUMN test, CHANGE COLUMN id id INT(11) NOT NULL, ADD COLUMN value INT(11) NOT NULL AFTER id, ADD INDEX id (id) USING BTREE',
             ],
             $this->forge
                 ->build('test')
                 ->changeColumn('id', [
-                    'type' => 'int'
+                    'type' => 'int',
                 ])
                 ->addColumn('value', [
-                    'type' => 'int'
+                    'type' => 'int',
                 ])
                 ->dropColumn('test')
                 ->dropIndex('test')
@@ -40,5 +39,4 @@ trait MergeQueryTestTrait
                 ->sql()
         );
     }
-
 }

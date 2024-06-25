@@ -10,7 +10,6 @@ use RunTimeException;
  */
 class ForgeException extends RunTimeException
 {
-
     public static function forExistingColumn(string $column): static
     {
         return new static('Table column already exists: '.$column);
@@ -50,5 +49,4 @@ class ForgeException extends RunTimeException
     {
         return new static('Table does not exist: '.$table);
     }
-
 }

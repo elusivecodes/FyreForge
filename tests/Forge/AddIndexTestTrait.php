@@ -5,21 +5,20 @@ namespace Tests\Forge;
 
 trait AddIndexTestTrait
 {
-
     public function testAddIndex(): void
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int'
+                'type' => 'int',
             ],
             'value' => [
-                'type' => 'int'
-            ]
+                'type' => 'int',
+            ],
         ]);
 
         $this->forge->addIndex('test', 'id_value', [
             'columns' => ['id', 'value'],
-            'unique' => true
+            'unique' => true,
         ]);
 
         $this->assertTrue(
@@ -41,7 +40,17 @@ trait AddIndexTestTrait
         $this->assertSame(
             'ALTER TABLE test ADD INDEX name (value) USING BTREE',
             $this->forge->addIndexSql('test', 'name', [
-                'columns' => 'value'
+                'columns' => 'value',
+            ])
+        );
+    }
+
+    public function testAddIndexSqlFulltext(): void
+    {
+        $this->assertSame(
+            'ALTER TABLE test ADD FULLTEXT INDEX value (value)',
+            $this->forge->addIndexSql('test', 'value', [
+                'type' => 'fulltext',
             ])
         );
     }
@@ -51,7 +60,7 @@ trait AddIndexTestTrait
         $this->assertSame(
             'ALTER TABLE test ADD INDEX name (value, test) USING BTREE',
             $this->forge->addIndexSql('test', 'name', [
-                'columns' => ['value', 'test']
+                'columns' => ['value', 'test'],
             ])
         );
     }
@@ -62,18 +71,8 @@ trait AddIndexTestTrait
             'ALTER TABLE test ADD PRIMARY KEY (id)',
             $this->forge->addIndexSql('test', 'PRIMARY', [
                 'columns' => [
-                    'id'
-                ]
-            ])
-        );
-    }
-
-    public function testAddIndexSqlFulltext(): void
-    {
-        $this->assertSame(
-            'ALTER TABLE test ADD FULLTEXT INDEX value (value)',
-            $this->forge->addIndexSql('test', 'value', [
-                'type' => 'fulltext'
+                    'id',
+                ],
             ])
         );
     }
@@ -83,9 +82,8 @@ trait AddIndexTestTrait
         $this->assertSame(
             'ALTER TABLE test ADD UNIQUE KEY value (value) USING BTREE',
             $this->forge->addIndexSql('test', 'value', [
-                'unique' => true
+                'unique' => true,
             ])
         );
     }
-
 }

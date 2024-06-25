@@ -5,40 +5,38 @@ namespace Tests\TableForge;
 
 trait RenameTestTrait
 {
+    public function testRenameSqlExistingTable(): void
+    {
+        $this->forge->createTable('test', [
+            'id' => [
+                'type' => 'int',
+            ],
+        ]);
+
+        $this->assertSame(
+            [
+                'RENAME TABLE test TO other',
+            ],
+            $this->forge
+                ->build('test')
+                ->rename('other')
+                ->sql()
+        );
+    }
 
     public function testRenameSqlNewTable(): void
     {
         $this->assertSame(
             [
-                'CREATE TABLE other (id INT(11) NOT NULL) ENGINE = InnoDB DEFAULT CHARSET = \'utf8mb4\' COLLATE = \'utf8mb4_unicode_ci\''
+                'CREATE TABLE other (id INT(11) NOT NULL) ENGINE = InnoDB DEFAULT CHARSET = \'utf8mb4\' COLLATE = \'utf8mb4_unicode_ci\'',
             ],
             $this->forge
                 ->build('test')
                 ->addColumn('id', [
-                    'type' => 'int'
+                    'type' => 'int',
                 ])
                 ->rename('other')
                 ->sql()
         );
     }
-
-    public function testRenameSqlExistingTable(): void
-    {
-        $this->forge->createTable('test', [
-            'id' => [
-                'type' => 'int'
-            ]
-        ]);
-
-        $this->assertSame(
-            [
-                'RENAME TABLE test TO other'
-            ],
-            $this->forge
-                ->build('test')
-                ->rename('other')
-                ->sql()
-        );
-    }
-
 }

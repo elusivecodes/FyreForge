@@ -5,39 +5,38 @@ namespace Tests\Forge;
 
 trait CreateTableTestTrait
 {
-
     public function testCreateTable(): void
     {
         $this->forge->createTable('test', [
             'id' => [
                 'type' => 'int',
-                'extra' => 'AUTO_INCREMENT'
+                'extra' => 'AUTO_INCREMENT',
             ],
             'value' => [
                 'type' => 'varchar',
-                'length' => 255
+                'length' => 255,
             ],
             'created' => [
                 'type' => 'datetime',
-                'default' => 'CURRENT_TIMESTAMP()'
+                'default' => 'CURRENT_TIMESTAMP()',
             ],
             'modified' => [
                 'type' => 'datetime',
                 'nullable' => true,
                 'default' => 'NULL',
-                'extra' => 'ON UPDATE CURRENT_TIMESTAMP()'
-            ]
+                'extra' => 'ON UPDATE CURRENT_TIMESTAMP()',
+            ],
         ], [
             'indexes' => [
                 'PRIMARY' => [
                     'columns' => [
-                        'id'
-                    ]
+                        'id',
+                    ],
                 ],
                 'value' => [
-                    'unique' => true
-                ]
-            ]
+                    'unique' => true,
+                ],
+            ],
         ]);
 
         $this->assertTrue(
@@ -52,66 +51,38 @@ trait CreateTableTestTrait
             $this->forge->createTableSql('test', [
                 'id' => [
                     'type' => 'int',
-                    'extra' => 'AUTO_INCREMENT'
+                    'extra' => 'AUTO_INCREMENT',
                 ],
                 'value' => [
-                    'type' => 'int'
+                    'type' => 'int',
                 ],
                 'created' => [
                     'type' => 'datetime',
-                    'default' => 'CURRENT_TIMESTAMP'
+                    'default' => 'CURRENT_TIMESTAMP',
                 ],
                 'modified' => [
                     'type' => 'datetime',
                     'nullable' => true,
                     'default' => 'NULL',
-                    'extra' => 'ON UPDATE CURRENT_TIMESTAMP'
-                ]
+                    'extra' => 'ON UPDATE CURRENT_TIMESTAMP',
+                ],
             ], [
                 'indexes' => [
                     'PRIMARY' => [
                         'columns' => [
-                            'id'
-                        ]
+                            'id',
+                        ],
                     ],
                     'value' => [
-                        'unique' => true
-                    ]
+                        'unique' => true,
+                    ],
                 ],
                 'foreignKeys' => [
                     'value' => [
                         'referencedTable' => 'other',
-                        'referencedColumns' => 'id'
-                    ]
-                ]
-            ])
-        );
-    }
-
-    public function testCreateTableSqlIfNotExists(): void
-    {
-        $this->assertSame(
-            'CREATE TABLE IF NOT EXISTS test (id INT(11) NOT NULL) ENGINE = InnoDB DEFAULT CHARSET = \'utf8mb4\' COLLATE = \'utf8mb4_unicode_ci\'',
-            $this->forge->createTableSql('test', [
-                'id' => [
-                    'type' => 'int'
-                ]
-            ], [
-                'ifNotExists' => true
-            ])
-        );
-    }
-
-    public function testCreateTableSqlEngine(): void
-    {
-        $this->assertSame(
-            'CREATE TABLE test (id INT(11) NOT NULL) ENGINE = MyISAM DEFAULT CHARSET = \'utf8mb4\' COLLATE = \'utf8mb4_unicode_ci\'',
-            $this->forge->createTableSql('test', [
-                'id' => [
-                    'type' => 'int'
-                ]
-            ], [
-                'engine' => 'MyISAM'
+                        'referencedColumns' => 'id',
+                    ],
+                ],
             ])
         );
     }
@@ -122,13 +93,40 @@ trait CreateTableTestTrait
             'CREATE TABLE test (id INT(11) NOT NULL) ENGINE = InnoDB DEFAULT CHARSET = \'utf8\' COLLATE = \'utf8_unicode_ci\'',
             $this->forge->createTableSql('test', [
                 'id' => [
-                    'type' => 'int'
-                ]
+                    'type' => 'int',
+                ],
             ], [
                 'charset' => 'utf8',
-                'collation' => 'utf8_unicode_ci'
+                'collation' => 'utf8_unicode_ci',
             ])
         );
     }
 
+    public function testCreateTableSqlEngine(): void
+    {
+        $this->assertSame(
+            'CREATE TABLE test (id INT(11) NOT NULL) ENGINE = MyISAM DEFAULT CHARSET = \'utf8mb4\' COLLATE = \'utf8mb4_unicode_ci\'',
+            $this->forge->createTableSql('test', [
+                'id' => [
+                    'type' => 'int',
+                ],
+            ], [
+                'engine' => 'MyISAM',
+            ])
+        );
+    }
+
+    public function testCreateTableSqlIfNotExists(): void
+    {
+        $this->assertSame(
+            'CREATE TABLE IF NOT EXISTS test (id INT(11) NOT NULL) ENGINE = InnoDB DEFAULT CHARSET = \'utf8mb4\' COLLATE = \'utf8mb4_unicode_ci\'',
+            $this->forge->createTableSql('test', [
+                'id' => [
+                    'type' => 'int',
+                ],
+            ], [
+                'ifNotExists' => true,
+            ])
+        );
+    }
 }

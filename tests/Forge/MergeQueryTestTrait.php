@@ -5,29 +5,28 @@ namespace Tests\Forge;
 
 trait MergeQueryTestTrait
 {
-
     public function testMergeQueries(): void
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'varchar'
+                'type' => 'varchar',
             ],
             'test' => [
-                'type' => 'varchar'
-            ]
+                'type' => 'varchar',
+            ],
         ], [
             'indexes' => [
-                'test'
-            ]
+                'test',
+            ],
         ]);
 
         $this->forge
             ->build('test')
             ->changeColumn('id', [
-                'type' => 'int'
+                'type' => 'int',
             ])
             ->addColumn('value', [
-                'type' => 'int'
+                'type' => 'int',
             ])
             ->dropColumn('test')
             ->dropIndex('test')
@@ -39,7 +38,7 @@ trait MergeQueryTestTrait
             $this->schema->describe('test')
                 ->column('id')['type']
         );
-    
+
         $this->assertTrue(
             $this->schema->describe('test')
                 ->hasColumn('value')
@@ -55,5 +54,4 @@ trait MergeQueryTestTrait
                 ->hasIndex('id')
         );
     }
-
 }

@@ -12,12 +12,13 @@ use Fyre\Schema\SchemaRegistry;
  */
 abstract class Forge
 {
-
     protected Connection $connection;
+
     protected Schema $schema;
 
     /**
      * New Forge constructor.
+     *
      * @param Connection The Connection.
      */
     public function __construct(Connection $connection)
@@ -28,6 +29,7 @@ abstract class Forge
 
     /**
      * Add a column to a table.
+     *
      * @param string $table The table name.
      * @param string $column The column name.
      * @param array $options The column options.
@@ -42,6 +44,7 @@ abstract class Forge
 
     /**
      * Generate SQL for adding a column to a table.
+     *
      * @param string $table The table name.
      * @param string $column The column name.
      * @param array $options The column options.
@@ -51,6 +54,7 @@ abstract class Forge
 
     /**
      * Add a foreign key to a table.
+     *
      * @param string $table The table name.
      * @param string $foreignKey The foreign key name.
      * @param array $options The foreign key options.
@@ -65,6 +69,7 @@ abstract class Forge
 
     /**
      * Generate SQL for adding a foreign key to a table.
+     *
      * @param string $table The table name.
      * @param string $foreignKey The foreign key name.
      * @param array $options The foreign key options.
@@ -74,6 +79,7 @@ abstract class Forge
 
     /**
      * Add an index to a table.
+     *
      * @param string $table The table name.
      * @param string $index The index name.
      * @param array $options The index options.
@@ -88,6 +94,7 @@ abstract class Forge
 
     /**
      * Generate SQL for adding an index to a table.
+     *
      * @param string $table The table name.
      * @param string $index The index name.
      * @param array $options The index options.
@@ -97,6 +104,7 @@ abstract class Forge
 
     /**
      * Alter a table.
+     *
      * @param string $table The table name.
      * @param array $options The table options.
      * @return bool TRUE if the query was successful.
@@ -110,6 +118,7 @@ abstract class Forge
 
     /**
      * Generate SQL for altering a table.
+     *
      * @param string $table The table name.
      * @param array $options The table options.
      * @return string The SQL query.
@@ -118,6 +127,7 @@ abstract class Forge
 
     /**
      * Build a table schema.
+     *
      * @param string $tableName The table name.
      * @param array $options The table options.
      * @return TableForge The TableForge.
@@ -126,6 +136,7 @@ abstract class Forge
 
     /**
      * Change a table column.
+     *
      * @param string $table The table name.
      * @param string $column The column name.
      * @param array $options The column options.
@@ -140,6 +151,7 @@ abstract class Forge
 
     /**
      * Generate SQL for changing a table column.
+     *
      * @param string $table The table name.
      * @param string $column The column name.
      * @param array $options The column options.
@@ -149,6 +161,7 @@ abstract class Forge
 
     /**
      * Create a new schema.
+     *
      * @param string $schema The schema name.
      * @param array $options The schema options.
      * @return bool TRUE if the query was successful.
@@ -162,6 +175,7 @@ abstract class Forge
 
     /**
      * Generate SQL for creating a new schema.
+     *
      * @param string $schema The schema name.
      * @param array $options The schema options.
      * @return string The SQL query.
@@ -170,6 +184,7 @@ abstract class Forge
 
     /**
      * Create a new table.
+     *
      * @param string $table The table name.
      * @param array $columns The table columns.
      * @param array $options The table options.
@@ -184,6 +199,7 @@ abstract class Forge
 
     /**
      * Generate SQL for creating a new table.
+     *
      * @param string $table The table name.
      * @param array $columns The table columns.
      * @param array $options The table options.
@@ -193,6 +209,7 @@ abstract class Forge
 
     /**
      * Drop a column from a table.
+     *
      * @param string $table The table name.
      * @param string $column The column name.
      * @param array $options The options for dropping the table.
@@ -207,6 +224,7 @@ abstract class Forge
 
     /**
      * Generate SQL for dropping a column from a table.
+     *
      * @param string $table The table name.
      * @param string $column The column name.
      * @param array $options The options for dropping the table.
@@ -216,6 +234,7 @@ abstract class Forge
 
     /**
      * Drop a foreign key from a table.
+     *
      * @param string $table The table name.
      * @param string $foreignKey The foreign key name.
      * @return bool TRUE if the query was successful.
@@ -229,6 +248,7 @@ abstract class Forge
 
     /**
      * Generate SQL for dropping a foreign key from a table.
+     *
      * @param string $table The table name.
      * @param string $foreignKey The foreign key name.
      * @return string The SQL query.
@@ -237,6 +257,7 @@ abstract class Forge
 
     /**
      * Drop an index from a table.
+     *
      * @param string $table The table name.
      * @param string $index The index name.
      * @return bool TRUE if the query was successful.
@@ -250,6 +271,7 @@ abstract class Forge
 
     /**
      * Generate SQL for dropping an index from a table.
+     *
      * @param string $table The table name.
      * @param string $index The index name.
      * @return string The SQL query.
@@ -258,6 +280,7 @@ abstract class Forge
 
     /**
      * Drop a schema.
+     *
      * @param string $schema The schema name.
      * @param array $options The options for dropping the schema.
      * @return bool TRUE if the query was successful.
@@ -271,6 +294,7 @@ abstract class Forge
 
     /**
      * Generate SQL for dropping a schema.
+     *
      * @param string $schema The schema name.
      * @param array $options The options for dropping the schema.
      * @return string The SQL query.
@@ -279,6 +303,7 @@ abstract class Forge
 
     /**
      * Drop a table.
+     *
      * @param string $table The table name.
      * @param array $options The options for dropping the table.
      * @return bool TRUE if the query was successful.
@@ -292,6 +317,7 @@ abstract class Forge
 
     /**
      * Generate SQL for dropping a table.
+     *
      * @param string $table The table name.
      * @param array $options The options for dropping the table.
      * @return string The SQL query.
@@ -300,6 +326,7 @@ abstract class Forge
 
     /**
      * Get the Connection.
+     *
      * @return Connection The Connection.
      */
     public function getConnection(): Connection
@@ -309,6 +336,7 @@ abstract class Forge
 
     /**
      * Merge queries.
+     *
      * @param array $queries The queries.
      * @return array The queries.
      */
@@ -319,6 +347,7 @@ abstract class Forge
 
     /**
      * Parse column options.
+     *
      * @param array $options The column options.
      * @return array The parsed options.
      */
@@ -326,6 +355,7 @@ abstract class Forge
 
     /**
      * Parse foreign key options.
+     *
      * @param array $options The foreign key options.
      * @param string|null $foreignKey The foreign key name.
      * @return array The parsed options.
@@ -334,6 +364,7 @@ abstract class Forge
 
     /**
      * Parse index options.
+     *
      * @param array $options The index options.
      * @param string|null $index The index name.
      * @return array The parsed options.
@@ -342,6 +373,7 @@ abstract class Forge
 
     /**
      * Parse table options.
+     *
      * @param array $options The table options.
      * @return array The parsed options.
      */
@@ -349,6 +381,7 @@ abstract class Forge
 
     /**
      * Rename a table.
+     *
      * @param string $table The old table name.
      * @param string $newTable The new table name.
      * @return bool TRUE if the query was successful.
@@ -362,10 +395,10 @@ abstract class Forge
 
     /**
      * Generate SQL for renaming a table.
+     *
      * @param string $table The old table name.
      * @param string $newTable The new table name.
      * @return string The SQL query.
      */
     abstract public function renameTableSql(string $table, string $newTable): string;
-
 }

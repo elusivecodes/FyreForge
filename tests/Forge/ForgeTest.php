@@ -8,15 +8,14 @@ use Tests\ConnectionTrait;
 
 final class ForgeTest extends TestCase
 {
-
     use AddColumnTestTrait;
     use AddForeignKeyTestTrait;
     use AddIndexTestTrait;
     use AlterTableTestTrait;
     use ChangeColumnTestTrait;
+    use ConnectionTrait;
     use CreateSchemaTestTrait;
     use CreateTableTestTrait;
-    use ConnectionTrait;
     use DropColumnTestTrait;
     use DropForeignKeyTestTrait;
     use DropIndexTestTrait;
@@ -24,5 +23,4 @@ final class ForgeTest extends TestCase
     use DropTableTestTrait;
     use MergeQueryTestTrait;
     use RenameTableTestTrait;
-
 }
