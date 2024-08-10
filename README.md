@@ -111,11 +111,14 @@ Additional table options may be available depending on the connection handler.
 Create a new table.
 
 - `$table` is a string representing the table name.
+- `$columns` is an array containing the column definitions.
 - `$options` is an array containing the schema options.
+    - `indexes` is an array containing the index definitions.
+    - `foreignKeys` is an array containing the foreign key definitions.
     - `ifNotExists` is a boolean indicating whether to use an `IF NOT EXISTS` clause, and will default to *false*.
 
 ```php
-$forge->createTable($table, $options);
+$forge->createTable($table, $columns, $options);
 ```
 
 Additional table options may be available depending on the connection handler.
@@ -325,7 +328,10 @@ $forge->createSchema($schema, $options);
 Create a new table.
 
 - `$table` is a string representing the table name.
+- `$columns` is an array containing the column definitions.
 - `$options` is an array containing the schema options.
+    - `indexes` is an array containing the index definitions.
+    - `foreignKeys` is an array containing the foreign key definitions.
     - `engine` is a string representing the table engine, and will default to "*InnoDB*".
     - `charset` is a string representing the table character set, and will default to the connection character set.
     - `collation` is a string representing the table collation, and will default to the connection collation.
@@ -333,7 +339,7 @@ Create a new table.
     - `ifNotExists` is a boolean indicating whether to use an `IF NOT EXISTS` clause, and will default to *false*.
 
 ```php
-$forge->createTable($table, $options);
+$forge->createTable($table, $columns, $options);
 ```
 
 **Drop Foreign Key**
@@ -500,12 +506,15 @@ $forge->createSchema($schema, $options);
 Create a new table.
 
 - `$table` is a string representing the table name.
+- `$columns` is an array containing the column definitions.
 - `$options` is an array containing the schema options.
+    - `indexes` is an array containing the index definitions.
+    - `foreignKeys` is an array containing the foreign key definitions.
     - `comment` is a string representing the table comment, and will default to "".
     - `ifNotExists` is a boolean indicating whether to use an `IF NOT EXISTS` clause, and will default to *false*.
 
 ```php
-$forge->createTable($table, $options);
+$forge->createTable($table, $columns, $options);
 ```
 
 **Drop Constraint**
