@@ -97,11 +97,9 @@ Additional index options may be available depending on the connection handler.
 Build a [*TableForge*](#table-forges).
 
 - `$table` is a string representing the table name.
-- `$options` is an array containing the table options.
-    - `clean` is a boolean indicating whether to create a clean forge, and will default to *false*.
 
 ```php
-$tableForge = $forge->build($table, $options);
+$tableForge = $forge->build($table);
 ```
 
 Additional table options may be available depending on the connection handler.
@@ -277,7 +275,6 @@ Build a [*TableForge*](#table-forges).
     - `charset` is a string representing the table character set, and will default to the connection character set.
     - `collation` is a string representing the table collation, and will default to the connection collation.
     - `comment` is a string representing the table comment, and will default to "".
-    - `clean` is a boolean indicating whether to create a clean forge, and will default to *false*.
 
 ```php
 $tableForge = $forge->build($table, $options);
@@ -464,6 +461,18 @@ Alter a column's type.
 
 ```php
 $forge->alterColumnType($table, $column, $options);
+```
+
+**Build**
+
+Build a [*TableForge*](#table-forges).
+
+- `$table` is a string representing the table name.
+- `$options` is an array containing the table options.
+    - `comment` is a string representing the table comment, and will default to "".
+
+```php
+$tableForge = $forge->build($table, $options);
 ```
 
 **Comment On Column**
