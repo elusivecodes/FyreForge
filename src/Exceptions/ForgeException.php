@@ -25,6 +25,21 @@ class ForgeException extends RunTimeException
         return new static('Table index already exists: '.$index);
     }
 
+    public static function forInvalidConstraint(string $index): static
+    {
+        return new static('Constraint not valid: '.$index);
+    }
+
+    public static function forInvalidIndexOnTableCreation(string $index): static
+    {
+        return new static('Indexes cannot be added during table creation: '.$index);
+    }
+
+    public static function forInvalidIndexType(string $type): static
+    {
+        return new static('Index type not valid: '.$type);
+    }
+
     public static function forMissingColumn(string $column): static
     {
         return new static('Table column does not exist: '.$column);

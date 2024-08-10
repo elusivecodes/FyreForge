@@ -7,6 +7,9 @@
 - [Installation](#installation)
 - [Forge Registry](#forge-registry)
 - [Forges](#forges)
+    - [MySQL](#mysql)
+    - [Postgres](#postgres)
+    - [Sqlite](#sqlite)
 - [Table Forges](#table-forges)
 
 
@@ -43,14 +46,150 @@ $forge = ForgeRegistry::getForge($connection);
 Set a [*Forge*](#forges) handler for a [*Connection*](https://github.com/elusivecodes/FyreDB#connections) class.
 
 - `$connectionClass` is a string representing the [*Connection*](https://github.com/elusivecodes/FyreDB#connections) class name.
-- `$schemaClass` is a string representing the [*Schema*](https://github.com/elusivecodes/FyreSchema#schemas) class name.
+- `$forgeClass` is a string representing the [*Forge*](#forges) class name.
 
 ```php
-ForgeRegistry::setHandler($connectionClass, $schemaClass);
+ForgeRegistry::setHandler($connectionClass, $forgeClass);
 ```
 
 
 ## Forges
+
+**Add Column**
+
+Add a column to a table.
+
+- `$table` is a string representing the table name.
+- `$column` is a string representing the column name.
+- `$options` is an array containing the column options.
+    - `type` is a string representing the column type, and will default to "*varchar*".
+    - `length` is a number representing the column length, and will default to the type default.
+    - `precision` is a number representing the column precision, and will default to the type default.
+    - `nullable` is a boolean indicating whether the column is nullable, and will default to *false*.
+    - `default` is a string representing the column default value, and will default to *null* (no default).
+    - `autoIncrement` is a boolean indicating whether the column is an an auto incrementing column, and will default to *false*.
+
+```php
+$forge->addColumn($table, $column, $options);
+```
+
+Additional column options may be available depending on the connection handler.
+
+**Add Index**
+
+Add an index to a table.
+
+- `$table` is a string representing the table name.
+- `$index` is a string representing the index name.
+- `$options` is an array containing the index options.
+    - `columns` is a string or array containing the columns to use for the index, and will default to the index name.
+    - `unique` is a boolean indicating whether the index must be unique, and will default to *false*.
+    - `primary` is a boolean indicating whether the index is a primary key, and will default to *false*.
+
+```php
+$forge->addIndex($table, $index, $options);
+```
+
+Additional index options may be available depending on the connection handler.
+
+**Build**
+
+Build a [*TableForge*](#table-forges).
+
+- `$table` is a string representing the table name.
+- `$options` is an array containing the table options.
+    - `clean` is a boolean indicating whether to create a clean forge, and will default to *false*.
+
+```php
+$tableForge = $forge->build($table, $options);
+```
+
+Additional table options may be available depending on the connection handler.
+
+**Create Table**
+
+Create a new table.
+
+- `$table` is a string representing the table name.
+- `$options` is an array containing the schema options.
+    - `ifNotExists` is a boolean indicating whether to use an `IF NOT EXISTS` clause, and will default to *false*.
+
+```php
+$forge->createTable($table, $options);
+```
+
+Additional table options may be available depending on the connection handler.
+
+**Drop Column**
+
+Drop a column from a table.
+
+- `$table` is a string representing the table name.
+- `$column` is a string representing the column name.
+- `$options` is an array containing the column options.
+    - `ifExists` is a boolean indicating whether to use an `IF EXISTS` clause, and will default to *false*.
+
+```php
+$forge->dropColumn($table, $column, $options);
+```
+
+**Drop Index**
+
+Drop an index from a table.
+
+- `$table` is a string representing the table name.
+- `$index` is a string representing the index name.
+
+```php
+$forge->dropIndex($table, $index);
+```
+
+**Drop Table**
+
+Drop a table.
+
+- `$table` is a string representing the table name.
+- `$options` is an array containing the table options.
+    - `ifExists` is a boolean indicating whether to use an `IF EXISTS` clause, and will default to *false*.
+
+```php
+$forge->dropTable($table, $options);
+```
+
+**Get Connection**
+
+Get the [*Connection*](https://github.com/elusivecodes/FyreDB#connections).
+
+```php
+$connection = $forge->getConnection();
+```
+
+**Rename Column**
+
+Rename a column.
+
+- `$table` is a string representing the table name.
+- `$column` is a string representing the column name.
+- `$newColumn` is a string representing the new column name.
+
+```php
+$forge->renameColumn($table, $column, $newColumn);
+```
+
+**Rename Table**
+
+Rename a table.
+
+- `$table` is a string representing the table name.
+- `$newTable` is a string representing the new table name.
+
+```php
+$forge->renameTable($table, $newTable);
+```
+
+### MySQL
+
+The [*MySQL*](https://github.com/elusivecodes/FyreDB#MySQL) Forge extends the *Forge* class and provides additional methods and options specific to MySQL databases.
 
 **Add Column**
 
@@ -68,7 +207,7 @@ Add a column to a table.
     - `default` is a string representing the column default value, and will default to *null* (no default).
     - `charset` is a string representing the column character set, and will default to the connection character set.
     - `collation` is a string representing the column collation, and will default to the connection collation.
-    - `extra` is a string representing the column extra definition, and will default to "".
+    - `autoIncrement` is a boolean indicating whether the column is an an auto incrementing column, and will default to *false*.
     - `comment` is a string representing the column comment, and will default to "".
     - `after` is a string representing the column to add this column after, and will default to *null*.
     - `first` is a boolean indicating whether to add this column first in the table, and will default to *false*.
@@ -104,6 +243,7 @@ Add an index to a table.
     - `columns` is a string or array containing the columns to use for the index, and will default to the index name.
     - `type` is a string representing the index type, and will default to "*BTREE*".
     - `unique` is a boolean indicating whether the index must be unique, and will default to *false*.
+    - `primary` is a boolean indicating whether the index is a primary key, and will default to *false*.
 
 ```php
 $forge->addIndex($table, $index, $options);
@@ -157,7 +297,7 @@ Change a table column.
     - `default` is a string representing the column default value, and will default to *null* (no default).
     - `charset` is a string representing the column character set, and will default to the connection character set.
     - `collation` is a string representing the column collation, and will default to the connection collation.
-    - `extra` is a string representing the column extra definition, and will default to "".
+    - `autoIncrement` is a boolean indicating whether the column is an an auto incrementing column, and will default to *false*.
     - `comment` is a string representing the column comment, and will default to "".
     - `after` is a string representing the column to add this column after, and will default to *null*.
     - `first` is a boolean indicating whether to add this column first in the table, and will default to *false*.
@@ -196,19 +336,6 @@ Create a new table.
 $forge->createTable($table, $options);
 ```
 
-**Drop Column**
-
-Drop a column from a table.
-
-- `$table` is a string representing the table name.
-- `$column` is a string representing the column name.
-- `$options` is an array containing the column options.
-    - `ifExists` is a boolean indicating whether to use an `IF EXISTS` clause, and will default to *false*.
-
-```php
-$forge->dropColumn($table, $column, $options);
-```
-
 **Drop Foreign Key**
 
 Drop a foreign key from a table.
@@ -220,15 +347,14 @@ Drop a foreign key from a table.
 $forge->dropForeignKey($table, $foreignKey);
 ```
 
-**Drop Index**
+**Drop Primary Key**
 
-Drop an index from a table.
+Drop a primary key from a table.
 
 - `$table` is a string representing the table name.
-- `$index` is a string representing the index name.
 
 ```php
-$forge->dropIndex($table, $index);
+$forge->dropPrimaryKey();
 ```
 
 **Drop Schema**
@@ -243,36 +369,192 @@ Drop a schema.
 $forge->dropSchema($schema, $options);
 ```
 
-**Drop Table**
+### Postgres
 
-Drop a table.
+The [*Postgres*](https://github.com/elusivecodes/FyreDB#Postgres) Forge extends the *Forge* class and provides additional methods and options specific to Postgres databases.
+
+**Add Column**
+
+Add a column to a table.
 
 - `$table` is a string representing the table name.
-- `$options` is an array containing the table options.
+- `$column` is a string representing the column name.
+- `$options` is an array containing the column options.
+    - `type` is a string representing the column type, and will default to "*varchar*".
+    - `length` is a number representing the column length, and will default to the type default.
+    - `precision` is a number representing the column precision, and will default to the type default.
+    - `nullable` is a boolean indicating whether the column is nullable, and will default to *false*.
+    - `default` is a string representing the column default value, and will default to *null* (no default).
+    - `autoIncrement` is a boolean indicating whether the column is an an auto incrementing column, and will default to *false*.
+    - `comment` is a string representing the column comment, and will default to "".
+
+```php
+$forge->addColumn($table, $column, $options);
+```
+
+**Add Foreign Key**
+
+Add a foreign key to a table.
+
+- `$table` is a string representing the table name.
+- `$foreignKey` is a string representing the foreign key name.
+- `$options` is an array containing the foreign key options.
+    - `columns` is a string or array containing the columns to use for the foreign key, and will default to the foreign key name.
+    - `referencedTable` is a string representing the referenced table to use.
+    - `referencedColumns` is a string or array containing the columns to use in the referenced table.
+    - `update` is a string containing the ON UPDATE operation, and will default to "".
+    - `delete` is a string containing the ON DELETE operation, and will default to "".
+
+```php
+$forge->addForeignKey($table, $foreignKey, $options);
+```
+
+**Alter Column Auto Increment**
+
+Alter a column's auto increment.
+
+- `$table` is a string representing the table name.
+- `$column` is a string representing the column name.
+- `$autoIncrement` is a boolean indicating whether the column is an an auto incrementing column.
+
+```php
+$forge->alterColumnAutoIncrement($table, $column, $autoIncrement);
+```
+
+**Alter Column Default**
+
+Alter a column's default value.
+
+- `$table` is a string representing the table name.
+- `$column` is a string representing the column name.
+- `$default` is a string representing the column default value.
+
+```php
+$forge->alterColumnDefault($table, $column, $default);
+```
+
+**Alter Column Nullable**
+
+Alter whether a column is nullable.
+
+- `$table` is a string representing the table name.
+- `$column` is a string representing the column name.
+- `$nullable` is a boolean indicating whether the column is nullable, and will default to *false*.
+
+```php
+$forge->alterColumnNullable($table, $column, $nullable);
+```
+
+**Alter Column Type**
+
+Alter a column's type.
+
+- `$table` is a string representing the table name.
+- `$column` is a string representing the column name.
+- `$options` is an array containing the column options.
+    - `type` is a string representing the column type, and will default to "*varchar*".
+    - `length` is a number representing the column length, and will default to the type default.
+    - `precision` is a number representing the column precision, and will default to the type default.
+
+```php
+$forge->alterColumnType($table, $column, $options);
+```
+
+**Comment On Column**
+
+Set the comment for a column.
+
+- `$table` is a string representing the table name.
+- `$column` is a string representing the column name.
+- `$comment` is a string representing the table comment.
+
+```php
+$forge->commentOnTable($table, $column, $comment);
+```
+
+**Comment On Table**
+
+Set the comment for a table.
+
+- `$table` is a string representing the table name.
+- `$comment` is a string representing the table comment.
+
+```php
+$forge->commentOnTable($table, $comment);
+```
+
+**Create Schema**
+
+Create a new schema.
+
+- `$schema` is a string representing the schema name.
+- `$options` is an array containing the schema options.
+    - `ifNotExists` is a boolean indicating whether to use an `IF NOT EXISTS` clause, and will default to *false*.
+
+```php
+$forge->createSchema($schema, $options);
+```
+
+**Create Table**
+
+Create a new table.
+
+- `$table` is a string representing the table name.
+- `$options` is an array containing the schema options.
+    - `comment` is a string representing the table comment, and will default to "".
+    - `ifNotExists` is a boolean indicating whether to use an `IF NOT EXISTS` clause, and will default to *false*.
+
+```php
+$forge->createTable($table, $options);
+```
+
+**Drop Constraint**
+
+Drop a constraint from a table.
+
+- `$table` is a string representing the table name.
+- `$index` is a string representing the index name.
+
+```php
+$forge->dropConstraint($table, $index);
+```
+
+**Drop Foreign Key**
+
+Drop a foreign key from a table.
+
+- `$table` is a string representing the table name.
+- `$foreignKey` is a string representing the foreign key name.
+
+```php
+$forge->dropForeignKey($table, $foreignKey);
+```
+
+**Drop Primary Key**
+
+Drop a primary key from a table.
+
+- `$table` is a string representing the table name.
+
+```php
+$forge->dropPrimaryKey();
+```
+
+**Drop Schema**
+
+Drop a schema.
+
+- `$schema` is a string representing the schema name.
+- `$options` is an array containing the schema options.
     - `ifExists` is a boolean indicating whether to use an `IF EXISTS` clause, and will default to *false*.
 
 ```php
-$forge->dropTable($table, $options);
+$forge->dropSchema($schema, $options);
 ```
 
-**Get Connection**
+### Sqlite
 
-Get the [*Connection*](https://github.com/elusivecodes/FyreDB#connections).
-
-```php
-$connection = $forge->getConnection();
-```
-
-**Rename Table**
-
-Rename a table.
-
-- `$table` is a string representing the table name.
-- `$newTable` is a string representing the new table name.
-
-```php
-$forge->renameTable($table, $newTable);
-```
+The [*Sqlite*](https://github.com/elusivecodes/FyreDB#Sqlite) Forge extends the *Forge* class.
 
 
 ## Table Forges
@@ -283,23 +565,19 @@ Add a column to the table.
 
 - `$column` is a string representing the column name.
 - `$options` is an array containing the column options.
+    - `name` is a string representing the new column name, and will default to the column name.
     - `type` is a string representing the column type, and will default to "*varchar*".
     - `length` is a number representing the column length, and will default to the type default.
     - `precision` is a number representing the column precision, and will default to the type default.
-    - `values` is an array containing the enum/set values, and will default to *null*.
     - `nullable` is a boolean indicating whether the column is nullable, and will default to *false*.
-    - `unsigned` is a boolean indicating whether the column is unsigned, and will default to *false*.
     - `default` is a string representing the column default value, and will default to *null* (no default).
-    - `charset` is a string representing the column character set, and will default to the connection character set.
-    - `collation` is a string representing the column collation, and will default to the connection collation.
-    - `extra` is a string representing the column extra definition, and will default to "".
-    - `comment` is a string representing the column comment, and will default to "".
-    - `after` is a string representing the column to add this column after, and will default to *null*.
-    - `first` is a boolean indicating whether to add this column first in the table, and will default to *false*.
+    - `autoIncrement` is a boolean indicating whether the column is an an auto incrementing column, and will default to *false*.
 
 ```php
 $tableForge->addColumn($column, $options);
 ```
+
+Additional column options may be available depending on the connection handler.
 
 **Add Foreign Key**
 
@@ -317,6 +595,8 @@ Add a foreign key to the table.
 $tableForge->addForeignKey($foreignKey, $options);
 ```
 
+Foreign keys cannot be added to an existing Sqlite table.
+
 **Add Index**
 
 Add an index to the table.
@@ -324,12 +604,16 @@ Add an index to the table.
 - `$index` is a string representing the index name.
 - `$options` is an array containing the index options.
     - `columns` is a string or array containing the columns to use for the index, and will default to the index name.
-    - `type` is a string representing the index type, and will default to "*BTREE*".
     - `unique` is a boolean indicating whether the index must be unique, and will default to *false*.
+    - `primary` is a boolean indicating whether the index is a primary key, and will default to *false*.
 
 ```php
 $tableForge->addIndex($index, $options);
 ```
+
+Additional index options may be available depending on the connection handler.
+
+Primary keys cannot be added to an existing Sqlite table.
 
 **Change Column**
 
@@ -338,23 +622,14 @@ Change a table column.
 - `$column` is a string representing the column name.
 - `$options` is an array containing the column options.
     - `name` is a string representing the new column name, and will default to the column name.
-    - `type` is a string representing the column type, and will default to "*varchar*".
-    - `length` is a number representing the column length, and will default to the type default.
-    - `precision` is a number representing the column precision, and will default to the type default.
-    - `values` is an array containing the enum/set values, and will default to *null*.
-    - `nullable` is a boolean indicating whether the column is nullable, and will default to *false*.
-    - `unsigned` is a boolean indicating whether the column is unsigned, and will default to *false*.
-    - `default` is a string representing the column default value, and will default to *null* (no default).
-    - `charset` is a string representing the column character set, and will default to the connection character set.
-    - `collation` is a string representing the column collation, and will default to the connection collation.
-    - `extra` is a string representing the column extra definition, and will default to "".
-    - `comment` is a string representing the column comment, and will default to "".
-    - `after` is a string representing the column to add this column after, and will default to *null*.
-    - `first` is a boolean indicating whether to add this column first in the table, and will default to *false*.
 
 ```php
 $tableForge->changeColumn($column, $options);
 ```
+
+Additional column options may be available depending on the connection handler.
+
+Column definitions can not be modified for an existing Sqlite table.
 
 **Clear**
 
@@ -418,6 +693,8 @@ Drop a foreign key from the table.
 $tableForge->dropForeignKey($foreignKey);
 ```
 
+Foreign keys cannot be dropped from an existing Sqlite table.
+
 **Drop Index**
 
 Drop an index from the table.
@@ -427,6 +704,8 @@ Drop an index from the table.
 ```php
 $tableForge->dropIndex($index);
 ```
+
+Primary and unique keys cannot be dropped from an existing Sqlite table.
 
 **Execute**
 
@@ -537,6 +816,8 @@ Set the primary key.
 ```php
 $tableForge->setPrimaryKey($columns);
 ```
+
+Primary keys cannot be added to an existing Sqlite table.
 
 **SQL**
 

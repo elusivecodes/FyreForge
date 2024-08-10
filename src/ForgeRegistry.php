@@ -4,8 +4,13 @@ declare(strict_types=1);
 namespace Fyre\Forge;
 
 use Fyre\DB\Connection;
-use Fyre\DB\Handlers\MySQL\MySQLConnection;
-use Fyre\Forge\Handlers\MySQL\MySQLForge;
+use Fyre\DB\Handlers\Mysql\MysqlConnection;
+use Fyre\DB\Handlers\Postgres\PostgresConnection;
+use Fyre\DB\Handlers\Sqlite\SqliteConnection;
+use Fyre\Forge\Exceptions\ForgeException;
+use Fyre\Forge\Handlers\Mysql\MysqlForge;
+use Fyre\Forge\Handlers\Postgres\PostgresForge;
+use Fyre\Forge\Handlers\Sqlite\SqliteForge;
 use WeakMap;
 
 use function array_key_exists;
@@ -20,7 +25,9 @@ abstract class ForgeRegistry
     protected static WeakMap $forges;
 
     protected static array $handlers = [
-        MySQLConnection::class => MySQLForge::class,
+        MysqlConnection::class => MysqlForge::class,
+        PostgresConnection::class => PostgresForge::class,
+        SqliteConnection::class => SqliteForge::class,
     ];
 
     /**
