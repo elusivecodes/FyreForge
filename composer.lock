@@ -770,16 +770,16 @@
         },
         {
             "name": "fyre/schema",
-            "version": "v4.2.1",
+            "version": "v4.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elusivecodes/FyreSchema.git",
-                "reference": "4c9564a93a1124712f3ce8111bb3b2f9c697bc6a"
+                "reference": "a712fc19d99d3af4bf4c015159d318dc524e5ff3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elusivecodes/FyreSchema/zipball/4c9564a93a1124712f3ce8111bb3b2f9c697bc6a",
-                "reference": "4c9564a93a1124712f3ce8111bb3b2f9c697bc6a",
+                "url": "https://api.github.com/repos/elusivecodes/FyreSchema/zipball/a712fc19d99d3af4bf4c015159d318dc524e5ff3",
+                "reference": "a712fc19d99d3af4bf4c015159d318dc524e5ff3",
                 "shasum": ""
             },
             "require": {
@@ -811,9 +811,9 @@
             "description": "A database schema library.",
             "support": {
                 "issues": "https://github.com/elusivecodes/FyreSchema/issues",
-                "source": "https://github.com/elusivecodes/FyreSchema/tree/v4.2.1"
+                "source": "https://github.com/elusivecodes/FyreSchema/tree/v4.2.2"
             },
-            "time": "2024-08-10T10:39:17+00:00"
+            "time": "2024-08-11T10:14:54+00:00"
         },
         {
             "name": "fyre/typeparser",

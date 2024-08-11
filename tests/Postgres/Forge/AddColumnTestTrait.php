@@ -108,7 +108,7 @@ trait AddColumnTestTrait
                 'length' => 11,
                 'precision' => 0,
                 'nullable' => true,
-                'default' => null,
+                'default' => 'NULL',
                 'comment' => '',
                 'autoIncrement' => false,
             ],

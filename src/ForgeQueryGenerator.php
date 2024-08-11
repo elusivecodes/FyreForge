@@ -225,6 +225,8 @@ abstract class ForgeQueryGenerator
 
         if ($options['default'] !== null) {
             $options['default'] = (string) $options['default'];
+        } else if ($options['nullable']) {
+            $options['default'] = 'NULL';
         }
 
         $options['nullable'] = (bool) $options['nullable'];
