@@ -44,7 +44,10 @@ trait PostgresConnectionTrait
         $this->schema = SchemaRegistry::getSchema($this->db);
         $this->forge = ForgeRegistry::getForge($this->db);
         $this->generator = $this->forge->generator();
+    }
 
+    protected function tearDown(): void
+    {
         $this->db->query('DROP TABLE IF EXISTS test');
         $this->db->query('DROP TABLE IF EXISTS test_values');
         $this->db->query('DROP TABLE IF EXISTS other');
