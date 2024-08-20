@@ -14,6 +14,8 @@ use Fyre\Forge\Handlers\Sqlite\SqliteForge;
 use WeakMap;
 
 use function array_key_exists;
+use function array_shift;
+use function class_parents;
 use function get_class;
 use function ltrim;
 
@@ -67,9 +69,15 @@ abstract class ForgeRegistry
     protected static function loadForge(Connection $connection): Forge
     {
         $connectionClass = get_class($connection);
+        $connectionKey = $connectionClass;
 
-        if (!array_key_exists($connectionClass, static::$handlers)) {
-            throw ForgeException::forMissingHandler($connectionClass);
+        while (!array_key_exists($connectionKey, static::$handlers)) {
+            $classParents ??= class_parents($connection);
+            $connectionKey = array_shift($classParents);
+
+            if (!$connectionKey) {
+                throw ForgeException::forMissingHandler($connectionClass);
+            }
         }
 
         $forgeClass = static::$handlers[$connectionClass];
