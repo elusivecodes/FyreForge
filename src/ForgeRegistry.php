@@ -80,7 +80,7 @@ abstract class ForgeRegistry
             }
         }
 
-        $forgeClass = static::$handlers[$connectionClass];
+        $forgeClass = static::$handlers[$connectionKey];
 
         return new $forgeClass($connection);
     }
