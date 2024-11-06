@@ -48,6 +48,10 @@ $container->singleton(ForgeRegistry::class);
 
 Any dependencies will be injected automatically when loading from the [*Container*](https://github.com/elusivecodes/FyreContainer).
 
+```php
+$forgeRegistry = $container->use(ForgeRegistry::class);
+```
+
 
 ## Methods
 
