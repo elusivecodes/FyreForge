@@ -64,4 +64,9 @@ class ForgeException extends RunTimeException
     {
         return new static('Table does not exist: '.$table);
     }
+
+    public static function forUnsupportedColumnType(string $type): static
+    {
+        return new static('Column type not supported by connection handler: '.$type);
+    }
 }

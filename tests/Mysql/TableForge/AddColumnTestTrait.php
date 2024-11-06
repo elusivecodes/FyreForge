@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Tests\Mysql\TableForge;
 
+use Fyre\DB\Types\IntegerType;
 use Fyre\Forge\Exceptions\ForgeException;
 
 trait AddColumnTestTrait
@@ -13,14 +14,14 @@ trait AddColumnTestTrait
 
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
         ]);
 
         $this->forge
             ->build('test')
             ->addColumn('id', [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ]);
     }
 
@@ -28,7 +29,7 @@ trait AddColumnTestTrait
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
         ]);
 
@@ -39,7 +40,7 @@ trait AddColumnTestTrait
             $this->forge
                 ->build('test')
                 ->addColumn('value', [
-                    'type' => 'int',
+                    'type' => IntegerType::class,
                 ])
                 ->sql()
         );
@@ -54,7 +55,7 @@ trait AddColumnTestTrait
             $this->forge
                 ->build('test')
                 ->addColumn('id', [
-                    'type' => 'int',
+                    'type' => IntegerType::class,
                 ])
                 ->sql()
         );

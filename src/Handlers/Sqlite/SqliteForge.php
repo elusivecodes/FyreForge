@@ -34,7 +34,11 @@ class SqliteForge extends Forge
      */
     public function build(string $tableName, array $options = []): SqliteTableForge
     {
-        return new SqliteTableForge($this, $tableName, $options);
+        return $this->container->build(SqliteTableForge::class, [
+            'forge' => $this,
+            'tableName' => $tableName,
+            'options' => $options,
+        ]);
     }
 
     /**
@@ -93,6 +97,6 @@ class SqliteForge extends Forge
      */
     public function generator(): SqliteForgeQueryGenerator
     {
-        return $this->generator ??= new SqliteForgeQueryGenerator($this);
+        return $this->generator ??= $this->container->build(SqliteForgeQueryGenerator::class, ['forge' => $this]);
     }
 }

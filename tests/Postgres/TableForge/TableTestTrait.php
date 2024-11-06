@@ -3,13 +3,15 @@ declare(strict_types=1);
 
 namespace Tests\Postgres\TableForge;
 
+use Fyre\DB\Types\IntegerType;
+
 trait TableTestTrait
 {
     public function testOptionsExistingTable(): void
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'integer',
+                'type' => IntegerType::class,
             ],
         ]);
 
@@ -37,7 +39,7 @@ trait TableTestTrait
                     'comment' => 'This is the value',
                 ])
                 ->addColumn('id', [
-                    'type' => 'integer',
+                    'type' => IntegerType::class,
                 ])
                 ->sql()
         );

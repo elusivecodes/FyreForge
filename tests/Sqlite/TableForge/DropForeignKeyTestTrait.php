@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Tests\Sqlite\TableForge;
 
+use Fyre\DB\Types\IntegerType;
 use Fyre\Forge\Exceptions\ForgeException;
 
 trait DropForeignKeyTestTrait
@@ -13,7 +14,7 @@ trait DropForeignKeyTestTrait
 
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
         ]);
 
@@ -28,7 +29,7 @@ trait DropForeignKeyTestTrait
 
         $this->forge->createTable('test_values', [
             'id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
         ], [
             'indexes' => [
@@ -43,10 +44,10 @@ trait DropForeignKeyTestTrait
 
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
             'value_id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
         ], [
             'foreignKeys' => [
@@ -68,15 +69,15 @@ trait DropForeignKeyTestTrait
     {
         $this->assertSame(
             [
-                'CREATE TABLE test (id INT(11) NOT NULL, value_id INT(11) NOT NULL)',
+                'CREATE TABLE test (id INTEGER NOT NULL, value_id INTEGER NOT NULL)',
             ],
             $this->forge
                 ->build('test')
                 ->addColumn('id', [
-                    'type' => 'int',
+                    'type' => IntegerType::class,
                 ])
                 ->addColumn('value_id', [
-                    'type' => 'int',
+                    'type' => IntegerType::class,
                 ])
                 ->addForeignKey('test_value_id', [
                     'columns' => 'value_id',

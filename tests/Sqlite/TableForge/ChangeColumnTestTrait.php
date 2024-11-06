@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Tests\Sqlite\TableForge;
 
+use Fyre\DB\Types\IntegerType;
+use Fyre\DB\Types\StringType;
 use Fyre\Forge\Exceptions\ForgeException;
 
 trait ChangeColumnTestTrait
@@ -14,7 +16,7 @@ trait ChangeColumnTestTrait
         $this->forge
             ->build('test')
             ->changeColumn('invalid', [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ]);
     }
 
@@ -24,14 +26,14 @@ trait ChangeColumnTestTrait
 
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'varchar',
+                'type' => StringType::class,
             ],
         ]);
 
         $this->forge
             ->build('test')
             ->changeColumn('id', [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ])
             ->sql();
     }
@@ -40,15 +42,15 @@ trait ChangeColumnTestTrait
     {
         $this->assertSame(
             [
-                'CREATE TABLE test (id INT(11) NOT NULL)',
+                'CREATE TABLE test (id INTEGER NOT NULL)',
             ],
             $this->forge
                 ->build('test')
                 ->addColumn('id', [
-                    'type' => 'varchar',
+                    'type' => StringType::class,
                 ])
                 ->changeColumn('id', [
-                    'type' => 'int',
+                    'type' => IntegerType::class,
                 ])
                 ->sql()
         );

@@ -3,16 +3,18 @@ declare(strict_types=1);
 
 namespace Tests\Mysql\Forge;
 
+use Fyre\DB\Types\IntegerType;
+
 trait RenameColumnTestTrait
 {
     public function testRenameColumn(): void
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
             'value' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
         ]);
 

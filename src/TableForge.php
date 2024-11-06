@@ -47,13 +47,14 @@ abstract class TableForge
      * @param Forge $forge The forge.
      * @param string $tableName The table name.
      * @param array $options The table options.
+     * @param SchemaRegistry The SchemaRegistry.
      */
-    public function __construct(Forge $forge, string $tableName, array $options = [])
+    public function __construct(Forge $forge, SchemaRegistry $schemaRegistry, string $tableName, array $options = [])
     {
         $this->forge = $forge;
 
         $connection = $this->forge->getConnection();
-        $this->schema = SchemaRegistry::getSchema($connection);
+        $this->schema = $schemaRegistry->use($connection);
 
         $this->tableName = $tableName;
 

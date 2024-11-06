@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Tests\Postgres\TableForge;
 
+use Fyre\DB\Types\IntegerType;
+use Fyre\DB\Types\StringType;
 use PHPUnit\Framework\TestCase;
 use Tests\Postgres\PostgresConnectionTrait;
 
@@ -29,11 +31,11 @@ final class TableForgeTest extends TestCase
         $tableForge = $this->forge->build('test');
 
         $tableForge->addColumn('id', [
-            'type' => 'integer',
+            'type' => IntegerType::class,
         ]);
 
         $tableForge->addColumn('value', [
-            'type' => 'character varying',
+            'type' => StringType::class,
         ]);
 
         $this->assertSame(
@@ -55,11 +57,11 @@ final class TableForgeTest extends TestCase
         $tableForge = $this->forge->build('test');
 
         $tableForge->addColumn('id', [
-            'type' => 'integer',
+            'type' => IntegerType::class,
         ]);
 
         $tableForge->addColumn('value', [
-            'type' => 'character varying',
+            'type' => StringType::class,
         ]);
 
         $this->assertSame(
@@ -76,11 +78,11 @@ final class TableForgeTest extends TestCase
         $tableForge = $this->forge->build('test');
 
         $tableForge->addColumn('id', [
-            'type' => 'integer',
+            'type' => IntegerType::class,
         ]);
 
         $tableForge->addColumn('value', [
-            'type' => 'character varying',
+            'type' => StringType::class,
         ]);
 
         $this->assertSame(
@@ -113,11 +115,11 @@ final class TableForgeTest extends TestCase
         $tableForge = $this->forge->build('test');
 
         $tableForge->addColumn('id', [
-            'type' => 'integer',
+            'type' => IntegerType::class,
         ]);
 
         $tableForge->addColumn('value_id', [
-            'type' => 'integer',
+            'type' => IntegerType::class,
         ]);
 
         $tableForge->addForeignKey('value_id', [
@@ -146,11 +148,11 @@ final class TableForgeTest extends TestCase
         $tableForge = $this->forge->build('test');
 
         $tableForge->addColumn('id', [
-            'type' => 'integer',
+            'type' => IntegerType::class,
         ]);
 
         $tableForge->addColumn('value_id', [
-            'type' => 'integer',
+            'type' => IntegerType::class,
         ]);
 
         $tableForge->addForeignKey('value_id', [
@@ -191,7 +193,7 @@ final class TableForgeTest extends TestCase
         $tableForge = $this->forge->build('test');
 
         $tableForge->addColumn('id', [
-            'type' => 'integer',
+            'type' => IntegerType::class,
         ]);
 
         $this->assertTrue(
@@ -204,7 +206,7 @@ final class TableForgeTest extends TestCase
         $tableForge = $this->forge->build('test');
 
         $tableForge->addColumn('id', [
-            'type' => 'integer',
+            'type' => IntegerType::class,
         ]);
 
         $this->assertFalse(
@@ -217,11 +219,11 @@ final class TableForgeTest extends TestCase
         $tableForge = $this->forge->build('test');
 
         $tableForge->addColumn('id', [
-            'type' => 'integer',
+            'type' => IntegerType::class,
         ]);
 
         $tableForge->addColumn('value_id', [
-            'type' => 'integer',
+            'type' => IntegerType::class,
         ]);
 
         $tableForge->addForeignKey('value_id', [
@@ -239,11 +241,11 @@ final class TableForgeTest extends TestCase
         $tableForge = $this->forge->build('test');
 
         $tableForge->addColumn('id', [
-            'type' => 'integer',
+            'type' => IntegerType::class,
         ]);
 
         $tableForge->addColumn('value_id', [
-            'type' => 'integer',
+            'type' => IntegerType::class,
         ]);
 
         $this->assertFalse(
@@ -256,7 +258,7 @@ final class TableForgeTest extends TestCase
         $tableForge = $this->forge->build('test');
 
         $tableForge->addColumn('id', [
-            'type' => 'integer',
+            'type' => IntegerType::class,
         ]);
 
         $tableForge->addIndex('id');
@@ -271,7 +273,7 @@ final class TableForgeTest extends TestCase
         $tableForge = $this->forge->build('test');
 
         $tableForge->addColumn('id', [
-            'type' => 'integer',
+            'type' => IntegerType::class,
         ]);
 
         $this->assertFalse(
@@ -284,7 +286,7 @@ final class TableForgeTest extends TestCase
         $tableForge = $this->forge->build('test');
 
         $tableForge->addColumn('id', [
-            'type' => 'integer',
+            'type' => IntegerType::class,
         ]);
 
         $tableForge->addIndex('id');
@@ -307,7 +309,7 @@ final class TableForgeTest extends TestCase
         $tableForge = $this->forge->build('test');
 
         $tableForge->addColumn('id', [
-            'type' => 'integer',
+            'type' => IntegerType::class,
         ]);
 
         $tableForge->addIndex('id');

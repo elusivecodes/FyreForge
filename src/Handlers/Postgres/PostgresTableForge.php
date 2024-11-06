@@ -164,7 +164,6 @@ class PostgresTableForge extends TableForge
                     array_key_exists('length', $columnOptions) ||
                     array_key_exists('precision', $columnOptions)
                 ) {
-
                     $statements[] = $generator->buildAlterColumnType($column, $options + ['cast' => array_key_exists('type', $columnOptions)]);
                 }
 

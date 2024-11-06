@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Tests\Postgres\TableForge;
 
+use Fyre\DB\Types\IntegerType;
 use Fyre\Forge\Exceptions\ForgeException;
 
 trait DropForeignKeyTestTrait
@@ -13,7 +14,7 @@ trait DropForeignKeyTestTrait
 
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'integer',
+                'type' => IntegerType::class,
             ],
         ]);
 
@@ -26,7 +27,7 @@ trait DropForeignKeyTestTrait
     {
         $this->forge->createTable('test_values', [
             'id' => [
-                'type' => 'integer',
+                'type' => IntegerType::class,
             ],
         ], [
             'indexes' => [
@@ -41,10 +42,10 @@ trait DropForeignKeyTestTrait
 
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'integer',
+                'type' => IntegerType::class,
             ],
             'value_id' => [
-                'type' => 'integer',
+                'type' => IntegerType::class,
             ],
         ], [
             'foreignKeys' => [
@@ -75,10 +76,10 @@ trait DropForeignKeyTestTrait
             $this->forge
                 ->build('test')
                 ->addColumn('id', [
-                    'type' => 'integer',
+                    'type' => IntegerType::class,
                 ])
                 ->addColumn('value_id', [
-                    'type' => 'integer',
+                    'type' => IntegerType::class,
                 ])
                 ->addForeignKey('value_id', [
                     'referencedTable' => 'test_values',

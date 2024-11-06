@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace Tests\Sqlite\Forge;
 
 use Fyre\DB\Exceptions\DbException;
+use Fyre\DB\Types\IntegerType;
+use Fyre\DB\Types\StringType;
 
 trait MergeQueryTestTrait
 {
@@ -14,10 +16,10 @@ trait MergeQueryTestTrait
 
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
             'test' => [
-                'type' => 'varchar',
+                'type' => StringType::class,
             ],
         ], [
             'indexes' => [
@@ -30,7 +32,7 @@ trait MergeQueryTestTrait
         $this->forge
             ->build('test')
             ->addColumn('value', [
-                'type' => 'int',
+                'type' => IntegerType::class,
                 'nullable' => true,
                 'default' => 'NULL',
             ])

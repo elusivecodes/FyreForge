@@ -3,9 +3,11 @@ declare(strict_types=1);
 
 namespace Tests\Postgres;
 
+use Fyre\Container\Container;
 use Fyre\DB\Connection;
 use Fyre\DB\ConnectionManager;
 use Fyre\DB\Handlers\Postgres\PostgresConnection;
+use Fyre\DB\TypeParser;
 use Fyre\Forge\Forge;
 use Fyre\Forge\ForgeQueryGenerator;
 use Fyre\Forge\ForgeRegistry;
@@ -26,23 +28,23 @@ trait PostgresConnectionTrait
 
     protected function setUp(): void
     {
-        ConnectionManager::clear();
-        ConnectionManager::setConfig([
-            'default' => [
-                'className' => PostgresConnection::class,
-                'host' => getenv('POSTGRES_HOST'),
-                'username' => getenv('POSTGRES_USERNAME'),
-                'password' => getenv('POSTGRES_PASSWORD'),
-                'database' => getenv('POSTGRES_DATABASE'),
-                'port' => getenv('POSTGRES_PORT'),
-                'charset' => 'utf8',
-                'persist' => true,
-            ],
+        $container = new Container();
+        $container->singleton(TypeParser::class);
+        $container->singleton(SchemaRegistry::class);
+
+        $this->db = $container->use(ConnectionManager::class)->build([
+            'className' => PostgresConnection::class,
+            'host' => getenv('POSTGRES_HOST'),
+            'username' => getenv('POSTGRES_USERNAME'),
+            'password' => getenv('POSTGRES_PASSWORD'),
+            'database' => getenv('POSTGRES_DATABASE'),
+            'port' => getenv('POSTGRES_PORT'),
+            'charset' => 'utf8',
+            'persist' => true,
         ]);
 
-        $this->db = ConnectionManager::use();
-        $this->schema = SchemaRegistry::getSchema($this->db);
-        $this->forge = ForgeRegistry::getForge($this->db);
+        $this->schema = $container->use(SchemaRegistry::class)->use($this->db);
+        $this->forge = $container->use(ForgeRegistry::class)->use($this->db);
         $this->generator = $this->forge->generator();
     }
 

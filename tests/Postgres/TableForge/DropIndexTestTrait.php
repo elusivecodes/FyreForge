@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Tests\Postgres\TableForge;
 
+use Fyre\DB\Types\IntegerType;
 use Fyre\Forge\Exceptions\ForgeException;
 
 trait DropIndexTestTrait
@@ -20,7 +21,7 @@ trait DropIndexTestTrait
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'integer',
+                'type' => IntegerType::class,
             ],
         ]);
         $this->forge->addIndex('test', 'id');
@@ -45,7 +46,7 @@ trait DropIndexTestTrait
             $this->forge
                 ->build('test')
                 ->addColumn('id', [
-                    'type' => 'integer',
+                    'type' => IntegerType::class,
                 ])
                 ->addIndex('id')
                 ->dropIndex('id')

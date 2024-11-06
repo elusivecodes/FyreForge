@@ -3,16 +3,19 @@ declare(strict_types=1);
 
 namespace Tests\Postgres\Forge;
 
+use Fyre\DB\Types\IntegerType;
+use Fyre\DB\Types\StringType;
+
 trait MergeQueryTestTrait
 {
     public function testMergeQueries(): void
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'character varying',
+                'type' => StringType::class,
             ],
             'test' => [
-                'type' => 'character varying',
+                'type' => StringType::class,
             ],
         ], [
             'indexes' => [
@@ -25,10 +28,10 @@ trait MergeQueryTestTrait
         $this->forge
             ->build('test')
             ->changeColumn('id', [
-                'type' => 'integer',
+                'type' => IntegerType::class,
             ])
             ->addColumn('value', [
-                'type' => 'integer',
+                'type' => IntegerType::class,
             ])
             ->dropColumn('test')
             ->dropIndex('test_idx')

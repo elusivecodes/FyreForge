@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Fyre\Forge;
 
+use Fyre\Container\Container;
 use Fyre\DB\Connection;
 use Fyre\DB\Handlers\Mysql\MysqlConnection;
 use Fyre\DB\Handlers\Postgres\PostgresConnection;
@@ -22,40 +23,51 @@ use function ltrim;
 /**
  * ForgeRegistry
  */
-abstract class ForgeRegistry
+class ForgeRegistry
 {
-    protected static WeakMap $forges;
+    protected Container $container;
 
-    protected static array $handlers = [
+    protected WeakMap $forges;
+
+    protected array $handlers = [
         MysqlConnection::class => MysqlForge::class,
         PostgresConnection::class => PostgresForge::class,
         SqliteConnection::class => SqliteForge::class,
     ];
 
     /**
-     * Get the Forge for a Connection.
+     * New SchemaRegistry constructor.
      *
-     * @param Connection $connection The Connection.
-     * @return Forge The Forge.
+     * @param Container $container The Container.
      */
-    public static function getForge(Connection $connection): Forge
+    public function __construct(Container $container)
     {
-        static::$forges ??= new WeakMap();
-
-        return static::$forges[$connection] ??= static::loadForge($connection);
+        $this->container = $container;
+        $this->forges = new WeakMap();
     }
 
     /**
-     * Set a Forge handler for a Connection class.
+     * Map a Connection class to a Forge handler.
      *
      * @param string $connectionClass The Connection class.
      * @param string $forgeClass The Forge class.
      */
-    public static function setHandler(string $connectionClass, string $forgeClass): void
+    public function map(string $connectionClass, string $forgeClass): void
     {
         $connectionClass = ltrim($connectionClass, '\\');
 
-        static::$handlers[$connectionClass] = $forgeClass;
+        $this->handlers[$connectionClass] = $forgeClass;
+    }
+
+    /**
+     * Load a shared Forge for a Connection.
+     *
+     * @param Connection $connection The Connection.
+     * @return Forge The Forge.
+     */
+    public function use(Connection $connection): Forge
+    {
+        return $this->forges[$connection] ??= $this->build($connection);
     }
 
     /**
@@ -66,12 +78,12 @@ abstract class ForgeRegistry
      *
      * @throws ForgeException if the handler is missing.
      */
-    protected static function loadForge(Connection $connection): Forge
+    protected function build(Connection $connection): Forge
     {
         $connectionClass = get_class($connection);
         $connectionKey = $connectionClass;
 
-        while (!array_key_exists($connectionKey, static::$handlers)) {
+        while (!array_key_exists($connectionKey, $this->handlers)) {
             $classParents ??= class_parents($connection);
             $connectionKey = array_shift($classParents);
 
@@ -80,8 +92,8 @@ abstract class ForgeRegistry
             }
         }
 
-        $forgeClass = static::$handlers[$connectionKey];
+        $forgeClass = $this->handlers[$connectionKey];
 
-        return new $forgeClass($connection);
+        return $this->container->build($forgeClass, ['connection' => $connection]);
     }
 }

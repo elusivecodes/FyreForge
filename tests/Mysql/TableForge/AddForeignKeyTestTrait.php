@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Tests\Mysql\TableForge;
 
+use Fyre\DB\Types\IntegerType;
 use Fyre\Forge\Exceptions\ForgeException;
 
 trait AddForeignKeyTestTrait
@@ -13,7 +14,7 @@ trait AddForeignKeyTestTrait
 
         $this->forge->createTable('test_values', [
             'id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
         ], [
             'indexes' => [
@@ -27,10 +28,10 @@ trait AddForeignKeyTestTrait
 
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
             'value_id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
         ], [
             'foreignKeys' => [
@@ -53,10 +54,10 @@ trait AddForeignKeyTestTrait
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
             'value_id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
         ]);
 
@@ -83,10 +84,10 @@ trait AddForeignKeyTestTrait
             $this->forge
                 ->build('test')
                 ->addColumn('id', [
-                    'type' => 'int',
+                    'type' => IntegerType::class,
                 ])
                 ->addColumn('value_id', [
-                    'type' => 'int',
+                    'type' => IntegerType::class,
                 ])
                 ->addForeignKey('value_id', [
                     'referencedTable' => 'test_values',

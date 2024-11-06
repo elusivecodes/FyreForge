@@ -5,7 +5,8 @@
 
 ## Table Of Contents
 - [Installation](#installation)
-- [Forge Registry](#forge-registry)
+- [Basic Usage](#basic-usage)
+- [Methods](#methods)
 - [Forges](#forges)
     - [MySQL](#mysql)
     - [Postgres](#postgres)
@@ -29,28 +30,49 @@ use Fyre\Forge\ForgeRegistry;
 ```
 
 
-## Forge Registry
+## Basic Usage
 
-**Get Forge**
-
-Get the [*Forge*](#forges) for a [*Connection*](https://github.com/elusivecodes/FyreDB#connections).
-
-- `$connection` is a [*Connection*](https://github.com/elusivecodes/FyreDB#connections).
+- `$container` is a  [*Container*](https://github.com/elusivecodes/FyreContainer).
 
 ```php
-$forge = ForgeRegistry::getForge($connection);
+$forgeRegistry = new ForgeRegistry($container);
 ```
 
-**Set Handler**
+**Autoloading**
 
-Set a [*Forge*](#forges) handler for a [*Connection*](https://github.com/elusivecodes/FyreDB#connections) class.
+It is recommended to bind the *ForgeRegistry* to the [*Container*](https://github.com/elusivecodes/FyreContainer) as a singleton.
+
+```php
+$container->singleton(ForgeRegistry::class);
+```
+
+Any dependencies will be injected automatically when loading from the [*Container*](https://github.com/elusivecodes/FyreContainer).
+
+
+## Methods
+
+**Map**
+
+Map a [*Connection*](https://github.com/elusivecodes/FyreDB#connections) class to a [*Forge*](#forges) handler.
 
 - `$connectionClass` is a string representing the [*Connection*](https://github.com/elusivecodes/FyreDB#connections) class name.
 - `$forgeClass` is a string representing the [*Forge*](#forges) class name.
 
 ```php
-ForgeRegistry::setHandler($connectionClass, $forgeClass);
+$forgeRegistry->map($connectionClass, $forgeClass);
 ```
+
+**Use**
+
+Load the shared [*Forge*](#forges) for a [*Connection*](https://github.com/elusivecodes/FyreDB#connections).
+
+- `$connection` is a [*Connection*](https://github.com/elusivecodes/FyreDB#connections).
+
+```php
+$forge = $forgeRegistry->use($connection);
+```
+
+[*Forge*](#forges) dependencies will be resolved automatically from the [*Container*](https://github.com/elusivecodes/FyreContainer).
 
 
 ## Forges
@@ -62,7 +84,7 @@ Add a column to a table.
 - `$table` is a string representing the table name.
 - `$column` is a string representing the column name.
 - `$options` is an array containing the column options.
-    - `type` is a string representing the column type, and will default to "*varchar*".
+    - `type` is a string representing the column type, and will default to `StringType::class`.
     - `length` is a number representing the column length, and will default to the type default.
     - `precision` is a number representing the column precision, and will default to the type default.
     - `nullable` is a boolean indicating whether the column is nullable, and will default to *false*.
@@ -72,6 +94,8 @@ Add a column to a table.
 ```php
 $forge->addColumn($table, $column, $options);
 ```
+
+You can also specify a [*Type*](https://github.com/elusivecodes/FyreTypeParser#types) class name as the `type`, which will be automatically mapped to the correct type.
 
 Additional column options may be available depending on the connection handler.
 
@@ -101,6 +125,8 @@ Build a [*TableForge*](#table-forges).
 ```php
 $tableForge = $forge->build($table);
 ```
+
+[*TableForge*](#table-forges) dependencies will be resolved automatically from the Container.
 
 Additional table options may be available depending on the connection handler.
 
@@ -199,7 +225,7 @@ Add a column to a table.
 - `$table` is a string representing the table name.
 - `$column` is a string representing the column name.
 - `$options` is an array containing the column options.
-    - `type` is a string representing the column type, and will default to "*varchar*".
+    - `type` is a string representing the column type, and will default to `StringType::class`.
     - `length` is a number representing the column length, and will default to the type default.
     - `precision` is a number representing the column precision, and will default to the type default.
     - `values` is an array containing the enum/set values, and will default to *null*.
@@ -216,6 +242,8 @@ Add a column to a table.
 ```php
 $forge->addColumn($table, $column, $options);
 ```
+
+You can also specify a [*Type*](https://github.com/elusivecodes/FyreTypeParser#types) class name as the `type`, which will be automatically mapped to the correct type.
 
 **Add Foreign Key**
 
@@ -280,6 +308,8 @@ Build a [*TableForge*](#table-forges).
 $tableForge = $forge->build($table, $options);
 ```
 
+[*TableForge*](#table-forges) dependencies will be resolved automatically from the Container.
+
 **Change Column**
 
 Change a table column.
@@ -288,7 +318,7 @@ Change a table column.
 - `$column` is a string representing the column name.
 - `$options` is an array containing the column options.
     - `name` is a string representing the new column name, and will default to the column name.
-    - `type` is a string representing the column type, and will default to "*varchar*".
+    - `type` is a string representing the column type, and will default to `StringType::class`.
     - `length` is a number representing the column length, and will default to the type default.
     - `precision` is a number representing the column precision, and will default to the type default.
     - `values` is an array containing the enum/set values, and will default to *null*.
@@ -305,6 +335,8 @@ Change a table column.
 ```php
 $forge->changeColumn($table, $column, $options);
 ```
+
+You can also specify a [*Type*](https://github.com/elusivecodes/FyreTypeParser#types) class name as the `type`, which will be automatically mapped to the correct type.
 
 **Create Schema**
 
@@ -383,7 +415,7 @@ Add a column to a table.
 - `$table` is a string representing the table name.
 - `$column` is a string representing the column name.
 - `$options` is an array containing the column options.
-    - `type` is a string representing the column type, and will default to "*varchar*".
+    - `type` is a string representing the column type, and will default to `StringType::class`.
     - `length` is a number representing the column length, and will default to the type default.
     - `precision` is a number representing the column precision, and will default to the type default.
     - `nullable` is a boolean indicating whether the column is nullable, and will default to *false*.
@@ -394,6 +426,8 @@ Add a column to a table.
 ```php
 $forge->addColumn($table, $column, $options);
 ```
+
+You can also specify a [*Type*](https://github.com/elusivecodes/FyreTypeParser#types) class name as the `type`, which will be automatically mapped to the correct type.
 
 **Add Foreign Key**
 
@@ -455,13 +489,15 @@ Alter a column's type.
 - `$table` is a string representing the table name.
 - `$column` is a string representing the column name.
 - `$options` is an array containing the column options.
-    - `type` is a string representing the column type, and will default to "*varchar*".
+    - `type` is a string representing the column type, and will default to `StringType::class`.
     - `length` is a number representing the column length, and will default to the type default.
     - `precision` is a number representing the column precision, and will default to the type default.
 
 ```php
 $forge->alterColumnType($table, $column, $options);
 ```
+
+You can also specify a [*Type*](https://github.com/elusivecodes/FyreTypeParser#types) class name as the `type`, which will be automatically mapped to the correct type.
 
 **Build**
 
@@ -474,6 +510,8 @@ Build a [*TableForge*](#table-forges).
 ```php
 $tableForge = $forge->build($table, $options);
 ```
+
+[*TableForge*](#table-forges) dependencies will be resolved automatically from the Container.
 
 **Comment On Column**
 
@@ -584,7 +622,7 @@ Add a column to the table.
 - `$column` is a string representing the column name.
 - `$options` is an array containing the column options.
     - `name` is a string representing the new column name, and will default to the column name.
-    - `type` is a string representing the column type, and will default to "*varchar*".
+    - `type` is a string representing the column type, and will default to `StringType::class`.
     - `length` is a number representing the column length, and will default to the type default.
     - `precision` is a number representing the column precision, and will default to the type default.
     - `nullable` is a boolean indicating whether the column is nullable, and will default to *false*.
@@ -594,6 +632,7 @@ Add a column to the table.
 ```php
 $tableForge->addColumn($column, $options);
 ```
+You can also specify a [*Type*](https://github.com/elusivecodes/FyreTypeParser#types) class name as the `type`, which will be automatically mapped to the correct type.
 
 Additional column options may be available depending on the connection handler.
 

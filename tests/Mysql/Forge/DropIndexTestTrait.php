@@ -3,13 +3,15 @@ declare(strict_types=1);
 
 namespace Tests\Mysql\Forge;
 
+use Fyre\DB\Types\IntegerType;
+
 trait DropIndexTestTrait
 {
     public function testDropIndex(): void
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
         ]);
 
@@ -27,7 +29,7 @@ trait DropIndexTestTrait
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
         ]);
 
@@ -48,7 +50,7 @@ trait DropIndexTestTrait
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
         ]);
 

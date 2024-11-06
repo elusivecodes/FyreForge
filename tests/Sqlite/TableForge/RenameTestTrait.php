@@ -3,13 +3,15 @@ declare(strict_types=1);
 
 namespace Tests\Sqlite\TableForge;
 
+use Fyre\DB\Types\IntegerType;
+
 trait RenameTestTrait
 {
     public function testRenameSqlExistingTable(): void
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'integer',
+                'type' => IntegerType::class,
             ],
         ]);
 
@@ -28,12 +30,12 @@ trait RenameTestTrait
     {
         $this->assertSame(
             [
-                'CREATE TABLE other (id INT(11) NOT NULL)',
+                'CREATE TABLE other (id INTEGER NOT NULL)',
             ],
             $this->forge
                 ->build('test')
                 ->addColumn('id', [
-                    'type' => 'int',
+                    'type' => IntegerType::class,
                 ])
                 ->rename('other')
                 ->sql()

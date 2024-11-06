@@ -3,9 +3,11 @@ declare(strict_types=1);
 
 namespace Tests\Sqlite;
 
+use Fyre\Container\Container;
 use Fyre\DB\Connection;
 use Fyre\DB\ConnectionManager;
 use Fyre\DB\Handlers\Sqlite\SqliteConnection;
+use Fyre\DB\TypeParser;
 use Fyre\Forge\Forge;
 use Fyre\Forge\ForgeQueryGenerator;
 use Fyre\Forge\ForgeRegistry;
@@ -24,17 +26,17 @@ trait SqliteConnectionTrait
 
     protected function setUp(): void
     {
-        ConnectionManager::clear();
-        ConnectionManager::setConfig([
-            'default' => [
-                'className' => SqliteConnection::class,
-                'persist' => true,
-            ],
+        $container = new Container();
+        $container->singleton(TypeParser::class);
+        $container->singleton(SchemaRegistry::class);
+
+        $this->db = $container->use(ConnectionManager::class)->build([
+            'className' => SqliteConnection::class,
+            'persist' => true,
         ]);
 
-        $this->db = ConnectionManager::use();
-        $this->schema = SchemaRegistry::getSchema($this->db);
-        $this->forge = ForgeRegistry::getForge($this->db);
+        $this->schema = $container->use(SchemaRegistry::class)->use($this->db);
+        $this->forge = $container->use(ForgeRegistry::class)->use($this->db);
         $this->generator = $this->forge->generator();
     }
 

@@ -3,13 +3,25 @@ declare(strict_types=1);
 
 namespace Tests\Sqlite\TableForge;
 
+use Fyre\DB\Types\BinaryType;
+use Fyre\DB\Types\BooleanType;
+use Fyre\DB\Types\DateTimeType;
+use Fyre\DB\Types\DateType;
+use Fyre\DB\Types\DecimalType;
+use Fyre\DB\Types\FloatType;
+use Fyre\DB\Types\IntegerType;
+use Fyre\DB\Types\StringType;
+use Fyre\DB\Types\TextType;
+use Fyre\DB\Types\TimeType;
+
 trait DiffDefaultsTestTrait
 {
     public function testTableDiffDefaultsBigInt(): void
     {
         $this->forge->createTable('test', [
             'value' => [
-                'type' => 'bigint',
+                'type' => IntegerType::class,
+                'length' => 20,
             ],
         ]);
 
@@ -19,7 +31,48 @@ trait DiffDefaultsTestTrait
                 ->build('test')
                 ->clear()
                 ->addColumn('value', [
-                    'type' => 'bigint',
+                    'type' => IntegerType::class,
+                    'length' => 20,
+                ])
+                ->sql()
+        );
+    }
+
+    public function testTableDiffDefaultsBinary(): void
+    {
+        $this->forge->createTable('test', [
+            'value' => [
+                'type' => BinaryType::class,
+            ],
+        ]);
+
+        $this->assertSame(
+            [],
+            $this->forge
+                ->build('test')
+                ->clear()
+                ->addColumn('value', [
+                    'type' => BinaryType::class,
+                ])
+                ->sql()
+        );
+    }
+
+    public function testTableDiffDefaultsBoolean(): void
+    {
+        $this->forge->createTable('test', [
+            'value' => [
+                'type' => BooleanType::class,
+            ],
+        ]);
+
+        $this->assertSame(
+            [],
+            $this->forge
+                ->build('test')
+                ->clear()
+                ->addColumn('value', [
+                    'type' => BooleanType::class,
                 ])
                 ->sql()
         );
@@ -29,7 +82,8 @@ trait DiffDefaultsTestTrait
     {
         $this->forge->createTable('test', [
             'value' => [
-                'type' => 'char',
+                'type' => StringType::class,
+                'length' => 1,
             ],
         ]);
 
@@ -39,7 +93,8 @@ trait DiffDefaultsTestTrait
                 ->build('test')
                 ->clear()
                 ->addColumn('value', [
-                    'type' => 'char',
+                    'type' => StringType::class,
+                    'length' => 1,
                 ])
                 ->sql()
         );
@@ -49,7 +104,7 @@ trait DiffDefaultsTestTrait
     {
         $this->forge->createTable('test', [
             'value' => [
-                'type' => 'date',
+                'type' => DateType::class,
             ],
         ]);
 
@@ -59,7 +114,7 @@ trait DiffDefaultsTestTrait
                 ->build('test')
                 ->clear()
                 ->addColumn('value', [
-                    'type' => 'date',
+                    'type' => DateType::class,
                 ])
                 ->sql()
         );
@@ -69,7 +124,7 @@ trait DiffDefaultsTestTrait
     {
         $this->forge->createTable('test', [
             'value' => [
-                'type' => 'datetime',
+                'type' => DateTimeType::class,
             ],
         ]);
 
@@ -79,7 +134,7 @@ trait DiffDefaultsTestTrait
                 ->build('test')
                 ->clear()
                 ->addColumn('value', [
-                    'type' => 'datetime',
+                    'type' => DateTimeType::class,
                 ])
                 ->sql()
         );
@@ -89,7 +144,7 @@ trait DiffDefaultsTestTrait
     {
         $this->forge->createTable('test', [
             'value' => [
-                'type' => 'decimal',
+                'type' => DecimalType::class,
             ],
         ]);
 
@@ -99,7 +154,7 @@ trait DiffDefaultsTestTrait
                 ->build('test')
                 ->clear()
                 ->addColumn('value', [
-                    'type' => 'decimal',
+                    'type' => DecimalType::class,
                 ])
                 ->sql()
         );
@@ -109,7 +164,7 @@ trait DiffDefaultsTestTrait
     {
         $this->forge->createTable('test', [
             'value' => [
-                'type' => 'float',
+                'type' => FloatType::class,
             ],
         ]);
 
@@ -119,7 +174,7 @@ trait DiffDefaultsTestTrait
                 ->build('test')
                 ->clear()
                 ->addColumn('value', [
-                    'type' => 'float',
+                    'type' => FloatType::class,
                 ])
                 ->sql()
         );
@@ -129,7 +184,7 @@ trait DiffDefaultsTestTrait
     {
         $this->forge->createTable('test', [
             'value' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
         ]);
 
@@ -139,7 +194,7 @@ trait DiffDefaultsTestTrait
                 ->build('test')
                 ->clear()
                 ->addColumn('value', [
-                    'type' => 'int',
+                    'type' => IntegerType::class,
                 ])
                 ->sql()
         );
@@ -149,7 +204,8 @@ trait DiffDefaultsTestTrait
     {
         $this->forge->createTable('test', [
             'value' => [
-                'type' => 'mediumint',
+                'type' => IntegerType::class,
+                'length' => 8,
             ],
         ]);
 
@@ -159,7 +215,8 @@ trait DiffDefaultsTestTrait
                 ->build('test')
                 ->clear()
                 ->addColumn('value', [
-                    'type' => 'mediumint',
+                    'type' => IntegerType::class,
+                    'length' => 8,
                 ])
                 ->sql()
         );
@@ -169,7 +226,8 @@ trait DiffDefaultsTestTrait
     {
         $this->forge->createTable('test', [
             'value' => [
-                'type' => 'smallint',
+                'type' => IntegerType::class,
+                'length' => 6,
             ],
         ]);
 
@@ -179,7 +237,28 @@ trait DiffDefaultsTestTrait
                 ->build('test')
                 ->clear()
                 ->addColumn('value', [
-                    'type' => 'smallint',
+                    'type' => IntegerType::class,
+                    'length' => 6,
+                ])
+                ->sql()
+        );
+    }
+
+    public function testTableDiffDefaultsText(): void
+    {
+        $this->forge->createTable('test', [
+            'value' => [
+                'type' => TextType::class,
+            ],
+        ]);
+
+        $this->assertSame(
+            [],
+            $this->forge
+                ->build('test')
+                ->clear()
+                ->addColumn('value', [
+                    'type' => TextType::class,
                 ])
                 ->sql()
         );
@@ -189,7 +268,7 @@ trait DiffDefaultsTestTrait
     {
         $this->forge->createTable('test', [
             'value' => [
-                'type' => 'time',
+                'type' => TimeType::class,
             ],
         ]);
 
@@ -199,27 +278,7 @@ trait DiffDefaultsTestTrait
                 ->build('test')
                 ->clear()
                 ->addColumn('value', [
-                    'type' => 'time',
-                ])
-                ->sql()
-        );
-    }
-
-    public function testTableDiffDefaultsTimestamp(): void
-    {
-        $this->forge->createTable('test', [
-            'value' => [
-                'type' => 'timestamp',
-            ],
-        ]);
-
-        $this->assertSame(
-            [],
-            $this->forge
-                ->build('test')
-                ->clear()
-                ->addColumn('value', [
-                    'type' => 'timestamp',
+                    'type' => TimeType::class,
                 ])
                 ->sql()
         );
@@ -229,7 +288,8 @@ trait DiffDefaultsTestTrait
     {
         $this->forge->createTable('test', [
             'value' => [
-                'type' => 'tinyint',
+                'type' => IntegerType::class,
+                'length' => 4,
             ],
         ]);
 
@@ -239,7 +299,8 @@ trait DiffDefaultsTestTrait
                 ->build('test')
                 ->clear()
                 ->addColumn('value', [
-                    'type' => 'tinyint',
+                    'type' => IntegerType::class,
+                    'length' => 4,
                 ])
                 ->sql()
         );
@@ -249,7 +310,7 @@ trait DiffDefaultsTestTrait
     {
         $this->forge->createTable('test', [
             'value' => [
-                'type' => 'varchar',
+                'type' => StringType::class,
             ],
         ]);
 
@@ -259,7 +320,7 @@ trait DiffDefaultsTestTrait
                 ->build('test')
                 ->clear()
                 ->addColumn('value', [
-                    'type' => 'varchar',
+                    'type' => StringType::class,
                 ])
                 ->sql()
         );

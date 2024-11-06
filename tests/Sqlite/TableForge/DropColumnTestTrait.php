@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Tests\Sqlite\TableForge;
 
+use Fyre\DB\Types\IntegerType;
 use Fyre\Forge\Exceptions\ForgeException;
 
 trait DropColumnTestTrait
@@ -20,10 +21,10 @@ trait DropColumnTestTrait
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
             'value' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
         ]);
 
@@ -42,15 +43,15 @@ trait DropColumnTestTrait
     {
         $this->assertSame(
             [
-                'CREATE TABLE test (id INT(11) NOT NULL)',
+                'CREATE TABLE test (id INTEGER NOT NULL)',
             ],
             $this->forge
                 ->build('test')
                 ->addColumn('id', [
-                    'type' => 'int',
+                    'type' => IntegerType::class,
                 ])
                 ->addColumn('value', [
-                    'type' => 'int',
+                    'type' => IntegerType::class,
                 ])
                 ->dropColumn('value')
                 ->sql()

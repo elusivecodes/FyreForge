@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Tests\Sqlite\TableForge;
 
+use Fyre\DB\Types\IntegerType;
 use Fyre\Forge\Exceptions\ForgeException;
 
 trait AddIndexTestTrait
@@ -13,7 +14,7 @@ trait AddIndexTestTrait
 
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
         ]);
         $this->forge->addIndex('test', 'id');
@@ -27,7 +28,7 @@ trait AddIndexTestTrait
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
         ]);
 
@@ -46,13 +47,13 @@ trait AddIndexTestTrait
     {
         $this->assertSame(
             [
-                'CREATE TABLE test (id INT(11) NOT NULL)',
+                'CREATE TABLE test (id INTEGER NOT NULL)',
                 'CREATE INDEX id ON test (id)',
             ],
             $this->forge
                 ->build('test')
                 ->addColumn('id', [
-                    'type' => 'int',
+                    'type' => IntegerType::class,
                 ])
                 ->addIndex('id')
                 ->sql()

@@ -69,7 +69,11 @@ class MysqlForge extends Forge
      */
     public function build(string $tableName, array $options = []): MysqlTableForge
     {
-        return new MysqlTableForge($this, $tableName, $options);
+        return $this->container->build(MysqlTableForge::class, [
+            'forge' => $this,
+            'tableName' => $tableName,
+            'options' => $options,
+        ]);
     }
 
     /**
@@ -171,6 +175,6 @@ class MysqlForge extends Forge
      */
     public function generator(): MysqlForgeQueryGenerator
     {
-        return $this->generator ??= new MysqlForgeQueryGenerator($this);
+        return $this->generator ??= $this->container->build(MysqlForgeQueryGenerator::class, ['forge' => $this]);
     }
 }

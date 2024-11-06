@@ -3,20 +3,22 @@ declare(strict_types=1);
 
 namespace Tests\Mysql\TableForge;
 
+use Fyre\DB\Types\IntegerType;
+
 trait ExecuteTestTrait
 {
     public function testExecuteAddColumn(): void
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
         ]);
 
         $this->forge
             ->build('test')
             ->addColumn('value', [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ])
             ->execute();
 
@@ -30,7 +32,7 @@ trait ExecuteTestTrait
     {
         $this->forge->createTable('test_values', [
             'id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
         ], [
             'indexes' => [
@@ -44,10 +46,10 @@ trait ExecuteTestTrait
 
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
             'value_id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
         ]);
 
@@ -69,7 +71,7 @@ trait ExecuteTestTrait
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
         ]);
 
@@ -88,10 +90,10 @@ trait ExecuteTestTrait
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
             'value' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
         ]);
 
@@ -118,7 +120,7 @@ trait ExecuteTestTrait
         $this->forge
             ->build('test')
             ->addColumn('id', [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ])
             ->execute();
 
@@ -131,7 +133,7 @@ trait ExecuteTestTrait
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
         ]);
 
@@ -149,10 +151,10 @@ trait ExecuteTestTrait
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
             'value' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
         ]);
 
@@ -171,7 +173,7 @@ trait ExecuteTestTrait
     {
         $this->forge->createTable('test_values', [
             'id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
         ], [
             'indexes' => [
@@ -185,10 +187,10 @@ trait ExecuteTestTrait
 
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
             'value_id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
         ], [
             'foreignKeys' => [
@@ -214,7 +216,7 @@ trait ExecuteTestTrait
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
         ], [
             'indexes' => [
@@ -237,7 +239,7 @@ trait ExecuteTestTrait
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
         ]);
 

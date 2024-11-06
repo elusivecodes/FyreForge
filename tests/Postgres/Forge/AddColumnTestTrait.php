@@ -3,18 +3,26 @@ declare(strict_types=1);
 
 namespace Tests\Postgres\Forge;
 
+use Fyre\DB\Types\BinaryType;
+use Fyre\DB\Types\DateTimeFractionalType;
+use Fyre\DB\Types\DecimalType;
+use Fyre\DB\Types\FloatType;
+use Fyre\DB\Types\IntegerType;
+use Fyre\DB\Types\StringType;
+use Fyre\DB\Types\TextType;
+
 trait AddColumnTestTrait
 {
     public function testAddColumnComment(): void
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'integer',
+                'type' => IntegerType::class,
             ],
         ]);
 
         $this->forge->addColumn('test', 'value', [
-            'type' => 'character varying',
+            'type' => StringType::class,
             'comment' => 'This is the value',
         ]);
 
@@ -37,12 +45,12 @@ trait AddColumnTestTrait
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'integer',
+                'type' => IntegerType::class,
             ],
         ]);
 
         $this->forge->addColumn('test', 'value', [
-            'type' => 'integer',
+            'type' => IntegerType::class,
             'default' => '1',
         ]);
 
@@ -65,12 +73,12 @@ trait AddColumnTestTrait
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'integer',
+                'type' => IntegerType::class,
             ],
         ]);
 
         $this->forge->addColumn('test', 'value', [
-            'type' => 'character varying',
+            'type' => StringType::class,
             'length' => 255,
         ]);
 
@@ -93,12 +101,12 @@ trait AddColumnTestTrait
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'integer',
+                'type' => IntegerType::class,
             ],
         ]);
 
         $this->forge->addColumn('test', 'value', [
-            'type' => 'integer',
+            'type' => IntegerType::class,
             'nullable' => true,
         ]);
 
@@ -121,12 +129,12 @@ trait AddColumnTestTrait
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'integer',
+                'type' => IntegerType::class,
             ],
         ]);
 
         $this->forge->addColumn('test', 'value', [
-            'type' => 'numeric',
+            'type' => DecimalType::class,
             'precision' => 2,
         ]);
 
@@ -149,12 +157,13 @@ trait AddColumnTestTrait
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'integer',
+                'type' => IntegerType::class,
             ],
         ]);
 
         $this->forge->addColumn('test', 'value', [
-            'type' => 'bigint',
+            'type' => IntegerType::class,
+            'length' => 20,
         ]);
 
         $this->assertSame(
@@ -176,12 +185,12 @@ trait AddColumnTestTrait
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'integer',
+                'type' => IntegerType::class,
             ],
         ]);
 
         $this->forge->addColumn('test', 'value', [
-            'type' => 'bytea',
+            'type' => BinaryType::class,
         ]);
 
         $this->assertSame(
@@ -203,12 +212,13 @@ trait AddColumnTestTrait
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'integer',
+                'type' => IntegerType::class,
             ],
         ]);
 
         $this->forge->addColumn('test', 'value', [
-            'type' => 'character',
+            'type' => StringType::class,
+            'length' => 1,
         ]);
 
         $this->assertSame(
@@ -226,43 +236,16 @@ trait AddColumnTestTrait
         );
     }
 
-    public function testAddColumnTypeDoublePrecision(): void
-    {
-        $this->forge->createTable('test', [
-            'id' => [
-                'type' => 'integer',
-            ],
-        ]);
-
-        $this->forge->addColumn('test', 'value', [
-            'type' => 'double precision',
-        ]);
-
-        $this->assertSame(
-            [
-                'type' => 'double precision',
-                'length' => null,
-                'precision' => null,
-                'nullable' => false,
-                'default' => null,
-                'comment' => '',
-                'autoIncrement' => false,
-            ],
-            $this->schema->describe('test')
-                ->column('value')
-        );
-    }
-
     public function testAddColumnTypeInteger(): void
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'integer',
+                'type' => IntegerType::class,
             ],
         ]);
 
         $this->forge->addColumn('test', 'value', [
-            'type' => 'integer',
+            'type' => IntegerType::class,
         ]);
 
         $this->assertSame(
@@ -284,12 +267,12 @@ trait AddColumnTestTrait
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'integer',
+                'type' => IntegerType::class,
             ],
         ]);
 
         $this->forge->addColumn('test', 'value', [
-            'type' => 'numeric',
+            'type' => DecimalType::class,
             'length' => 10,
             'precision' => 2,
         ]);
@@ -313,12 +296,12 @@ trait AddColumnTestTrait
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'integer',
+                'type' => IntegerType::class,
             ],
         ]);
 
         $this->forge->addColumn('test', 'value', [
-            'type' => 'real',
+            'type' => FloatType::class,
         ]);
 
         $this->assertSame(
@@ -340,12 +323,14 @@ trait AddColumnTestTrait
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'smallint',
+                'type' => IntegerType::class,
+                'length' => 6,
             ],
         ]);
 
         $this->forge->addColumn('test', 'value', [
-            'type' => 'smallint',
+            'type' => IntegerType::class,
+            'length' => 6,
         ]);
 
         $this->assertSame(
@@ -367,12 +352,12 @@ trait AddColumnTestTrait
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'integer',
+                'type' => IntegerType::class,
             ],
         ]);
 
         $this->forge->addColumn('test', 'value', [
-            'type' => 'text',
+            'type' => TextType::class,
         ]);
 
         $this->assertSame(
@@ -394,12 +379,12 @@ trait AddColumnTestTrait
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'integer',
+                'type' => IntegerType::class,
             ],
         ]);
 
         $this->forge->addColumn('test', 'value', [
-            'type' => 'timestamp',
+            'type' => DateTimeFractionalType::class,
         ]);
 
         $this->assertSame(

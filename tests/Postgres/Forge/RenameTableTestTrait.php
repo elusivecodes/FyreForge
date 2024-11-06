@@ -3,13 +3,15 @@ declare(strict_types=1);
 
 namespace Tests\Postgres\Forge;
 
+use Fyre\DB\Types\IntegerType;
+
 trait RenameTableTestTrait
 {
     public function testRenameTable(): void
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'integer',
+                'type' => IntegerType::class,
             ],
         ]);
 

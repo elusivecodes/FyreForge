@@ -150,7 +150,11 @@ class PostgresForge extends Forge
      */
     public function build(string $tableName, array $options = []): PostgresTableForge
     {
-        return new PostgresTableForge($this, $tableName, $options);
+        return $this->container->build(PostgresTableForge::class, [
+            'forge' => $this,
+            'tableName' => $tableName,
+            'options' => $options,
+        ]);
     }
 
     /**
@@ -311,6 +315,6 @@ class PostgresForge extends Forge
      */
     public function generator(): PostgresForgeQueryGenerator
     {
-        return $this->generator ??= new PostgresForgeQueryGenerator($this);
+        return $this->generator ??= $this->container->build(PostgresForgeQueryGenerator::class, ['forge' => $this]);
     }
 }

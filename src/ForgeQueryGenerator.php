@@ -3,8 +3,9 @@ declare(strict_types=1);
 
 namespace Fyre\Forge;
 
+use Fyre\DB\Types\StringType;
+
 use function implode;
-use function strtolower;
 use function strtoupper;
 
 /**
@@ -208,7 +209,7 @@ abstract class ForgeQueryGenerator
      */
     public function parseColumnOptions(array $options = []): array
     {
-        $options['type'] = strtolower($options['type'] ?? 'varchar');
+        $options['type'] ??= StringType::class;
         $options['length'] ??= null;
         $options['precision'] ??= null;
         $options['nullable'] ??= false;

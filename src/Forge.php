@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace Fyre\Forge;
 
+use Fyre\Container\Container;
 use Fyre\DB\Connection;
 use Fyre\Schema\Schema;
-use Fyre\Schema\SchemaRegistry;
 
 /**
  * Forge
@@ -14,19 +14,20 @@ abstract class Forge
 {
     protected Connection $connection;
 
-    protected ForgeQueryGenerator $generator;
+    protected Container $container;
 
-    protected Schema $schema;
+    protected ForgeQueryGenerator $generator;
 
     /**
      * New Forge constructor.
      *
+     * @param Container $container The Container.
      * @param Connection The Connection.
      */
-    public function __construct(Connection $connection)
+    public function __construct(Container $container, Connection $connection)
     {
+        $this->container = $container;
         $this->connection = $connection;
-        $this->schema = SchemaRegistry::getSchema($connection);
     }
 
     /**
@@ -139,7 +140,7 @@ abstract class Forge
      */
     public function getConnection(): Connection
     {
-        return $this->schema->getConnection();
+        return $this->connection;
     }
 
     /**

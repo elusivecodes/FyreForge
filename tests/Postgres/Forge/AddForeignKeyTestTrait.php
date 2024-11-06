@@ -3,13 +3,15 @@ declare(strict_types=1);
 
 namespace Tests\Postgres\Forge;
 
+use Fyre\DB\Types\IntegerType;
+
 trait AddForeignKeyTestTrait
 {
     public function testAddForeignKey(): void
     {
         $this->forge->createTable('test_values', [
             'id' => [
-                'type' => 'integer',
+                'type' => IntegerType::class,
             ],
         ], [
             'indexes' => [
@@ -24,10 +26,10 @@ trait AddForeignKeyTestTrait
 
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'integer',
+                'type' => IntegerType::class,
             ],
             'value_id' => [
-                'type' => 'integer',
+                'type' => IntegerType::class,
             ],
         ]);
 

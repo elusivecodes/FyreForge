@@ -3,16 +3,19 @@ declare(strict_types=1);
 
 namespace Tests\Postgres\Forge;
 
+use Fyre\DB\Types\IntegerType;
+use Fyre\DB\Types\StringType;
+
 trait ChangeColumnTestTrait
 {
     public function testAlterColumnAutoIncrement(): void
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'integer',
+                'type' => IntegerType::class,
             ],
             'value' => [
-                'type' => 'character varying',
+                'type' => StringType::class,
             ],
         ], [
             'indexes' => [
@@ -46,11 +49,11 @@ trait ChangeColumnTestTrait
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'integer',
+                'type' => IntegerType::class,
                 'autoIncrement' => true,
             ],
             'value' => [
-                'type' => 'character varying',
+                'type' => StringType::class,
             ],
         ], [
             'indexes' => [
@@ -84,10 +87,10 @@ trait ChangeColumnTestTrait
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'integer',
+                'type' => IntegerType::class,
             ],
             'value' => [
-                'type' => 'integer',
+                'type' => IntegerType::class,
             ],
         ]);
 
@@ -112,10 +115,10 @@ trait ChangeColumnTestTrait
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'integer',
+                'type' => IntegerType::class,
             ],
             'value' => [
-                'type' => 'integer',
+                'type' => IntegerType::class,
                 'default' => '1',
             ],
         ]);
@@ -141,10 +144,10 @@ trait ChangeColumnTestTrait
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'integer',
+                'type' => IntegerType::class,
             ],
             'value' => [
-                'type' => 'integer',
+                'type' => IntegerType::class,
             ],
         ]);
 
@@ -169,10 +172,10 @@ trait ChangeColumnTestTrait
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'integer',
+                'type' => IntegerType::class,
             ],
             'value' => [
-                'type' => 'integer',
+                'type' => IntegerType::class,
                 'nullable' => true,
             ],
         ]);
@@ -198,15 +201,15 @@ trait ChangeColumnTestTrait
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
             'value' => [
-                'type' => 'character varying',
+                'type' => StringType::class,
             ],
         ]);
 
         $this->forge->alterColumnType('test', 'value', [
-            'type' => 'integer',
+            'type' => IntegerType::class,
             'cast' => true,
         ]);
 
@@ -229,10 +232,10 @@ trait ChangeColumnTestTrait
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'integer',
+                'type' => IntegerType::class,
             ],
             'value' => [
-                'type' => 'character varying',
+                'type' => StringType::class,
             ],
         ]);
 

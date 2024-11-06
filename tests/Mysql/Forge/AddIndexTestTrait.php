@@ -3,16 +3,19 @@ declare(strict_types=1);
 
 namespace Tests\Mysql\Forge;
 
+use Fyre\DB\Types\IntegerType;
+use Fyre\DB\Types\StringType;
+
 trait AddIndexTestTrait
 {
     public function testAddIndex(): void
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
             'value' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
         ]);
 
@@ -41,10 +44,10 @@ trait AddIndexTestTrait
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
             'value' => [
-                'type' => 'varchar',
+                'type' => StringType::class,
             ],
         ]);
 
@@ -73,10 +76,10 @@ trait AddIndexTestTrait
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
             'value' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
         ]);
 
@@ -97,10 +100,10 @@ trait AddIndexTestTrait
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
             'value' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
         ]);
 

@@ -3,13 +3,17 @@ declare(strict_types=1);
 
 namespace Tests\Mysql\TableForge;
 
+use Fyre\DB\Types\DateTimeType;
+use Fyre\DB\Types\IntegerType;
+use Fyre\DB\Types\StringType;
+
 trait DiffTestTrait
 {
     public function testTableDiffChangeForeignKey(): void
     {
         $this->forge->createTable('test_values', [
             'id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
         ], [
             'indexes' => [
@@ -23,10 +27,10 @@ trait DiffTestTrait
 
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
             'value_id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
         ], [
             'foreignKeys' => [
@@ -45,10 +49,10 @@ trait DiffTestTrait
                 ->build('test')
                 ->clear()
                 ->addColumn('id', [
-                    'type' => 'int',
+                    'type' => IntegerType::class,
                 ])
                 ->addColumn('value_id', [
-                    'type' => 'int',
+                    'type' => IntegerType::class,
                 ])
                 ->addForeignKey('value_id', [
                     'referencedTable' => 'test_values',
@@ -64,10 +68,10 @@ trait DiffTestTrait
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
             'value' => [
-                'type' => 'varchar',
+                'type' => StringType::class,
             ],
         ], [
             'indexes' => [
@@ -83,10 +87,10 @@ trait DiffTestTrait
                 ->build('test')
                 ->clear()
                 ->addColumn('id', [
-                    'type' => 'int',
+                    'type' => IntegerType::class,
                 ])
                 ->addColumn('value', [
-                    'type' => 'varchar',
+                    'type' => StringType::class,
                 ])
                 ->addIndex('value', [
                     'unique' => true,
@@ -99,19 +103,19 @@ trait DiffTestTrait
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
                 'autoIncrement' => true,
             ],
             'value' => [
-                'type' => 'varchar',
+                'type' => StringType::class,
                 'length' => 255,
             ],
             'created' => [
-                'type' => 'datetime',
+                'type' => DateTimeType::class,
                 'default' => 'CURRENT_TIMESTAMP()',
             ],
             'modified' => [
-                'type' => 'datetime',
+                'type' => DateTimeType::class,
                 'nullable' => true,
                 'default' => 'NULL',
             ],
@@ -134,19 +138,19 @@ trait DiffTestTrait
                 ->build('test')
                 ->clear()
                 ->addColumn('id', [
-                    'type' => 'int',
+                    'type' => IntegerType::class,
                     'autoIncrement' => true,
                 ])
                 ->addColumn('value', [
-                    'type' => 'varchar',
+                    'type' => StringType::class,
                     'length' => 255,
                 ])
                 ->addColumn('created', [
-                    'type' => 'datetime',
+                    'type' => DateTimeType::class,
                     'default' => 'CURRENT_TIMESTAMP()',
                 ])
                 ->addColumn('modified', [
-                    'type' => 'datetime',
+                    'type' => DateTimeType::class,
                     'nullable' => true,
                     'default' => 'NULL',
                 ])
@@ -162,10 +166,10 @@ trait DiffTestTrait
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
             'value2' => [
-                'type' => 'varchar',
+                'type' => StringType::class,
             ],
         ]);
 
@@ -177,13 +181,13 @@ trait DiffTestTrait
                 ->build('test')
                 ->clear()
                 ->addColumn('id', [
-                    'type' => 'int',
+                    'type' => IntegerType::class,
                 ])
                 ->addColumn('value1', [
-                    'type' => 'varchar',
+                    'type' => StringType::class,
                 ])
                 ->addColumn('value2', [
-                    'type' => 'varchar',
+                    'type' => StringType::class,
                 ])
                 ->sql()
         );
@@ -193,7 +197,7 @@ trait DiffTestTrait
     {
         $this->forge->createTable('test_values', [
             'id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
         ], [
             'indexes' => [
@@ -207,10 +211,10 @@ trait DiffTestTrait
 
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
             'value_id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
         ]);
 
@@ -222,10 +226,10 @@ trait DiffTestTrait
                 ->build('test')
                 ->clear()
                 ->addColumn('id', [
-                    'type' => 'int',
+                    'type' => IntegerType::class,
                 ])
                 ->addColumn('value_id', [
-                    'type' => 'int',
+                    'type' => IntegerType::class,
                 ])
                 ->addForeignKey('value_id', [
                     'referencedTable' => 'test_values',
@@ -239,10 +243,10 @@ trait DiffTestTrait
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
             'value' => [
-                'type' => 'varchar',
+                'type' => StringType::class,
                 'length' => 255,
             ],
         ]);
@@ -255,10 +259,10 @@ trait DiffTestTrait
                 ->build('test')
                 ->clear()
                 ->addColumn('id', [
-                    'type' => 'int',
+                    'type' => IntegerType::class,
                 ])
                 ->addColumn('value', [
-                    'type' => 'varchar',
+                    'type' => StringType::class,
                     'length' => 255,
                 ])
                 ->addIndex('value')
@@ -270,7 +274,7 @@ trait DiffTestTrait
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
         ]);
 
@@ -284,7 +288,7 @@ trait DiffTestTrait
                 ])
                 ->clear()
                 ->addColumn('id', [
-                    'type' => 'int',
+                    'type' => IntegerType::class,
                 ])
                 ->sql()
         );
@@ -294,10 +298,10 @@ trait DiffTestTrait
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
             'value' => [
-                'type' => 'varchar',
+                'type' => StringType::class,
             ],
         ]);
 
@@ -309,10 +313,10 @@ trait DiffTestTrait
                 ->build('test')
                 ->clear()
                 ->addColumn('id', [
-                    'type' => 'int',
+                    'type' => IntegerType::class,
                 ])
                 ->addColumn('value', [
-                    'type' => 'varchar',
+                    'type' => StringType::class,
                     'length' => 255,
                 ])
                 ->sql()
@@ -323,13 +327,13 @@ trait DiffTestTrait
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
             'value1' => [
-                'type' => 'varchar',
+                'type' => StringType::class,
             ],
             'value2' => [
-                'type' => 'varchar',
+                'type' => StringType::class,
             ],
         ]);
 
@@ -341,13 +345,13 @@ trait DiffTestTrait
                 ->build('test')
                 ->clear()
                 ->addColumn('id', [
-                    'type' => 'int',
+                    'type' => IntegerType::class,
                 ])
                 ->addColumn('value2', [
-                    'type' => 'varchar',
+                    'type' => StringType::class,
                 ])
                 ->addColumn('value1', [
-                    'type' => 'varchar',
+                    'type' => StringType::class,
                 ])
                 ->sql()
         );
@@ -357,10 +361,10 @@ trait DiffTestTrait
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
             'value' => [
-                'type' => 'varchar',
+                'type' => StringType::class,
                 'length' => 255,
             ],
         ]);
@@ -373,7 +377,7 @@ trait DiffTestTrait
                 ->build('test')
                 ->clear()
                 ->addColumn('id', [
-                    'type' => 'int',
+                    'type' => IntegerType::class,
                 ])
                 ->sql()
         );
@@ -383,7 +387,7 @@ trait DiffTestTrait
     {
         $this->forge->createTable('test_values', [
             'id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
         ], [
             'indexes' => [
@@ -397,10 +401,10 @@ trait DiffTestTrait
 
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
             'value_id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
         ], [
             'foreignKeys' => [
@@ -419,10 +423,10 @@ trait DiffTestTrait
                 ->build('test')
                 ->clear()
                 ->addColumn('id', [
-                    'type' => 'int',
+                    'type' => IntegerType::class,
                 ])
                 ->addColumn('value_id', [
-                    'type' => 'int',
+                    'type' => IntegerType::class,
                 ])
                 ->sql()
         );
@@ -432,10 +436,10 @@ trait DiffTestTrait
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
             'value' => [
-                'type' => 'varchar',
+                'type' => StringType::class,
                 'length' => 255,
             ],
         ], [
@@ -452,10 +456,10 @@ trait DiffTestTrait
                 ->build('test')
                 ->clear()
                 ->addColumn('id', [
-                    'type' => 'int',
+                    'type' => IntegerType::class,
                 ])
                 ->addColumn('value', [
-                    'type' => 'varchar',
+                    'type' => StringType::class,
                     'length' => 255,
                 ])
                 ->sql()
@@ -466,7 +470,7 @@ trait DiffTestTrait
     {
         $this->forge->createTable('test', [
             'id' => [
-                'type' => 'int',
+                'type' => IntegerType::class,
             ],
         ]);
 
@@ -478,7 +482,7 @@ trait DiffTestTrait
                 ->build('test')
                 ->clear()
                 ->addColumn('id', [
-                    'type' => 'int',
+                    'type' => IntegerType::class,
                 ])
                 ->setPrimaryKey('id')
                 ->sql()

@@ -3,6 +3,21 @@ declare(strict_types=1);
 
 namespace Fyre\Forge\Handlers\Postgres;
 
+use Fyre\DB\Types\BinaryType;
+use Fyre\DB\Types\BooleanType;
+use Fyre\DB\Types\DateTimeFractionalType;
+use Fyre\DB\Types\DateTimeTimeZoneType;
+use Fyre\DB\Types\DateTimeType;
+use Fyre\DB\Types\DateType;
+use Fyre\DB\Types\DecimalType;
+use Fyre\DB\Types\EnumType;
+use Fyre\DB\Types\FloatType;
+use Fyre\DB\Types\IntegerType;
+use Fyre\DB\Types\JsonType;
+use Fyre\DB\Types\SetType;
+use Fyre\DB\Types\StringType;
+use Fyre\DB\Types\TextType;
+use Fyre\DB\Types\TimeType;
 use Fyre\Forge\Exceptions\ForgeException;
 use Fyre\Forge\ForgeQueryGenerator;
 
@@ -420,12 +435,77 @@ class PostgresForgeQueryGenerator extends ForgeQueryGenerator
      *
      * @param array $options The column options.
      * @return array The parsed options.
+     *
+     * @throws ForgeException if the column type is not supported by the connection handler.
      */
     public function parseColumnOptions(array $options = []): array
     {
         $options = parent::parseColumnOptions($options);
 
         $options['comment'] ??= '';
+
+        switch ($options['type']) {
+            case BinaryType::class:
+                $options['type'] = 'bytea';
+                break;
+            case BooleanType::class:
+                $options['type'] = 'boolean';
+                break;
+            case DateTimeFractionalType::class:
+                $options['type'] = 'timestamp without time zone';
+                break;
+            case DateTimeTimeZoneType::class:
+                $options['type'] = 'timestamp with time zone';
+                break;
+            case DateTimeType::class:
+                $options['type'] = 'timestamp without time zone';
+                $options['precision'] = 0;
+                break;
+            case DateType::class:
+                $options['type'] = 'date';
+                break;
+            case DecimalType::class:
+                $options['type'] = 'numeric';
+                break;
+            case FloatType::class:
+                $options['type'] = 'real';
+                break;
+            case IntegerType::class:
+                $options['length'] ??= 10;
+
+                if ($options['length'] <= 6) {
+                    $options['type'] = 'smallint';
+                } else if ($options['length'] <= 8) {
+                    $options['type'] = 'mediumint';
+                } else if ($options['length'] <= 11) {
+                    $options['type'] = 'integer';
+                } else {
+                    $options['type'] = 'bigint';
+                }
+                break;
+            case JsonType::class:
+                $options['type'] = 'json';
+                break;
+            case StringType::class:
+                $options['length'] ??= 80;
+
+                $options['type'] = $options['length'] === 1 ?
+                    'character' :
+                    'character varying';
+                break;
+            case TextType::class:
+                $options['type'] = 'text';
+                break;
+            case TimeType::class:
+                $options['type'] = 'time without time zone';
+                break;
+            case EnumType::class:
+            case SetType::class:
+                throw ForgeException::forUnsupportedColumnType($options['type']);
+            default:
+                $options['type'] = strtolower($options['type']);
+                break;
+        }
 
         $type = $options['type'];
 
@@ -473,6 +553,7 @@ class PostgresForgeQueryGenerator extends ForgeQueryGenerator
             case 'numeric':
                 $options['precision'] ??= 0;
                 break;
+            case 'date':
             case 'smallint':
             case 'smallserial':
             case 'integer':
