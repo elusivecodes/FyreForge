@@ -511,7 +511,9 @@ class MysqlForgeQueryGenerator extends ForgeQueryGenerator
         if ($options['default'] !== null) {
             $options['default'] = (string) $options['default'];
             $default = strtolower($options['default']);
-            if (str_starts_with($default, 'current_timestamp')) {
+            if ($default === 'current_timestamp') {
+                $options['default'] = 'current_timestamp()';
+            } else if (str_starts_with($default, 'current_timestamp')) {
                 $options['default'] = $default;
             } else if ($default === 'null') {
                 $options['default'] = 'NULL';
