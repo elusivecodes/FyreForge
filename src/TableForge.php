@@ -379,7 +379,7 @@ abstract class TableForge
     }
 
     /**
-     * Determine if the table has a column.
+     * Determine whether the table has a column.
      *
      * @param string $name The column name.
      * @return bool TRUE if the table has the column, otherwise FALSE.
@@ -390,7 +390,7 @@ abstract class TableForge
     }
 
     /**
-     * Determine if the table has a foreign key.
+     * Determine whether the table has a foreign key.
      *
      * @param string $name The foreign key name.
      * @return bool TRUE if the table has the foreign key, otherwise FALSE.
@@ -401,7 +401,7 @@ abstract class TableForge
     }
 
     /**
-     * Determine if the table has an index.
+     * Determine whether the table has an index.
      *
      * @param string $name The index name.
      * @return bool TRUE if the table has the index, otherwise FALSE.

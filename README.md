@@ -32,7 +32,7 @@ use Fyre\Forge\ForgeRegistry;
 
 ## Basic Usage
 
-- `$container` is a  [*Container*](https://github.com/elusivecodes/FyreContainer).
+- `$container` is a [*Container*](https://github.com/elusivecodes/FyreContainer).
 
 ```php
 $forgeRegistry = new ForgeRegistry($container);
@@ -812,7 +812,7 @@ $tableName = $tableForge->getTableName();
 
 **Has Column**
 
-Determine if the table has a column.
+Determine whether the table has a column.
 
 - `$name` is a string representing the column name.
 
@@ -822,7 +822,7 @@ $hasColumn = $tableForge->hasColumn($name);
 
 **Has Foreign Key**
 
-Determine if the table has a foreign key.
+Determine whether the table has a foreign key.
 
 - `$name` is a string representing the foreign key name.
 
@@ -832,7 +832,7 @@ $hasForeignKey = $tableForge->hasForeignKey($name);
 
 **Has Index**
 
-Determine if the table has an index.
+Determine whether the table has an index.
 
 - `$name` is a string representing the index name.
 
