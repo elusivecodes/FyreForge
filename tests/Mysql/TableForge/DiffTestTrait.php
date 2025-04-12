@@ -5,7 +5,9 @@ namespace Tests\Mysql\TableForge;
 
 use Fyre\DB\Types\DateTimeType;
 use Fyre\DB\Types\IntegerType;
+use Fyre\DB\Types\JsonType;
 use Fyre\DB\Types\StringType;
+use Fyre\DB\Types\TextType;
 
 trait DiffTestTrait
 {
@@ -110,6 +112,18 @@ trait DiffTestTrait
                 'type' => StringType::class,
                 'length' => 255,
             ],
+            'json_default' => [
+                'type' => JsonType::class,
+                'default' => '\'{"key": "value"}\'',
+            ],
+            'text_default' => [
+                'type' => TextType::class,
+                'default' => '\'This is a default value\'',
+            ],
+            'point_default' => [
+                'type' => 'POINT',
+                'default' => 'point(1,2)',
+            ],
             'created' => [
                 'type' => DateTimeType::class,
                 'default' => 'CURRENT_TIMESTAMP()',
@@ -144,6 +158,18 @@ trait DiffTestTrait
                 ->addColumn('value', [
                     'type' => StringType::class,
                     'length' => 255,
+                ])
+                ->addColumn('json_default', [
+                    'type' => JsonType::class,
+                    'default' => '\'{"key": "value"}\'',
+                ])
+                ->addColumn('text_default', [
+                    'type' => TextType::class,
+                    'default' => '\'This is a default value\'',
+                ])
+                ->addColumn('point_default', [
+                    'type' => 'POINT',
+                    'default' => 'point(1,2)',
                 ])
                 ->addColumn('created', [
                     'type' => DateTimeType::class,

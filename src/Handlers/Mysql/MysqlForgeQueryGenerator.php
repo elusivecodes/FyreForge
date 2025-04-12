@@ -26,6 +26,7 @@ use function array_map;
 use function implode;
 use function is_numeric;
 use function ltrim;
+use function str_contains;
 use function str_starts_with;
 use function strtolower;
 use function strtoupper;
@@ -160,10 +161,31 @@ class MysqlForgeQueryGenerator extends ForgeQueryGenerator
 
         if ($options['default'] !== null) {
             $sql .= ' DEFAULT ';
-            if (str_starts_with($options['default'], 'current_timestamp')) {
-                $sql .= strtoupper($options['default']);
-            } else {
-                $sql .= $options['default'];
+            switch ($options['type']) {
+                case 'binary':
+                case 'blob':
+                case 'geometry':
+                case 'json':
+                case 'linestring':
+                case 'longblob':
+                case 'longtext':
+                case 'mediumblob':
+                case 'mediumtext':
+                case 'point':
+                case 'polygon':
+                case 'text':
+                case 'tinyblob':
+                case 'tinytext':
+                case 'varbinary':
+                    $sql .= '('.$options['default'].')';
+                    break;
+                default:
+                    if (str_starts_with($options['default'], 'current_timestamp')) {
+                        $sql .= strtoupper($options['default']);
+                    } else {
+                        $sql .= $options['default'];
+                    }
+                    break;
             }
         }
 
@@ -506,6 +528,12 @@ class MysqlForgeQueryGenerator extends ForgeQueryGenerator
             default:
                 $options['type'] = strtolower($options['type']);
                 break;
+        }
+
+        if ($options['type'] === 'json' && str_contains($this->forge->getConnection()->version(), 'MariaDB')) {
+            $options['type'] = 'longtext';
+            $options['charset'] = 'utf8mb4';
+            $options['collation'] = 'utf8mb4_bin';
         }
 
         if ($options['default'] !== null) {

@@ -32,7 +32,6 @@ trait SqliteConnectionTrait
 
         $this->db = $container->use(ConnectionManager::class)->build([
             'className' => SqliteConnection::class,
-            'persist' => true,
         ]);
 
         $this->schema = $container->use(SchemaRegistry::class)->use($this->db);
