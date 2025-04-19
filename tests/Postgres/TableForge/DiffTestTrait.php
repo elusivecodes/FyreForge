@@ -46,7 +46,7 @@ trait DiffTestTrait
 
         $this->assertSame(
             [
-                'ALTER TABLE test DROP CONSTRAINT value_id, ADD CONSTRAINT value_id FOREIGN KEY (value_id) REFERENCES test_values (id) ON UPDATE CASCADE ON DELETE CASCADE',
+                'ALTER TABLE test DROP CONSTRAINT value_id, ADD CONSTRAINT value_id FOREIGN KEY (value_id) REFERENCES test_values (id) ON UPDATE CASCADE ON DELETE CASCADE DEFERRABLE INITIALLY IMMEDIATE',
             ],
             $this->forge
                 ->build('test')
@@ -250,7 +250,7 @@ trait DiffTestTrait
 
         $this->assertSame(
             [
-                'ALTER TABLE test ADD CONSTRAINT value_id FOREIGN KEY (value_id) REFERENCES test_values (id)',
+                'ALTER TABLE test ADD CONSTRAINT value_id FOREIGN KEY (value_id) REFERENCES test_values (id) DEFERRABLE INITIALLY IMMEDIATE',
             ],
             $this->forge
                 ->build('test')

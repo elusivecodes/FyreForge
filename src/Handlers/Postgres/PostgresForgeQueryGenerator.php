@@ -431,6 +431,21 @@ class PostgresForgeQueryGenerator extends ForgeQueryGenerator
     }
 
     /**
+     * Generate SQL for a foreign key.
+     *
+     * @param string $foreignKey The foreign key name.
+     * @param array $options The foreign key options.
+     * @return string The SQL query.
+     */
+    public function buildForeignKey(string $foreignKey, array $options): string
+    {
+        $sql = parent::buildForeignKey($foreignKey, $options);
+        $sql .= ' DEFERRABLE INITIALLY IMMEDIATE';
+
+        return $sql;
+    }
+
+    /**
      * Parse column options.
      *
      * @param array $options The column options.

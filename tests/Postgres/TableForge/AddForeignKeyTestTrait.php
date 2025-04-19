@@ -64,7 +64,7 @@ trait AddForeignKeyTestTrait
 
         $this->assertSame(
             [
-                'ALTER TABLE test ADD CONSTRAINT value_id FOREIGN KEY (value_id) REFERENCES test_values (id)',
+                'ALTER TABLE test ADD CONSTRAINT value_id FOREIGN KEY (value_id) REFERENCES test_values (id) DEFERRABLE INITIALLY IMMEDIATE',
             ],
             $this->forge
                 ->build('test')
@@ -80,7 +80,7 @@ trait AddForeignKeyTestTrait
     {
         $this->assertSame(
             [
-                'CREATE TABLE test (id INTEGER NOT NULL, value_id INTEGER NOT NULL, CONSTRAINT value_id FOREIGN KEY (value_id) REFERENCES test_values (id))',
+                'CREATE TABLE test (id INTEGER NOT NULL, value_id INTEGER NOT NULL, CONSTRAINT value_id FOREIGN KEY (value_id) REFERENCES test_values (id) DEFERRABLE INITIALLY IMMEDIATE)',
             ],
             $this->forge
                 ->build('test')
