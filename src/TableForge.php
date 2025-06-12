@@ -25,8 +25,6 @@ abstract class TableForge
 
     protected array $foreignKeys = [];
 
-    protected Forge $forge;
-
     protected array $indexes = [];
 
     protected string|null $newTableName = null;
@@ -34,8 +32,6 @@ abstract class TableForge
     protected array $renameColumns = [];
 
     protected Schema $schema;
-
-    protected string $tableName;
 
     protected array $tableOptions;
 
@@ -49,14 +45,14 @@ abstract class TableForge
      * @param array $options The table options.
      * @param SchemaRegistry The SchemaRegistry.
      */
-    public function __construct(Forge $forge, SchemaRegistry $schemaRegistry, string $tableName, array $options = [])
-    {
-        $this->forge = $forge;
-
+    public function __construct(
+        protected Forge $forge,
+        SchemaRegistry $schemaRegistry,
+        protected string $tableName,
+        array $options = []
+    ) {
         $connection = $this->forge->getConnection();
         $this->schema = $schemaRegistry->use($connection);
-
-        $this->tableName = $tableName;
 
         if (!$this->schema->hasTable($this->tableName)) {
             $this->tableOptions = $this->forge->generator()->parseTableOptions($options);

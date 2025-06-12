@@ -13,17 +13,14 @@ use function strtoupper;
  */
 abstract class ForgeQueryGenerator
 {
-    protected Forge $forge;
-
     /**
      * New ForgeQueryGenerator constructor.
      *
      * @param Forge $forge The forge.
      */
-    public function __construct(Forge $forge)
-    {
-        $this->forge = $forge;
-    }
+    public function __construct(
+        protected Forge $forge
+    ) {}
 
     /**
      * Generate SQL for adding a column to a table.

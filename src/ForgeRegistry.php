@@ -25,8 +25,6 @@ use function ltrim;
  */
 class ForgeRegistry
 {
-    protected Container $container;
-
     protected WeakMap $forges;
 
     protected array $handlers = [
@@ -40,9 +38,9 @@ class ForgeRegistry
      *
      * @param Container $container The Container.
      */
-    public function __construct(Container $container)
-    {
-        $this->container = $container;
+    public function __construct(
+        protected Container $container
+    ) {
         $this->forges = new WeakMap();
     }
 

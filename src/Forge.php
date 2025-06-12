@@ -12,10 +12,6 @@ use Fyre\Schema\Schema;
  */
 abstract class Forge
 {
-    protected Connection $connection;
-
-    protected Container $container;
-
     protected ForgeQueryGenerator $generator;
 
     /**
@@ -24,11 +20,10 @@ abstract class Forge
      * @param Container $container The Container.
      * @param Connection The Connection.
      */
-    public function __construct(Container $container, Connection $connection)
-    {
-        $this->container = $container;
-        $this->connection = $connection;
-    }
+    public function __construct(
+        protected Container $container,
+        protected Connection $connection
+    ) {}
 
     /**
      * Add a column to a table.
