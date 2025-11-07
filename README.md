@@ -187,7 +187,7 @@ Create a new table.
 - `$options` is an array containing the schema options.
 
 ```php
-$forge->createTable($tableName, $columns, $indexes, $foreignKeys);
+$forge->createTable($tableName, $columns, $indexes, $foreignKeys, $options);
 ```
 
 Additional table options may be available depending on the connection handler.
