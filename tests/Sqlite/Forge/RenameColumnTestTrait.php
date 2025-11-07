@@ -21,12 +21,12 @@ trait RenameColumnTestTrait
         $this->forge->renameColumn('test', 'value', 'other');
 
         $this->assertFalse(
-            $this->schema->describe('test')
+            $this->schema->table('test')
                 ->hasColumn('value')
         );
 
         $this->assertTrue(
-            $this->schema->describe('test')
+            $this->schema->table('test')
                 ->hasColumn('other')
         );
     }

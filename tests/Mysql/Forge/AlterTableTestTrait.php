@@ -21,12 +21,14 @@ trait AlterTableTestTrait
 
         $this->assertSame(
             [
+                'name' => 'test',
                 'engine' => 'MyISAM',
                 'charset' => 'utf8mb4',
                 'collation' => 'utf8mb4_unicode_ci',
                 'comment' => '',
             ],
             $this->schema->table('test')
+                ->toArray()
         );
     }
 }

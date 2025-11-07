@@ -30,13 +30,11 @@ trait CreateTableTestTrait
                 'default' => 'NULL',
             ],
         ], [
-            'indexes' => [
-                'primary' => [
-                    'columns' => [
-                        'id',
-                    ],
-                    'primary' => true,
+            'primary' => [
+                'columns' => [
+                    'id',
                 ],
+                'primary' => true,
             ],
         ]);
 

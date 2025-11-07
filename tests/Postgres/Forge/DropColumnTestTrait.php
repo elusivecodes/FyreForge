@@ -21,7 +21,7 @@ trait DropColumnTestTrait
         $this->forge->dropColumn('test', 'value');
 
         $this->assertFalse(
-            $this->schema->describe('test')
+            $this->schema->table('test')
                 ->hasColumn('value')
         );
     }

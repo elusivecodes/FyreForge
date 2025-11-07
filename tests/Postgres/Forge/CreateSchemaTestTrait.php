@@ -7,10 +7,7 @@ trait CreateSchemaTestTrait
 {
     public function testCreateSchema(): void
     {
-        $this->forge->createSchema('other', [
-            'charset' => 'utf8',
-            'collation' => 'utf8_unicode_ci',
-        ]);
+        $this->forge->createSchema('other');
 
         $this->assertCount(
             1,

@@ -1,0 +1,469 @@
+<?php
+declare(strict_types=1);
+
+namespace Tests\Postgres\Table;
+
+use Fyre\DB\Types\IntegerType;
+use Fyre\DB\Types\StringType;
+use Fyre\Forge\ForeignKey;
+use Fyre\Forge\Handlers\Postgres\PostgresColumn;
+use Fyre\Forge\Handlers\Postgres\PostgresIndex;
+use PHPUnit\Framework\TestCase;
+use Tests\Postgres\PostgresConnectionTrait;
+
+use function array_map;
+
+final class TableTest extends TestCase
+{
+    use AddColumnTestTrait;
+    use AddForeignKeyTestTrait;
+    use AddIndexTestTrait;
+    use ChangeColumnTestTrait;
+    use DiffDefaultsTestTrait;
+    use DiffTestTrait;
+    use DropColumnTestTrait;
+    use DropForeignKeyTestTrait;
+    use DropIndexTestTrait;
+    use DropTestTrait;
+    use ExecuteTestTrait;
+    use MergeQueryTestTrait;
+    use PostgresConnectionTrait;
+    use RenameTestTrait;
+    use TableTestTrait;
+
+    public function testColumn(): void
+    {
+        $table = $this->forge->build('test');
+
+        $table->addColumn('id', [
+            'type' => IntegerType::class,
+        ]);
+
+        $table->addColumn('value', [
+            'type' => StringType::class,
+        ]);
+
+        $this->assertSame(
+            [
+                'name' => 'id',
+                'type' => 'integer',
+                'length' => 11,
+                'precision' => 0,
+                'nullable' => false,
+                'unsigned' => false,
+                'default' => null,
+                'comment' => '',
+                'autoIncrement' => false,
+            ],
+            $table->column('id')
+                ->toArray()
+        );
+    }
+
+    public function testColumnDebug(): void
+    {
+        $table = $this->forge->build('test');
+
+        $table->addColumn('id', [
+            'type' => IntegerType::class,
+        ]);
+
+        $data = $table->column('id')
+            ->__debugInfo();
+
+        $this->assertSame(
+            [
+                'name' => 'id',
+                'type' => 'integer',
+                'length' => 11,
+                'precision' => 0,
+                'nullable' => false,
+                'unsigned' => false,
+                'default' => null,
+                'comment' => '',
+                'autoIncrement' => false,
+            ],
+            $data
+        );
+    }
+
+    public function testColumnNames(): void
+    {
+        $table = $this->forge->build('test');
+
+        $table->addColumn('id', [
+            'type' => IntegerType::class,
+        ]);
+
+        $table->addColumn('value', [
+            'type' => StringType::class,
+        ]);
+
+        $this->assertSame(
+            [
+                'id',
+                'value',
+            ],
+            $table->columnNames()
+        );
+    }
+
+    public function testColumns(): void
+    {
+        $table = $this->forge->build('test');
+
+        $table->addColumn('id', [
+            'type' => IntegerType::class,
+        ]);
+
+        $table->addColumn('value', [
+            'type' => StringType::class,
+        ]);
+
+        $this->assertSame(
+            [
+                'id' => [
+                    'name' => 'id',
+                    'type' => 'integer',
+                    'length' => 11,
+                    'precision' => 0,
+                    'nullable' => false,
+                    'unsigned' => false,
+                    'default' => null,
+                    'comment' => '',
+                    'autoIncrement' => false,
+                ],
+                'value' => [
+                    'name' => 'value',
+                    'type' => 'character varying',
+                    'length' => 80,
+                    'precision' => null,
+                    'nullable' => false,
+                    'unsigned' => false,
+                    'default' => null,
+                    'comment' => '',
+                    'autoIncrement' => false,
+                ],
+            ],
+            array_map(
+                fn(PostgresColumn $column): array => $column->toArray(),
+                $table->columns()
+            )
+        );
+    }
+
+    public function testDebug(): void
+    {
+        $data = $this->forge->build('test')
+            ->__debugInfo();
+
+        $this->assertSame(
+            [
+                'columns' => [],
+                'dropTable' => false,
+                'foreignKeys' => [],
+                'indexes' => [],
+                'newName' => null,
+                'renameColumns' => [],
+                'name' => 'test',
+                'comment' => null,
+            ],
+            $data
+        );
+    }
+
+    public function testForeignKey(): void
+    {
+        $table = $this->forge->build('test');
+
+        $table->addColumn('id', [
+            'type' => IntegerType::class,
+        ]);
+
+        $table->addColumn('value_id', [
+            'type' => IntegerType::class,
+        ]);
+
+        $table->addForeignKey('value_id', [
+            'referencedTable' => 'test_values',
+            'referencedColumns' => 'id',
+        ]);
+
+        $this->assertSame(
+            [
+                'name' => 'value_id',
+                'columns' => [
+                    'value_id',
+                ],
+                'referencedTable' => 'test_values',
+                'referencedColumns' => [
+                    'id',
+                ],
+                'onUpdate' => null,
+                'onDelete' => null,
+            ],
+            $table->foreignKey('value_id')
+                ->toArray()
+        );
+    }
+
+    public function testForeignKeyDebug(): void
+    {
+        $table = $this->forge->build('test');
+
+        $table->addColumn('id', [
+            'type' => IntegerType::class,
+        ]);
+
+        $table->addColumn('value_id', [
+            'type' => IntegerType::class,
+        ]);
+
+        $table->addForeignKey('value_id', [
+            'referencedTable' => 'test_values',
+            'referencedColumns' => 'id',
+        ]);
+
+        $data = $table->foreignKey('value_id')
+            ->__debugInfo();
+
+        $this->assertSame(
+            [
+                'columns' => [
+                    'value_id',
+                ],
+                'referencedColumns' => [
+                    'id',
+                ],
+                'name' => 'value_id',
+                'referencedTable' => 'test_values',
+                'onUpdate' => null,
+                'onDelete' => null,
+            ],
+            $data
+        );
+    }
+
+    public function testForeignKeys(): void
+    {
+        $table = $this->forge->build('test');
+
+        $table->addColumn('id', [
+            'type' => IntegerType::class,
+        ]);
+
+        $table->addColumn('value_id', [
+            'type' => IntegerType::class,
+        ]);
+
+        $table->addForeignKey('value_id', [
+            'referencedTable' => 'test_values',
+            'referencedColumns' => 'id',
+        ]);
+
+        $this->assertSame(
+            [
+                'value_id' => [
+                    'name' => 'value_id',
+                    'columns' => [
+                        'value_id',
+                    ],
+                    'referencedTable' => 'test_values',
+                    'referencedColumns' => [
+                        'id',
+                    ],
+                    'onUpdate' => null,
+                    'onDelete' => null,
+                ],
+            ],
+            array_map(
+                fn(ForeignKey $foreignKey): array => $foreignKey->toArray(),
+                $table->foreignKeys()
+            )
+        );
+    }
+
+    public function testGetName(): void
+    {
+        $table = $this->forge->build('test');
+
+        $this->assertSame(
+            'test',
+            $table->getName()
+        );
+    }
+
+    public function testHasColumn(): void
+    {
+        $table = $this->forge->build('test');
+
+        $table->addColumn('id', [
+            'type' => IntegerType::class,
+        ]);
+
+        $this->assertTrue(
+            $table->hasColumn('id')
+        );
+    }
+
+    public function testHasColumnFalse(): void
+    {
+        $table = $this->forge->build('test');
+
+        $table->addColumn('id', [
+            'type' => IntegerType::class,
+        ]);
+
+        $this->assertFalse(
+            $table->hasColumn('invalid')
+        );
+    }
+
+    public function testHasForeignKey(): void
+    {
+        $table = $this->forge->build('test');
+
+        $table->addColumn('id', [
+            'type' => IntegerType::class,
+        ]);
+
+        $table->addColumn('value_id', [
+            'type' => IntegerType::class,
+        ]);
+
+        $table->addForeignKey('value_id', [
+            'referencedTable' => 'test_values',
+            'referencedColumns' => 'id',
+        ]);
+
+        $this->assertTrue(
+            $table->hasForeignKey('value_id')
+        );
+    }
+
+    public function testHasForeignKeyFalse(): void
+    {
+        $table = $this->forge->build('test');
+
+        $table->addColumn('id', [
+            'type' => IntegerType::class,
+        ]);
+
+        $table->addColumn('value_id', [
+            'type' => IntegerType::class,
+        ]);
+
+        $this->assertFalse(
+            $table->hasForeignKey('value_id')
+        );
+    }
+
+    public function testHasIndex(): void
+    {
+        $table = $this->forge->build('test');
+
+        $table->addColumn('id', [
+            'type' => IntegerType::class,
+        ]);
+
+        $table->addIndex('id');
+
+        $this->assertTrue(
+            $table->hasIndex('id')
+        );
+    }
+
+    public function testHasIndexFalse(): void
+    {
+        $table = $this->forge->build('test');
+
+        $table->addColumn('id', [
+            'type' => IntegerType::class,
+        ]);
+
+        $this->assertFalse(
+            $table->hasIndex('id')
+        );
+    }
+
+    public function testIndex(): void
+    {
+        $table = $this->forge->build('test');
+
+        $table->addColumn('id', [
+            'type' => IntegerType::class,
+        ]);
+
+        $table->addIndex('id');
+
+        $this->assertSame(
+            [
+                'name' => 'id',
+                'columns' => [
+                    'id',
+                ],
+                'unique' => false,
+                'primary' => false,
+                'type' => 'btree',
+            ],
+            $table->index('id')
+                ->toArray()
+        );
+    }
+
+    public function testIndexDebug(): void
+    {
+        $table = $this->forge->build('test');
+
+        $table->addColumn('id', [
+            'type' => IntegerType::class,
+        ]);
+
+        $table->addIndex('id');
+
+        $data = $table->index('id')
+            ->__debugInfo();
+
+        $this->assertSame(
+            [
+                'columns' => [
+                    'id',
+                ],
+                'name' => 'id',
+                'unique' => false,
+                'primary' => false,
+                'type' => 'btree',
+            ],
+            $data
+        );
+    }
+
+    public function testIndexes(): void
+    {
+        $table = $this->forge->build('test');
+
+        $table->addColumn('id', [
+            'type' => IntegerType::class,
+        ]);
+
+        $table->addIndex('id');
+
+        $this->assertSame(
+            [
+                'id' => [
+                    'name' => 'id',
+                    'columns' => [
+                        'id',
+                    ],
+                    'unique' => false,
+                    'primary' => false,
+                    'type' => 'btree',
+                ],
+            ],
+            array_map(
+                fn(PostgresIndex $index): array => $index->toArray(),
+                $table->indexes()
+            )
+        );
+    }
+}

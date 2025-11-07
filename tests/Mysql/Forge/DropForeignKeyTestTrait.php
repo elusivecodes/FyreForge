@@ -14,11 +14,9 @@ trait DropForeignKeyTestTrait
                 'type' => IntegerType::class,
             ],
         ], [
-            'indexes' => [
-                'PRIMARY' => [
-                    'columns' => [
-                        'id',
-                    ],
+            'PRIMARY' => [
+                'columns' => [
+                    'id',
                 ],
             ],
         ]);
@@ -40,7 +38,7 @@ trait DropForeignKeyTestTrait
         $this->forge->dropForeignKey('test', 'value_id');
 
         $this->assertFalse(
-            $this->schema->describe('test')
+            $this->schema->table('test')
                 ->hasForeignKey('value_id')
         );
     }

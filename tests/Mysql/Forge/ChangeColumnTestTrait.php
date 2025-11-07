@@ -29,7 +29,7 @@ trait ChangeColumnTestTrait
                 'id',
                 'value',
             ],
-            $this->schema->describe('test')
+            $this->schema->table('test')
                 ->columnNames()
         );
     }
@@ -44,11 +44,9 @@ trait ChangeColumnTestTrait
                 'type' => StringType::class,
             ],
         ], [
-            'indexes' => [
-                'PRIMARY' => [
-                    'columns' => [
-                        'id',
-                    ],
+            'PRIMARY' => [
+                'columns' => [
+                    'id',
                 ],
             ],
         ]);
@@ -60,6 +58,7 @@ trait ChangeColumnTestTrait
 
         $this->assertSame(
             [
+                'name' => 'id',
                 'type' => 'int',
                 'length' => 11,
                 'precision' => 0,
@@ -72,8 +71,9 @@ trait ChangeColumnTestTrait
                 'comment' => '',
                 'autoIncrement' => true,
             ],
-            $this->schema->describe('test')
+            $this->schema->table('test')
                 ->column('id')
+                ->toArray()
         );
     }
 
@@ -96,6 +96,7 @@ trait ChangeColumnTestTrait
 
         $this->assertSame(
             [
+                'name' => 'value',
                 'type' => 'varchar',
                 'length' => 80,
                 'precision' => null,
@@ -108,8 +109,9 @@ trait ChangeColumnTestTrait
                 'comment' => '',
                 'autoIncrement' => false,
             ],
-            $this->schema->describe('test')
+            $this->schema->table('test')
                 ->column('value')
+                ->toArray()
         );
     }
 
@@ -131,6 +133,7 @@ trait ChangeColumnTestTrait
 
         $this->assertSame(
             [
+                'name' => 'value',
                 'type' => 'varchar',
                 'length' => 80,
                 'precision' => null,
@@ -143,8 +146,9 @@ trait ChangeColumnTestTrait
                 'comment' => 'This is the value',
                 'autoIncrement' => false,
             ],
-            $this->schema->describe('test')
+            $this->schema->table('test')
                 ->column('value')
+                ->toArray()
         );
     }
 
@@ -166,6 +170,7 @@ trait ChangeColumnTestTrait
 
         $this->assertSame(
             [
+                'name' => 'value',
                 'type' => 'int',
                 'length' => 11,
                 'precision' => 0,
@@ -178,8 +183,9 @@ trait ChangeColumnTestTrait
                 'comment' => '',
                 'autoIncrement' => false,
             ],
-            $this->schema->describe('test')
+            $this->schema->table('test')
                 ->column('value')
+                ->toArray()
         );
     }
 
@@ -203,7 +209,7 @@ trait ChangeColumnTestTrait
                 'id',
                 'value',
             ],
-            $this->schema->describe('test')
+            $this->schema->table('test')
                 ->columnNames()
         );
     }
@@ -226,6 +232,7 @@ trait ChangeColumnTestTrait
 
         $this->assertSame(
             [
+                'name' => 'value',
                 'type' => 'int',
                 'length' => 9,
                 'precision' => 0,
@@ -238,8 +245,9 @@ trait ChangeColumnTestTrait
                 'comment' => '',
                 'autoIncrement' => false,
             ],
-            $this->schema->describe('test')
+            $this->schema->table('test')
                 ->column('value')
+                ->toArray()
         );
     }
 
@@ -261,6 +269,7 @@ trait ChangeColumnTestTrait
 
         $this->assertSame(
             [
+                'name' => 'value',
                 'type' => 'varchar',
                 'length' => 255,
                 'precision' => null,
@@ -273,8 +282,9 @@ trait ChangeColumnTestTrait
                 'comment' => '',
                 'autoIncrement' => false,
             ],
-            $this->schema->describe('test')
+            $this->schema->table('test')
                 ->column('value')
+                ->toArray()
         );
     }
 
@@ -296,6 +306,7 @@ trait ChangeColumnTestTrait
 
         $this->assertSame(
             [
+                'name' => 'value',
                 'type' => 'int',
                 'length' => 11,
                 'precision' => 0,
@@ -308,8 +319,9 @@ trait ChangeColumnTestTrait
                 'comment' => '',
                 'autoIncrement' => false,
             ],
-            $this->schema->describe('test')
+            $this->schema->table('test')
                 ->column('value')
+                ->toArray()
         );
     }
 
@@ -331,6 +343,7 @@ trait ChangeColumnTestTrait
 
         $this->assertSame(
             [
+                'name' => 'value',
                 'type' => 'decimal',
                 'length' => 11,
                 'precision' => 2,
@@ -343,8 +356,9 @@ trait ChangeColumnTestTrait
                 'comment' => '',
                 'autoIncrement' => false,
             ],
-            $this->schema->describe('test')
+            $this->schema->table('test')
                 ->column('value')
+                ->toArray()
         );
     }
 
@@ -365,12 +379,12 @@ trait ChangeColumnTestTrait
         ]);
 
         $this->assertFalse(
-            $this->schema->describe('test')
+            $this->schema->table('test')
                 ->hasColumn('value')
         );
 
         $this->assertTrue(
-            $this->schema->describe('test')
+            $this->schema->table('test')
                 ->hasColumn('other')
         );
     }
@@ -392,6 +406,7 @@ trait ChangeColumnTestTrait
 
         $this->assertSame(
             [
+                'name' => 'value',
                 'type' => 'int',
                 'length' => 11,
                 'precision' => 0,
@@ -404,8 +419,9 @@ trait ChangeColumnTestTrait
                 'comment' => '',
                 'autoIncrement' => false,
             ],
-            $this->schema->describe('test')
+            $this->schema->table('test')
                 ->column('value')
+                ->toArray()
         );
     }
 
@@ -427,6 +443,7 @@ trait ChangeColumnTestTrait
 
         $this->assertSame(
             [
+                'name' => 'value',
                 'type' => 'int',
                 'length' => 10,
                 'precision' => 0,
@@ -439,8 +456,9 @@ trait ChangeColumnTestTrait
                 'comment' => '',
                 'autoIncrement' => false,
             ],
-            $this->schema->describe('test')
+            $this->schema->table('test')
                 ->column('value')
+                ->toArray()
         );
     }
 }

@@ -20,7 +20,7 @@ trait DropIndexTestTrait
         $this->forge->dropIndex('test', 'id');
 
         $this->assertFalse(
-            $this->schema->describe('test')
+            $this->schema->table('test')
                 ->hasIndex('id')
         );
     }
@@ -41,7 +41,7 @@ trait DropIndexTestTrait
         $this->forge->dropPrimaryKey('test');
 
         $this->assertFalse(
-            $this->schema->describe('test')
+            $this->schema->table('test')
                 ->hasIndex('id')
         );
     }
@@ -58,10 +58,10 @@ trait DropIndexTestTrait
             'unique' => true,
         ]);
 
-        $this->forge->dropConstraint('test', 'id');
+        $this->forge->dropIndex('test', 'id');
 
         $this->assertFalse(
-            $this->schema->describe('test')
+            $this->schema->table('test')
                 ->hasIndex('id')
         );
     }

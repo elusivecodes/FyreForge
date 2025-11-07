@@ -18,9 +18,7 @@ trait MergeQueryTestTrait
                 'type' => StringType::class,
             ],
         ], [
-            'indexes' => [
-                'test',
-            ],
+            'test' => [],
         ]);
 
         $this->forge
@@ -38,22 +36,23 @@ trait MergeQueryTestTrait
 
         $this->assertSame(
             'int',
-            $this->schema->describe('test')
-                ->column('id')['type']
+            $this->schema->table('test')
+                ->column('id')
+                ->getType()
         );
 
         $this->assertTrue(
-            $this->schema->describe('test')
+            $this->schema->table('test')
                 ->hasColumn('value')
         );
 
         $this->assertFalse(
-            $this->schema->describe('test')
+            $this->schema->table('test')
                 ->hasColumn('test')
         );
 
         $this->assertTrue(
-            $this->schema->describe('test')
+            $this->schema->table('test')
                 ->hasIndex('id')
         );
     }

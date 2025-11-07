@@ -24,18 +24,21 @@ trait AddIndexTestTrait
         ]);
 
         $this->assertTrue(
-            $this->schema->describe('test')
+            $this->schema->table('test')
                 ->hasIndex('id_value')
         );
 
         $this->assertSame(
             [
+                'name' => 'id_value',
                 'columns' => ['id', 'value'],
                 'unique' => false,
                 'primary' => false,
+                'type' => null,
             ],
-            $this->schema->describe('test')
-                ->index('id_value'),
+            $this->schema->table('test')
+                ->index('id_value')
+                ->toArray()
         );
     }
 
@@ -74,18 +77,21 @@ trait AddIndexTestTrait
         ]);
 
         $this->assertTrue(
-            $this->schema->describe('test')
+            $this->schema->table('test')
                 ->hasIndex('value')
         );
 
         $this->assertSame(
             [
+                'name' => 'value',
                 'columns' => ['value'],
                 'unique' => true,
                 'primary' => false,
+                'type' => null,
             ],
-            $this->schema->describe('test')
-                ->index('value'),
+            $this->schema->table('test')
+                ->index('value')
+                ->toArray()
         );
     }
 }

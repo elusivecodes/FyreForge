@@ -12,6 +12,7 @@ use Fyre\Forge\Exceptions\ForgeException;
 use Fyre\Forge\Handlers\Mysql\MysqlForge;
 use Fyre\Forge\Handlers\Postgres\PostgresForge;
 use Fyre\Forge\Handlers\Sqlite\SqliteForge;
+use Fyre\Utility\Traits\MacroTrait;
 use WeakMap;
 
 use function array_key_exists;
@@ -25,6 +26,8 @@ use function ltrim;
  */
 class ForgeRegistry
 {
+    use MacroTrait;
+
     protected WeakMap $forges;
 
     protected array $handlers = [

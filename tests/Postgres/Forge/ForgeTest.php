@@ -24,4 +24,14 @@ final class ForgeTest extends TestCase
     use PostgresConnectionTrait;
     use RenameColumnTestTrait;
     use RenameTableTestTrait;
+
+    public function testDebug(): void
+    {
+        $data = $this->forge->__debugInfo();
+
+        $this->assertSame(
+            [],
+            $data
+        );
+    }
 }

@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Tests\Sqlite\Forge;
 
-use Fyre\DB\Exceptions\DbException;
 use Fyre\DB\Types\IntegerType;
 use Fyre\DB\Types\StringType;
 
@@ -11,9 +10,6 @@ trait MergeQueryTestTrait
 {
     public function testMergeQueries(): void
     {
-        // not supported with sqlite version bundled with PHP
-        $this->expectException(DbException::class);
-
         $this->forge->createTable('test', [
             'id' => [
                 'type' => IntegerType::class,
@@ -22,10 +18,8 @@ trait MergeQueryTestTrait
                 'type' => StringType::class,
             ],
         ], [
-            'indexes' => [
-                'test_idx' => [
-                    'columns' => ['test'],
-                ],
+            'test_idx' => [
+                'columns' => ['test'],
             ],
         ]);
 
@@ -42,23 +36,24 @@ trait MergeQueryTestTrait
             ->execute();
 
         $this->assertSame(
-            'int',
-            $this->schema->describe('test')
-                ->column('id')['type']
+            'integer',
+            $this->schema->table('test')
+                ->column('id')
+                ->getType()
         );
 
         $this->assertTrue(
-            $this->schema->describe('test')
+            $this->schema->table('test')
                 ->hasColumn('value')
         );
 
         $this->assertFalse(
-            $this->schema->describe('test')
+            $this->schema->table('test')
                 ->hasIndex('test_idx')
         );
 
         $this->assertTrue(
-            $this->schema->describe('test')
+            $this->schema->table('test')
                 ->hasIndex('id')
         );
     }

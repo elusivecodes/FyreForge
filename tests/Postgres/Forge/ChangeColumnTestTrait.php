@@ -8,7 +8,7 @@ use Fyre\DB\Types\StringType;
 
 trait ChangeColumnTestTrait
 {
-    public function testAlterColumnAutoIncrement(): void
+    public function testChangeColumnAutoIncrement(): void
     {
         $this->forge->createTable('test', [
             'id' => [
@@ -18,34 +18,38 @@ trait ChangeColumnTestTrait
                 'type' => StringType::class,
             ],
         ], [
-            'indexes' => [
-                'test_pk' => [
-                    'columns' => [
-                        'id',
-                    ],
-                    'primary' => true,
+            'test_pk' => [
+                'columns' => [
+                    'id',
                 ],
+                'primary' => true,
             ],
         ]);
 
-        $this->forge->alterColumnAutoIncrement('test', 'id', true);
+        $this->forge->changeColumn('test', 'id', [
+            'type' => IntegerType::class,
+            'autoIncrement' => true,
+        ]);
 
         $this->assertSame(
             [
+                'name' => 'id',
                 'type' => 'integer',
                 'length' => 11,
                 'precision' => 0,
                 'nullable' => false,
+                'unsigned' => false,
                 'default' => null,
                 'comment' => '',
                 'autoIncrement' => true,
             ],
-            $this->schema->describe('test')
+            $this->schema->table('test')
                 ->column('id')
+                ->toArray()
         );
     }
 
-    public function testAlterColumnAutoIncrementFalse(): void
+    public function testChangeColumnAutoIncrementFalse(): void
     {
         $this->forge->createTable('test', [
             'id' => [
@@ -56,34 +60,72 @@ trait ChangeColumnTestTrait
                 'type' => StringType::class,
             ],
         ], [
-            'indexes' => [
-                'test_pk' => [
-                    'columns' => [
-                        'id',
-                    ],
-                    'primary' => true,
+            'test_pk' => [
+                'columns' => [
+                    'id',
                 ],
+                'primary' => true,
             ],
         ]);
 
-        $this->forge->alterColumnAutoIncrement('test', 'id', false);
+        $this->forge->changeColumn('test', 'id', [
+            'type' => IntegerType::class,
+            'autoIncrement' => false,
+        ]);
 
         $this->assertSame(
             [
+                'name' => 'id',
                 'type' => 'integer',
                 'length' => 11,
                 'precision' => 0,
                 'nullable' => false,
+                'unsigned' => false,
                 'default' => null,
                 'comment' => '',
                 'autoIncrement' => false,
             ],
-            $this->schema->describe('test')
+            $this->schema->table('test')
                 ->column('id')
+                ->toArray()
         );
     }
 
-    public function testAlterColumnDefault(): void
+    public function testChangeColumnComment(): void
+    {
+        $this->forge->createTable('test', [
+            'id' => [
+                'type' => IntegerType::class,
+            ],
+            'value' => [
+                'type' => StringType::class,
+            ],
+        ]);
+
+        $this->forge->changeColumn('test', 'value', [
+            'type' => StringType::class,
+            'comment' => 'This is the value',
+        ]);
+
+        $this->assertSame(
+            [
+                'name' => 'value',
+                'type' => 'character varying',
+                'length' => 80,
+                'precision' => null,
+                'nullable' => false,
+                'unsigned' => false,
+                'default' => null,
+                'comment' => 'This is the value',
+                'autoIncrement' => false,
+            ],
+            $this->schema->table('test')
+                ->column('value')
+                ->toArray()
+        );
+    }
+
+    public function testChangeColumnDefault(): void
     {
         $this->forge->createTable('test', [
             'id' => [
@@ -94,24 +136,30 @@ trait ChangeColumnTestTrait
             ],
         ]);
 
-        $this->forge->alterColumnDefault('test', 'value', '1');
+        $this->forge->changeColumn('test', 'value', [
+            'type' => IntegerType::class,
+            'default' => '1',
+        ]);
 
         $this->assertSame(
             [
+                'name' => 'value',
                 'type' => 'integer',
                 'length' => 11,
                 'precision' => 0,
                 'nullable' => false,
+                'unsigned' => false,
                 'default' => '1',
                 'comment' => '',
                 'autoIncrement' => false,
             ],
-            $this->schema->describe('test')
+            $this->schema->table('test')
                 ->column('value')
+                ->toArray()
         );
     }
 
-    public function testAlterColumnDefaultNull(): void
+    public function testChangeColumnDefaultNull(): void
     {
         $this->forge->createTable('test', [
             'id' => [
@@ -123,24 +171,30 @@ trait ChangeColumnTestTrait
             ],
         ]);
 
-        $this->forge->alterColumnDefault('test', 'value', null);
+        $this->forge->changeColumn('test', 'value', [
+            'type' => IntegerType::class,
+            'default' => null,
+        ]);
 
         $this->assertSame(
             [
+                'name' => 'value',
                 'type' => 'integer',
                 'length' => 11,
                 'precision' => 0,
                 'nullable' => false,
+                'unsigned' => false,
                 'default' => null,
                 'comment' => '',
                 'autoIncrement' => false,
             ],
-            $this->schema->describe('test')
+            $this->schema->table('test')
                 ->column('value')
+                ->toArray()
         );
     }
 
-    public function testAlterColumnNullable(): void
+    public function testChangeColumnNullable(): void
     {
         $this->forge->createTable('test', [
             'id' => [
@@ -151,24 +205,30 @@ trait ChangeColumnTestTrait
             ],
         ]);
 
-        $this->forge->alterColumnNullable('test', 'value', true);
+        $this->forge->changeColumn('test', 'value', [
+            'type' => IntegerType::class,
+            'nullable' => true,
+        ]);
 
         $this->assertSame(
             [
+                'name' => 'value',
                 'type' => 'integer',
                 'length' => 11,
                 'precision' => 0,
                 'nullable' => true,
+                'unsigned' => false,
                 'default' => 'NULL',
                 'comment' => '',
                 'autoIncrement' => false,
             ],
-            $this->schema->describe('test')
+            $this->schema->table('test')
                 ->column('value')
+                ->toArray()
         );
     }
 
-    public function testAlterColumnNullableFalse(): void
+    public function testChangeColumnNullableFalse(): void
     {
         $this->forge->createTable('test', [
             'id' => [
@@ -180,24 +240,30 @@ trait ChangeColumnTestTrait
             ],
         ]);
 
-        $this->forge->alterColumnNullable('test', 'value', false);
+        $this->forge->changeColumn('test', 'value', [
+            'type' => IntegerType::class,
+            'nullable' => false,
+        ]);
 
         $this->assertSame(
             [
+                'name' => 'value',
                 'type' => 'integer',
                 'length' => 11,
                 'precision' => 0,
                 'nullable' => false,
+                'unsigned' => false,
                 'default' => null,
                 'comment' => '',
                 'autoIncrement' => false,
             ],
-            $this->schema->describe('test')
+            $this->schema->table('test')
                 ->column('value')
+                ->toArray()
         );
     }
 
-    public function testAlterColumnType(): void
+    public function testChangeColumnType(): void
     {
         $this->forge->createTable('test', [
             'id' => [
@@ -208,51 +274,26 @@ trait ChangeColumnTestTrait
             ],
         ]);
 
-        $this->forge->alterColumnType('test', 'value', [
+        $this->forge->changeColumn('test', 'value', [
             'type' => IntegerType::class,
             'cast' => true,
         ]);
 
         $this->assertSame(
             [
+                'name' => 'value',
                 'type' => 'integer',
                 'length' => 11,
                 'precision' => 0,
                 'nullable' => false,
+                'unsigned' => false,
                 'default' => null,
                 'comment' => '',
                 'autoIncrement' => false,
             ],
-            $this->schema->describe('test')
+            $this->schema->table('test')
                 ->column('value')
-        );
-    }
-
-    public function testCommentOnColumn(): void
-    {
-        $this->forge->createTable('test', [
-            'id' => [
-                'type' => IntegerType::class,
-            ],
-            'value' => [
-                'type' => StringType::class,
-            ],
-        ]);
-
-        $this->forge->commentOnColumn('test', 'value', 'This is the value');
-
-        $this->assertSame(
-            [
-                'type' => 'character varying',
-                'length' => 80,
-                'precision' => null,
-                'nullable' => false,
-                'default' => null,
-                'comment' => 'This is the value',
-                'autoIncrement' => false,
-            ],
-            $this->schema->describe('test')
-                ->column('value')
+                ->toArray()
         );
     }
 }

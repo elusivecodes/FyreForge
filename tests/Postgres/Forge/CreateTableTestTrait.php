@@ -30,15 +30,14 @@ trait CreateTableTestTrait
                 'default' => 'NULL',
             ],
         ], [
-            'comment' => 'This is the value',
-            'indexes' => [
-                'test_pkey' => [
-                    'columns' => [
-                        'id',
-                    ],
-                    'primary' => true,
+            'test_pkey' => [
+                'columns' => [
+                    'id',
                 ],
+                'primary' => true,
             ],
+        ], options: [
+            'comment' => 'This is the value',
         ]);
 
         $this->assertTrue(
@@ -47,9 +46,10 @@ trait CreateTableTestTrait
 
         $this->assertSame(
             [
+                'name' => 'test',
                 'comment' => 'This is the value',
             ],
-            $this->schema->table('test')
+            $this->schema->table('test')->toArray()
         );
     }
 }

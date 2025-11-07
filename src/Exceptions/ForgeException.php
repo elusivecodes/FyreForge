@@ -25,14 +25,24 @@ class ForgeException extends RunTimeException
         return new static('Table index already exists: '.$index);
     }
 
+    public static function forInvalidColumn(string $tableName, string $columnName): static
+    {
+        return new static('Invalid table column: '.$tableName.'.'.$columnName);
+    }
+
     public static function forInvalidConstraint(string $index): static
     {
         return new static('Constraint not valid: '.$index);
     }
 
-    public static function forInvalidIndexOnTableCreation(string $index): static
+    public static function forInvalidForeignKey(string $tableName, string $foreignKeyName): static
     {
-        return new static('Indexes cannot be added during table creation: '.$index);
+        return new static('Invalid table foreign key: '.$tableName.'.'.$foreignKeyName);
+    }
+
+    public static function forInvalidIndex(string $tableName, string $indexName): static
+    {
+        return new static('Invalid table index: '.$tableName.'.'.$indexName);
     }
 
     public static function forInvalidIndexType(string $type): static

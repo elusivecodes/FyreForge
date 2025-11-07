@@ -14,13 +14,11 @@ trait AddForeignKeyTestTrait
                 'type' => IntegerType::class,
             ],
         ], [
-            'indexes' => [
-                'test_values_pkey' => [
-                    'columns' => [
-                        'id',
-                    ],
-                    'primary' => true,
+            'test_values_pkey' => [
+                'columns' => [
+                    'id',
                 ],
+                'primary' => true,
             ],
         ]);
 
@@ -36,25 +34,27 @@ trait AddForeignKeyTestTrait
         $this->forge->addForeignKey('test', 'value_id', [
             'referencedTable' => 'test_values',
             'referencedColumns' => 'id',
-            'update' => 'CASCADE',
-            'delete' => 'CASCADE',
+            'onUpdate' => 'CASCADE',
+            'onDelete' => 'CASCADE',
         ]);
 
         $this->assertTrue(
-            $this->schema->describe('test')
+            $this->schema->table('test')
                 ->hasForeignKey('value_id')
         );
 
         $this->assertSame(
             [
+                'name' => 'value_id',
                 'columns' => ['value_id'],
                 'referencedTable' => 'test_values',
                 'referencedColumns' => ['id'],
-                'update' => 'CASCADE',
-                'delete' => 'CASCADE',
+                'onUpdate' => 'CASCADE',
+                'onDelete' => 'CASCADE',
             ],
-            $this->schema->describe('test')
+            $this->schema->table('test')
                 ->foreignKey('value_id')
+                ->toArray()
         );
     }
 }

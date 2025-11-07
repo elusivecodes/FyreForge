@@ -9,8 +9,8 @@ use Fyre\DB\ConnectionManager;
 use Fyre\DB\Handlers\Mysql\MysqlConnection;
 use Fyre\DB\TypeParser;
 use Fyre\Forge\Forge;
-use Fyre\Forge\ForgeQueryGenerator;
 use Fyre\Forge\ForgeRegistry;
+use Fyre\Forge\QueryGenerator;
 use Fyre\Schema\Schema;
 use Fyre\Schema\SchemaRegistry;
 
@@ -22,7 +22,7 @@ trait MysqlConnectionTrait
 
     protected Forge $forge;
 
-    protected ForgeQueryGenerator $generator;
+    protected QueryGenerator $generator;
 
     protected Schema $schema;
 

@@ -18,4 +18,14 @@ final class ForgeTest extends TestCase
     use RenameColumnTestTrait;
     use RenameTableTestTrait;
     use SqliteConnectionTrait;
+
+    public function testDebug(): void
+    {
+        $data = $this->forge->__debugInfo();
+
+        $this->assertSame(
+            [],
+            $data
+        );
+    }
 }

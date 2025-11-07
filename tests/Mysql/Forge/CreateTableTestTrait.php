@@ -30,16 +30,15 @@ trait CreateTableTestTrait
                 'default' => 'NULL',
             ],
         ], [
+            'PRIMARY' => [
+                'columns' => [
+                    'id',
+                ],
+            ],
+        ], options: [
             'engine' => 'MyISAM',
             'charset' => 'utf8mb3',
             'collation' => 'utf8mb3_unicode_ci',
-            'indexes' => [
-                'PRIMARY' => [
-                    'columns' => [
-                        'id',
-                    ],
-                ],
-            ],
         ]);
 
         $this->assertTrue(
@@ -48,12 +47,13 @@ trait CreateTableTestTrait
 
         $this->assertSame(
             [
+                'name' => 'test',
                 'engine' => 'MyISAM',
                 'charset' => 'utf8mb3',
                 'collation' => 'utf8mb3_unicode_ci',
                 'comment' => '',
             ],
-            $this->schema->table('test')
+            $this->schema->table('test')->toArray()
         );
     }
 }
