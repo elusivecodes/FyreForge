@@ -166,9 +166,10 @@ Additional table options may be available depending on the connection handler.
 Build a [*Table*](#tables).
 
 - `$tableName` is a string representing the table name.
+- `$options` is an array containing the table options.
 
 ```php
-$table = $forge->build($tableName);
+$table = $forge->build($tableName, $options);
 ```
 
 [*Table*](#tables) dependencies will be resolved automatically from the Container.
