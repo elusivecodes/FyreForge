@@ -127,6 +127,8 @@ Add a foreign key to a table.
 $forge->addForeignKey($tableName, $foreignKeyName, $options);
 ```
 
+Foreign keys cannot be added to an existing Sqlite table.
+
 **Add Index**
 
 Add an index to a table.
@@ -143,6 +145,8 @@ $forge->addIndex($tableName, $indexName, $options);
 ```
 
 Additional index options may be available depending on the connection handler.
+
+Primary keys cannot be added to an existing Sqlite table.
 
 **Alter Table**
 
@@ -209,6 +213,8 @@ Drop a foreign key from a table.
 $forge->dropForeignKey($tableName, $foreignKeyName);
 ```
 
+Foreign keys cannot be dropped from an existing Sqlite table.
+
 **Drop Index**
 
 Drop an index from a table.
@@ -219,6 +225,8 @@ Drop an index from a table.
 ```php
 $forge->dropIndex($tableName, $indexName);
 ```
+
+Primary keys cannot be dropped from an existing Sqlite table.
 
 **Drop Table**
 
@@ -612,6 +620,8 @@ Add a foreign key to the table.
 ```php
 $table->addForeignKey($foreignKey, $options);
 ```
+
+Foreign keys cannot be added to an existing Sqlite table.
 
 **Add Index**
 
